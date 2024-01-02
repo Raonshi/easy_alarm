@@ -1,0 +1,36 @@
+{
+    "header": {
+        "home" : "이지알람"
+    },
+    "common": {
+        "confirm": "확인",
+        "cancel": "취소",
+        "save": "저장",
+        "load": "불러오기",
+        "complete": "완료",
+        "search": "검색",
+        "delete": "삭제",
+        "add": "추가",
+        "edit": "수정",
+        "close": "닫기"
+    },
+    "alarm": {
+        "setTimeLabel" : "시간 설정",
+        "am": "오전",
+        "pm": "오후",
+        "routineLabel": "루틴",
+        "snoozeLabel" : "반복시간",
+        "snoozeMinute": "{}분 마다 반복",
+        "snoozeHour": "{}시간 마다 반복",
+        "snoozeHourAndMinute": "{}시간 {}분 마다 반복"
+    },
+    "weekday": {
+        "monday": "월",
+        "tuesday": "화",
+        "wednesday": "수",
+        "thursday": "목",
+        "friday": "금",
+        "saturday": "토",
+        "sunday": "일"
+    }
+}
