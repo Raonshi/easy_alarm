@@ -1,10 +1,10 @@
 import 'package:easy_alarm/common/dummy.dart';
 import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/style/icons.dart';
+import 'package:easy_alarm/ui/widget/add_alarm_bottom_sheet.dart';
+import 'package:easy_alarm/ui/widget/add_new_alarm_widget.dart';
 import 'package:easy_alarm/ui/widget/alarm_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -29,27 +29,21 @@ class HomePage extends StatelessWidget {
               itemCount: dummyAlarms.length + 1,
               itemBuilder: (context, index) {
                 if (index == dummyAlarms.length) {
-                  return Container(
-                    decoration: ShapeDecoration(
-                      shadows: [
-                        BoxShadow(
-                          offset: const Offset(0, 4),
-                          blurRadius: 4.0,
-                          spreadRadius: 0.0,
-                          color: Colors.black.withOpacity(0.25),
-                        )
-                      ],
-                      color: CustomColors.blue10,
-                      shape: const CircleBorder(
-                        side: BorderSide(color: CustomColors.blue20),
+                  return AddNewAlarmWidget(onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: CustomColors.white,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(28.0),
+                          topRight: Radius.circular(28.0),
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(
-                      CustomIcons.add,
-                      colorFilter: const ColorFilter.mode(CustomColors.blue70, BlendMode.srcIn),
-                    ),
-                  );
+                      builder: (context) => const AddAlarmBottomSheet(),
+                    );
+                  });
                 }
                 return AlarmItemWidget(
                   item: dummyAlarms[index],

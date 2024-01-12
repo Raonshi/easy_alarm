@@ -62,6 +62,6 @@ class CustomColors {
   static const Color red100 = Color(0xFF330C0A);
 
   /* Base */
-  static const Color black = Color(0xFFF1F1F1);
-  static const Color white = Color(0xFFE3E2E2);
+  static const Color black = Color(0xFF000000);
+  static const Color white = Color(0xFFFFFFFF);
 }
