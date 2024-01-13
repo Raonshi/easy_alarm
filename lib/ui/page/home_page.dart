@@ -1,6 +1,5 @@
 import 'package:easy_alarm/common/dummy.dart';
-import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/ui/widget/add_alarm_bottom_sheet.dart';
+import 'package:easy_alarm/ui/page/add_page.dart';
 import 'package:easy_alarm/ui/widget/add_new_alarm_widget.dart';
 import 'package:easy_alarm/ui/widget/alarm_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -9,11 +8,22 @@ import 'package:flutter/material.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  TextStyle get _headerTextStyle => const TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black);
+  TextStyle get _addBtnTextStyle => const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('header.home'.tr()),
+        centerTitle: false,
+        title: Text('header.home'.tr(), style: _headerTextStyle),
+        actions: [
+          GestureDetector(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage())),
+            child: Text("common.add".tr(), style: _addBtnTextStyle),
+          ),
+          SizedBox(width: 20.0),
+        ],
       ),
       body: Column(
         children: [
@@ -26,25 +36,8 @@ class HomePage extends StatelessWidget {
                 top: 12.0,
                 bottom: 48.0,
               ),
-              itemCount: dummyAlarms.length + 1,
+              itemCount: dummyAlarms.length,
               itemBuilder: (context, index) {
-                if (index == dummyAlarms.length) {
-                  return AddNewAlarmWidget(onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: CustomColors.white,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(28.0),
-                          topRight: Radius.circular(28.0),
-                        ),
-                      ),
-                      builder: (context) => const AddAlarmBottomSheet(),
-                    );
-                  });
-                }
                 return AlarmItemWidget(
                   item: dummyAlarms[index],
                   onTapDelete: (String value) {},
