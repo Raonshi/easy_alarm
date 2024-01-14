@@ -15,8 +15,9 @@ _$AlarmModelImpl _$$AlarmModelImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => $enumDecode(_$WeekdayEnumMap, e))
               .toList() ??
           const [],
-      snoozeTime:
-          TimeModel.fromJson(json['snoozeTime'] as Map<String, dynamic>),
+      snoozeTime: json['snoozeTime'] == null
+          ? null
+          : TimeModel.fromJson(json['snoozeTime'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AlarmModelImplToJson(_$AlarmModelImpl instance) =>
@@ -25,7 +26,7 @@ Map<String, dynamic> _$$AlarmModelImplToJson(_$AlarmModelImpl instance) =>
       'isAm': instance.isAm,
       'time': instance.time.toJson(),
       'weekdays': instance.weekdays.map((e) => _$WeekdayEnumMap[e]!).toList(),
-      'snoozeTime': instance.snoozeTime.toJson(),
+      'snoozeTime': instance.snoozeTime?.toJson(),
     };
 
 const _$WeekdayEnumMap = {

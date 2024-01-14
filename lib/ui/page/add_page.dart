@@ -80,7 +80,18 @@ class _AddPageBody extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: SnoozePanelWidget(
-                        onTapSwitch: (bool value) {},
+                        snoozeTime: TimeOfDay(
+                          hour: state.alarmModel.snoozeTime?.hour ?? 0,
+                          minute: state.alarmModel.snoozeTime?.minute ?? 0,
+                        ),
+                        onTapSwitch: (bool value) {
+                          if (!value) context.read<AddBloc>().updateSnoozeTime();
+                        },
+                        onTimeChanged: (TimeOfDay? value) {
+                          if (value != null) {
+                            context.read<AddBloc>().updateSnoozeTime(value);
+                          }
+                        },
                       ),
                     ),
                     const SizedBox(height: 5.0),

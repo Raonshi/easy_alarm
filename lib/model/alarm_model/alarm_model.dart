@@ -16,7 +16,7 @@ class AlarmModel with _$AlarmModel {
     required bool isAm,
     required TimeModel time,
     @Default([]) List<Weekday> weekdays,
-    required TimeModel snoozeTime,
+    TimeModel? snoozeTime,
   }) = _AlarmModel;
 
   factory AlarmModel.fromJson(Map<String, Object?> json) => _$AlarmModelFromJson(json);
@@ -30,18 +30,22 @@ class AlarmModel with _$AlarmModel {
       "${time.hour}:${time.minute.toString().padLeft(2, '0')}${isAm ? "alarm.am".tr() : "alarm.pm".tr()}";
 
   String get snoozeTimeText {
-    if (snoozeTime.hour == 0 && snoozeTime.minute == 0) {
+    if (snoozeTime == null) {
       return "alarm.snoozeNone".tr();
     }
 
-    if (snoozeTime.hour == 0 && snoozeTime.minute != 0) {
-      return "alarm.snoozeMinute".tr(args: [snoozeTime.minute.toString()]);
+    if (snoozeTime!.hour == 0 && snoozeTime!.minute == 0) {
+      return "alarm.snoozeNone".tr();
     }
 
-    if (snoozeTime.hour != 0 && snoozeTime.minute == 0) {
-      return "alarm.snoozeHour".tr(args: [snoozeTime.hour.toString()]);
+    if (snoozeTime!.hour == 0 && snoozeTime!.minute != 0) {
+      return "alarm.snoozeMinute".tr(args: [snoozeTime!.minute.toString()]);
     }
 
-    return "alarm.snoozeHourAndMinute".tr(args: [snoozeTime.hour.toString(), snoozeTime.minute.toString()]);
+    if (snoozeTime!.hour != 0 && snoozeTime!.minute == 0) {
+      return "alarm.snoozeHour".tr(args: [snoozeTime!.hour.toString()]);
+    }
+
+    return "alarm.snoozeHourAndMinute".tr(args: [snoozeTime!.hour.toString(), snoozeTime!.minute.toString()]);
   }
 }

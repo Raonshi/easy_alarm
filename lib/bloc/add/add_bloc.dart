@@ -50,4 +50,18 @@ class AddBloc extends Cubit<AddBlocState> {
       emit(AddBlocState.loaded(alarmModel: alarmModel));
     });
   }
+
+  void updateSnoozeTime([TimeOfDay? newTime]) {
+    state.mapOrNull(loaded: (state) {
+      late final AlarmModel alarmModel;
+      if (newTime == null) {
+        alarmModel = state.alarmModel.copyWith(snoozeTime: null);
+      } else {
+        final TimeModel newSnoozeTime = TimeModel(hour: newTime.hour, minute: newTime.minute);
+        alarmModel = state.alarmModel.copyWith(snoozeTime: newSnoozeTime);
+      }
+
+      emit(AddBlocState.loaded(alarmModel: alarmModel));
+    });
+  }
 }

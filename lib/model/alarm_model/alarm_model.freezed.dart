@@ -24,7 +24,7 @@ mixin _$AlarmModel {
   bool get isAm => throw _privateConstructorUsedError;
   TimeModel get time => throw _privateConstructorUsedError;
   List<Weekday> get weekdays => throw _privateConstructorUsedError;
-  TimeModel get snoozeTime => throw _privateConstructorUsedError;
+  TimeModel? get snoozeTime => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,10 +43,10 @@ abstract class $AlarmModelCopyWith<$Res> {
       bool isAm,
       TimeModel time,
       List<Weekday> weekdays,
-      TimeModel snoozeTime});
+      TimeModel? snoozeTime});
 
   $TimeModelCopyWith<$Res> get time;
-  $TimeModelCopyWith<$Res> get snoozeTime;
+  $TimeModelCopyWith<$Res>? get snoozeTime;
 }
 
 /// @nodoc
@@ -66,7 +66,7 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
     Object? isAm = null,
     Object? time = null,
     Object? weekdays = null,
-    Object? snoozeTime = null,
+    Object? snoozeTime = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -85,10 +85,10 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
           ? _value.weekdays
           : weekdays // ignore: cast_nullable_to_non_nullable
               as List<Weekday>,
-      snoozeTime: null == snoozeTime
+      snoozeTime: freezed == snoozeTime
           ? _value.snoozeTime
           : snoozeTime // ignore: cast_nullable_to_non_nullable
-              as TimeModel,
+              as TimeModel?,
     ) as $Val);
   }
 
@@ -102,8 +102,12 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
 
   @override
   @pragma('vm:prefer-inline')
-  $TimeModelCopyWith<$Res> get snoozeTime {
-    return $TimeModelCopyWith<$Res>(_value.snoozeTime, (value) {
+  $TimeModelCopyWith<$Res>? get snoozeTime {
+    if (_value.snoozeTime == null) {
+      return null;
+    }
+
+    return $TimeModelCopyWith<$Res>(_value.snoozeTime!, (value) {
       return _then(_value.copyWith(snoozeTime: value) as $Val);
     });
   }
@@ -122,12 +126,12 @@ abstract class _$$AlarmModelImplCopyWith<$Res>
       bool isAm,
       TimeModel time,
       List<Weekday> weekdays,
-      TimeModel snoozeTime});
+      TimeModel? snoozeTime});
 
   @override
   $TimeModelCopyWith<$Res> get time;
   @override
-  $TimeModelCopyWith<$Res> get snoozeTime;
+  $TimeModelCopyWith<$Res>? get snoozeTime;
 }
 
 /// @nodoc
@@ -145,7 +149,7 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
     Object? isAm = null,
     Object? time = null,
     Object? weekdays = null,
-    Object? snoozeTime = null,
+    Object? snoozeTime = freezed,
   }) {
     return _then(_$AlarmModelImpl(
       id: null == id
@@ -164,10 +168,10 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
           ? _value._weekdays
           : weekdays // ignore: cast_nullable_to_non_nullable
               as List<Weekday>,
-      snoozeTime: null == snoozeTime
+      snoozeTime: freezed == snoozeTime
           ? _value.snoozeTime
           : snoozeTime // ignore: cast_nullable_to_non_nullable
-              as TimeModel,
+              as TimeModel?,
     ));
   }
 }
@@ -181,7 +185,7 @@ class _$AlarmModelImpl extends _AlarmModel {
       required this.isAm,
       required this.time,
       final List<Weekday> weekdays = const [],
-      required this.snoozeTime})
+      this.snoozeTime})
       : _weekdays = weekdays,
         super._();
 
@@ -204,7 +208,7 @@ class _$AlarmModelImpl extends _AlarmModel {
   }
 
   @override
-  final TimeModel snoozeTime;
+  final TimeModel? snoozeTime;
 
   @override
   String toString() {
@@ -249,7 +253,7 @@ abstract class _AlarmModel extends AlarmModel {
       required final bool isAm,
       required final TimeModel time,
       final List<Weekday> weekdays,
-      required final TimeModel snoozeTime}) = _$AlarmModelImpl;
+      final TimeModel? snoozeTime}) = _$AlarmModelImpl;
   const _AlarmModel._() : super._();
 
   factory _AlarmModel.fromJson(Map<String, dynamic> json) =
@@ -264,7 +268,7 @@ abstract class _AlarmModel extends AlarmModel {
   @override
   List<Weekday> get weekdays;
   @override
-  TimeModel get snoozeTime;
+  TimeModel? get snoozeTime;
   @override
   @JsonKey(ignore: true)
   _$$AlarmModelImplCopyWith<_$AlarmModelImpl> get copyWith =>
