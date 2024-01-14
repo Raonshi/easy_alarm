@@ -19,7 +19,7 @@ class _AlarmItemWidgetState extends State<AlarmItemWidget> {
 
   @override
   void initState() {
-    _isEnabled = widget.item.routine;
+    _isEnabled = widget.item.weekdays.isNotEmpty;
     super.initState();
   }
 

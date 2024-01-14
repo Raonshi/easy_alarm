@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage()));
-              await NotificationManager().show(
+              await NotificationManager().schedule(
                 id: 1,
                 title: "title",
                 body: "body",

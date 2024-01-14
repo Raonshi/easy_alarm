@@ -23,9 +23,6 @@ class AlarmModel with _$AlarmModel {
 
   const AlarmModel._();
 
-  bool get routine => weekdays.isNotEmpty;
-  set routine(bool value) => copyWith(weekdays: value ? Weekday.values : []);
-
   String get timeText =>
       "${time.hour}:${time.minute.toString().padLeft(2, '0')}${isAm ? "alarm.am".tr() : "alarm.pm".tr()}";
 
