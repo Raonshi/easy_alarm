@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 class SnoozePanelWidget extends StatefulWidget {
-  const SnoozePanelWidget({super.key});
+  const SnoozePanelWidget({super.key, required this.onTapSwitch});
+
+  final ValueChanged<bool> onTapSwitch;
 
   @override
   State<SnoozePanelWidget> createState() => _SnoozePanelWidgetState();
@@ -19,13 +21,27 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
 
   TimeOfDay _time = TimeOfDay.now();
 
+  bool _isEnabled = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Text("alarm.snoozeLabel".tr(), style: _labelTextStyle),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("alarm.snoozeLabel".tr(), style: _labelTextStyle),
+            Switch(
+              value: _isEnabled,
+              onChanged: (value) {
+                setState(() => _isEnabled = value);
+                // widget.onTapSwitch(value);
+              },
+            ),
+          ],
+        ),
         const SizedBox(height: 10.0),
         GestureDetector(
           onTap: () async {
@@ -49,7 +65,7 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
                   color: CustomColors.blue30,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text(_time.hour.toString(), style: _timeTextStyle),
+                child: Text(_time.hour.toString().padLeft(2, "0"), style: _timeTextStyle),
               ),
               SizedBox(width: 24.0, child: Text(":", style: _timeTextStyle, textAlign: TextAlign.center)),
               Container(
@@ -58,7 +74,7 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
                   color: CustomColors.blue30,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text(_time.minute.toString(), style: _timeTextStyle),
+                child: Text(_time.minute.toString().padLeft(2, "0"), style: _timeTextStyle),
               ),
             ],
           ),

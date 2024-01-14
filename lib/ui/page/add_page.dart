@@ -1,5 +1,6 @@
 import 'package:easy_alarm/bloc/add/add_bloc.dart';
 import 'package:easy_alarm/bloc/add/add_bloc_state.dart';
+import 'package:easy_alarm/common/enums.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/widget/routine_panel_widget.dart';
 import 'package:easy_alarm/ui/widget/snooze_panel_widget.dart';
@@ -67,13 +68,20 @@ class _AddPageBody extends StatelessWidget {
                       padding: const EdgeInsets.all(20.0),
                       child: RoutinePanelWidget(
                         selectedWeekdays: state.alarmModel.weekdays,
+                        onTapSwitch: (bool value) {
+                          if (!value) context.read<AddBloc>().updateWeekdays([]);
+                        },
+                        onSelectedDaysChanged: (List<Weekday> weekdays) {
+                          context.read<AddBloc>().updateWeekdays(weekdays);
+                        },
                       ),
                     ),
                     const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
-                      // child: Text("alarm.snoozeLabel".tr(), style: _labelTextStyle),
-                      child: SnoozePanelWidget(),
+                      child: SnoozePanelWidget(
+                        onTapSwitch: (bool value) {},
+                      ),
                     ),
                     const SizedBox(height: 5.0),
                   ],

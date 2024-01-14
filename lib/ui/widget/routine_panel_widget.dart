@@ -5,9 +5,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class RoutinePanelWidget extends StatefulWidget {
-  const RoutinePanelWidget({super.key, required this.selectedWeekdays});
+  const RoutinePanelWidget({
+    super.key,
+    required this.selectedWeekdays,
+    required this.onTapSwitch,
+    required this.onSelectedDaysChanged,
+  });
 
   final List<Weekday> selectedWeekdays;
+  final ValueChanged<bool> onTapSwitch;
+  final ValueChanged<List<Weekday>> onSelectedDaysChanged;
 
   @override
   State<RoutinePanelWidget> createState() => _RoutinePanelWidgetState();
@@ -17,7 +24,6 @@ class _RoutinePanelWidgetState extends State<RoutinePanelWidget> {
   final TextStyle _labelTextStyle =
       const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: CustomColors.black);
 
-  final List<Weekday> _selectedWeekdays = [];
   bool _isEnabled = false;
 
   @override
@@ -32,6 +38,7 @@ class _RoutinePanelWidgetState extends State<RoutinePanelWidget> {
               value: _isEnabled,
               onChanged: (value) {
                 setState(() => _isEnabled = value);
+                widget.onTapSwitch(value);
               },
             ),
           ],
@@ -40,13 +47,8 @@ class _RoutinePanelWidgetState extends State<RoutinePanelWidget> {
           visible: _isEnabled,
           child: WeekdayPanelWidget(
             clickable: true,
-            selectedWeekdays: _selectedWeekdays,
-            onSelectedDaysChanged: (value) {
-              setState(() {
-                _selectedWeekdays.clear();
-                _selectedWeekdays.addAll(value);
-              });
-            },
+            selectedWeekdays: widget.selectedWeekdays,
+            onSelectedDaysChanged: widget.onSelectedDaysChanged,
           ),
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/bloc/add/add_bloc_state.dart';
+import 'package:easy_alarm/common/enums.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 import 'package:easy_alarm/model/time_model/time_model.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,16 @@ class AddBloc extends Cubit<AddBlocState> {
     state.mapOrNull(loaded: (state) {
       final AlarmModel alarmModel = state.alarmModel.copyWith(
         time: TimeModel(hour: newTime.hour, minute: newTime.minute),
+      );
+
+      emit(AddBlocState.loaded(alarmModel: alarmModel));
+    });
+  }
+
+  void updateWeekdays(List<Weekday> weekDays) {
+    state.mapOrNull(loaded: (state) {
+      final AlarmModel alarmModel = state.alarmModel.copyWith(
+        weekdays: weekDays,
       );
 
       emit(AddBlocState.loaded(alarmModel: alarmModel));
