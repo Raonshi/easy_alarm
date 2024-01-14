@@ -1,26 +1,19 @@
-import 'dart:developer';
-
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-class TimerPanelWidget extends StatefulWidget {
-  const TimerPanelWidget({super.key});
+class TimerPanelWidget extends StatelessWidget {
+  const TimerPanelWidget({super.key, required this.time, required this.onTimeChanged});
 
-  @override
-  State<TimerPanelWidget> createState() => _TimerPanelWidgetState();
-}
+  final TimeOfDay time;
+  final ValueChanged<TimeOfDay> onTimeChanged;
 
-class _TimerPanelWidgetState extends State<TimerPanelWidget> {
   TextStyle get _labelTextStyle =>
       const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: CustomColors.black);
 
   TextStyle get _timeTextStyle =>
       const TextStyle(fontSize: 57.0, height: 1.0, fontWeight: FontWeight.bold, color: CustomColors.black);
-
-  TimeOfDay _time = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +40,7 @@ class _TimerPanelWidgetState extends State<TimerPanelWidget> {
                         mode: CupertinoDatePickerMode.time,
                         use24hFormat: true,
                         onDateTimeChanged: (dateTime) {
-                          final TimeOfDay time = TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
-                          setState(() {
-                            _time = time;
-                          });
+                          onTimeChanged(TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
                         },
                       ),
                     ),
@@ -68,7 +58,7 @@ class _TimerPanelWidgetState extends State<TimerPanelWidget> {
                   color: CustomColors.blue30,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text(_time.hour.toString().padLeft(2, "0"), style: _timeTextStyle),
+                child: Text(time.hour.toString().padLeft(2, "0"), style: _timeTextStyle),
               ),
               SizedBox(width: 24.0, child: Text(":", style: _timeTextStyle, textAlign: TextAlign.center)),
               Container(
@@ -77,7 +67,7 @@ class _TimerPanelWidgetState extends State<TimerPanelWidget> {
                   color: CustomColors.blue30,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text(_time.minute.toString().padLeft(2, "0"), style: _timeTextStyle),
+                child: Text(time.minute.toString().padLeft(2, "0"), style: _timeTextStyle),
               ),
             ],
           ),

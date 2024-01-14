@@ -5,7 +5,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class RoutinePanelWidget extends StatefulWidget {
-  const RoutinePanelWidget({super.key});
+  const RoutinePanelWidget({super.key, required this.selectedWeekdays});
+
+  final List<Weekday> selectedWeekdays;
 
   @override
   State<RoutinePanelWidget> createState() => _RoutinePanelWidgetState();
@@ -28,9 +30,9 @@ class _RoutinePanelWidgetState extends State<RoutinePanelWidget> {
             Text("alarm.routineLabel".tr(), style: _labelTextStyle),
             Switch(
               value: _isEnabled,
-              onChanged: (value) => setState(() {
-                _isEnabled = value;
-              }),
+              onChanged: (value) {
+                setState(() => _isEnabled = value);
+              },
             ),
           ],
         ),

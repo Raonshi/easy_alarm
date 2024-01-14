@@ -50,14 +50,24 @@ class _AddPageBody extends StatelessWidget {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: TimerPanelWidget(),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: TimerPanelWidget(
+                        time: TimeOfDay(
+                          hour: state.alarmModel.time.hour,
+                          minute: state.alarmModel.time.minute,
+                        ),
+                        onTimeChanged: (TimeOfDay time) {
+                          context.read<AddBloc>().updateTime(time);
+                        },
+                      ),
                     ),
                     const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
-                    const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: RoutinePanelWidget(),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: RoutinePanelWidget(
+                        selectedWeekdays: state.alarmModel.weekdays,
+                      ),
                     ),
                     const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
                     Padding(
