@@ -1,3 +1,4 @@
+import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/ui/page/home_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  NotificationManager().initConfig();
 
   runApp(
     EasyLocalization(
