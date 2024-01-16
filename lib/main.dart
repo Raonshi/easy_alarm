@@ -1,17 +1,18 @@
 import 'dart:developer';
 
-import 'package:easy_alarm/core/alarm_manager.dart';
 import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/ui/page/home_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
   NotificationManager().initConfig();
+  MobileAds.instance.initialize();
 
   runApp(
     EasyLocalization(

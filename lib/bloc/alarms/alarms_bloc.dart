@@ -1,15 +1,10 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
-import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 
 class AlarmsBloc extends Cubit<AlarmsState> {
   final AlarmManager _alarmManager = AlarmManager();
-  final NotificationManager _notificationManager = NotificationManager();
-
   AlarmsBloc() : super(const AlarmsState.initial()) {
     _init();
   }

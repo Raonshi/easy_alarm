@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:easy_alarm/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
-import 'package:easy_alarm/common/dummy.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/page/add_page.dart';
+import 'package:easy_alarm/ui/widget/ad_widget.dart';
 import 'package:easy_alarm/ui/widget/alarm_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -48,63 +48,61 @@ class _HomePageBody extends StatelessWidget {
           const SizedBox(width: 20.0),
         ],
       ),
-      body: Column(
-        children: [
-          BlocBuilder<AlarmsBloc, AlarmsState>(
-            builder: (context, state) {
-              return state.map(
-                initial: (_) => const Offstage(),
-                loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
-                error: (state) => Center(child: Text(state.exception.toString())),
-                loaded: (state) {
-                  log(state.alarmModels.map((e) => e.toJson().toString()).toString());
-                  if (state.alarmModels.isEmpty) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(
-                          "home.noAlarm".tr(),
-                          textAlign: TextAlign.center,
-                          style: _emptyTextStyle,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          context.read<AlarmsBloc>().refreshAlarms();
-                        },
-                        child: ListView.separated(
-                          padding: const EdgeInsets.only(
-                            left: 20.0,
-                            right: 20.0,
-                            top: 12.0,
-                            bottom: 48.0,
+      body: SafeArea(
+        child: Column(
+          children: [
+            BlocBuilder<AlarmsBloc, AlarmsState>(
+              builder: (context, state) {
+                return state.map(
+                  initial: (_) => const Offstage(),
+                  loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
+                  error: (state) => Center(child: Text(state.exception.toString())),
+                  loaded: (state) {
+                    log(state.alarmModels.map((e) => e.toJson().toString()).toString());
+                    if (state.alarmModels.isEmpty) {
+                      return Expanded(
+                        child: Center(
+                          child: Text(
+                            "home.noAlarm".tr(),
+                            textAlign: TextAlign.center,
+                            style: _emptyTextStyle,
                           ),
-                          itemCount: state.alarmModels.length,
-                          itemBuilder: (context, index) {
-                            return AlarmItemWidget(
-                              key: ValueKey(state.alarmModels[index].id),
-                              item: state.alarmModels[index],
-                              onTapDelete: context.read<AlarmsBloc>().deleteAlarm,
-                              onTapSwitch: context.read<AlarmsBloc>().toggleAlarm,
-                            );
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(height: 16.0),
                         ),
-                      ),
-                    );
-                  }
-                },
-              );
-            },
-          ),
-          Container(
-            height: 90.0,
-            color: Colors.grey,
-            child: const Center(child: Text("Ads")),
-          ),
-        ],
+                      );
+                    } else {
+                      return Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            context.read<AlarmsBloc>().refreshAlarms();
+                          },
+                          child: ListView.separated(
+                            padding: const EdgeInsets.only(
+                              left: 20.0,
+                              right: 20.0,
+                              top: 12.0,
+                              bottom: 48.0,
+                            ),
+                            itemCount: state.alarmModels.length,
+                            itemBuilder: (context, index) {
+                              return AlarmItemWidget(
+                                key: ValueKey(state.alarmModels[index].id),
+                                item: state.alarmModels[index],
+                                onTapDelete: context.read<AlarmsBloc>().deleteAlarm,
+                                onTapSwitch: context.read<AlarmsBloc>().toggleAlarm,
+                              );
+                            },
+                            separatorBuilder: (context, index) => const SizedBox(height: 16.0),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+            const BottomAdWidget(),
+          ],
+        ),
       ),
     );
   }
