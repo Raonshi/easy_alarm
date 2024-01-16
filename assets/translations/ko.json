@@ -26,7 +26,10 @@
         "snoozeLabel" : "반복시간",
         "snoozeMinute": "{}분 마다 반복",
         "snoozeHour": "{}시간 마다 반복",
-        "snoozeHourAndMinute": "{}시간 {}분 마다 반복"
+        "snoozeHourAndMinute": "{}시간 {}분 마다 반복",
+        "contentLabel": "알람 내용",
+        "title": "알람 제목",
+        "content": "알람 내용"
     },
     "weekday": {
         "monday": "월",

@@ -9,6 +9,8 @@ part of 'alarm_model.dart';
 _$AlarmModelImpl _$$AlarmModelImplFromJson(Map<String, dynamic> json) =>
     _$AlarmModelImpl(
       id: json['id'] as String,
+      title: json['title'] as String? ?? "알람",
+      content: json['content'] as String? ?? "",
       isAm: json['isAm'] as bool,
       time: TimeModel.fromJson(json['time'] as Map<String, dynamic>),
       weekdays: (json['weekdays'] as List<dynamic>?)
@@ -23,6 +25,8 @@ _$AlarmModelImpl _$$AlarmModelImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$AlarmModelImplToJson(_$AlarmModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'title': instance.title,
+      'content': instance.content,
       'isAm': instance.isAm,
       'time': instance.time.toJson(),
       'weekdays': instance.weekdays.map((e) => _$WeekdayEnumMap[e]!).toList(),

@@ -2,6 +2,7 @@ import 'package:easy_alarm/bloc/add/add_bloc.dart';
 import 'package:easy_alarm/bloc/add/add_bloc_state.dart';
 import 'package:easy_alarm/common/enums.dart';
 import 'package:easy_alarm/style/colors.dart';
+import 'package:easy_alarm/ui/widget/alarm_content_panel_widget.dart';
 import 'package:easy_alarm/ui/widget/routine_panel_widget.dart';
 import 'package:easy_alarm/ui/widget/snooze_panel_widget.dart';
 import 'package:easy_alarm/ui/widget/timer_panel_widget.dart';
@@ -51,6 +52,13 @@ class _AddPageBody extends StatelessWidget {
               return SingleChildScrollView(
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: AlarmContentPanelWidget(
+                        onChangedTitle: (String value) {},
+                        onChangedContent: (String value) {},
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: TimerPanelWidget(

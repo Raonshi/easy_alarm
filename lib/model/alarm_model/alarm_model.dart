@@ -13,6 +13,8 @@ class AlarmModel with _$AlarmModel {
   @JsonSerializable(explicitToJson: true)
   const factory AlarmModel({
     required String id,
+    @Default("알람") String title,
+    @Default("") String content,
     required bool isAm,
     required TimeModel time,
     @Default([]) List<Weekday> weekdays,

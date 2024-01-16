@@ -31,6 +31,8 @@ class AddBloc extends Cubit<AddBlocState> {
     });
   }
 
+  void updateTitle(String newTitle) {}
+
   void updateTime(TimeOfDay newTime) {
     state.mapOrNull(loaded: (state) {
       final AlarmModel alarmModel = state.alarmModel.copyWith(

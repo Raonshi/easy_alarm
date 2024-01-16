@@ -21,6 +21,8 @@ AlarmModel _$AlarmModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AlarmModel {
   String get id => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
   bool get isAm => throw _privateConstructorUsedError;
   TimeModel get time => throw _privateConstructorUsedError;
   List<Weekday> get weekdays => throw _privateConstructorUsedError;
@@ -40,6 +42,8 @@ abstract class $AlarmModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String title,
+      String content,
       bool isAm,
       TimeModel time,
       List<Weekday> weekdays,
@@ -63,6 +67,8 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
   @override
   $Res call({
     Object? id = null,
+    Object? title = null,
+    Object? content = null,
     Object? isAm = null,
     Object? time = null,
     Object? weekdays = null,
@@ -72,6 +78,14 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
       isAm: null == isAm
           ? _value.isAm
@@ -123,6 +137,8 @@ abstract class _$$AlarmModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
+      String title,
+      String content,
       bool isAm,
       TimeModel time,
       List<Weekday> weekdays,
@@ -146,6 +162,8 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? title = null,
+    Object? content = null,
     Object? isAm = null,
     Object? time = null,
     Object? weekdays = null,
@@ -155,6 +173,14 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
       isAm: null == isAm
           ? _value.isAm
@@ -182,6 +208,8 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
 class _$AlarmModelImpl extends _AlarmModel {
   const _$AlarmModelImpl(
       {required this.id,
+      this.title = "알람",
+      this.content = "",
       required this.isAm,
       required this.time,
       final List<Weekday> weekdays = const [],
@@ -194,6 +222,12 @@ class _$AlarmModelImpl extends _AlarmModel {
 
   @override
   final String id;
+  @override
+  @JsonKey()
+  final String title;
+  @override
+  @JsonKey()
+  final String content;
   @override
   final bool isAm;
   @override
@@ -212,7 +246,7 @@ class _$AlarmModelImpl extends _AlarmModel {
 
   @override
   String toString() {
-    return 'AlarmModel(id: $id, isAm: $isAm, time: $time, weekdays: $weekdays, snoozeTime: $snoozeTime)';
+    return 'AlarmModel(id: $id, title: $title, content: $content, isAm: $isAm, time: $time, weekdays: $weekdays, snoozeTime: $snoozeTime)';
   }
 
   @override
@@ -221,6 +255,8 @@ class _$AlarmModelImpl extends _AlarmModel {
         (other.runtimeType == runtimeType &&
             other is _$AlarmModelImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.content, content) || other.content == content) &&
             (identical(other.isAm, isAm) || other.isAm == isAm) &&
             (identical(other.time, time) || other.time == time) &&
             const DeepCollectionEquality().equals(other._weekdays, _weekdays) &&
@@ -230,7 +266,7 @@ class _$AlarmModelImpl extends _AlarmModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, isAm, time,
+  int get hashCode => Object.hash(runtimeType, id, title, content, isAm, time,
       const DeepCollectionEquality().hash(_weekdays), snoozeTime);
 
   @JsonKey(ignore: true)
@@ -250,6 +286,8 @@ class _$AlarmModelImpl extends _AlarmModel {
 abstract class _AlarmModel extends AlarmModel {
   const factory _AlarmModel(
       {required final String id,
+      final String title,
+      final String content,
       required final bool isAm,
       required final TimeModel time,
       final List<Weekday> weekdays,
@@ -261,6 +299,10 @@ abstract class _AlarmModel extends AlarmModel {
 
   @override
   String get id;
+  @override
+  String get title;
+  @override
+  String get content;
   @override
   bool get isAm;
   @override
