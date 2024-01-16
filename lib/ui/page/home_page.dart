@@ -1,7 +1,5 @@
 import 'package:easy_alarm/common/dummy.dart';
-import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/ui/page/add_page.dart';
-import 'package:easy_alarm/ui/widget/add_new_alarm_widget.dart';
 import 'package:easy_alarm/ui/widget/alarm_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +20,6 @@ class HomePage extends StatelessWidget {
           GestureDetector(
             onTap: () async {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage()));
-              await NotificationManager().schedule(
-                id: 1,
-                title: "title",
-                body: "body",
-              );
             },
             child: Text("common.add".tr(), style: _addBtnTextStyle),
           ),

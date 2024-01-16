@@ -1,19 +1,19 @@
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
 
 class SnoozePanelWidget extends StatefulWidget {
   const SnoozePanelWidget({
     super.key,
     required this.onTapSwitch,
     required this.snoozeTime,
-    required this.onTimeChanged,
+    required this.onDurationChanged,
   });
 
   final TimeOfDay snoozeTime;
   final ValueChanged<bool> onTapSwitch;
-  final ValueChanged<TimeOfDay?> onTimeChanged;
+  final ValueChanged<Duration?> onDurationChanged;
 
   @override
   State<SnoozePanelWidget> createState() => _SnoozePanelWidgetState();
@@ -60,12 +60,33 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
         const SizedBox(height: 10.0),
         GestureDetector(
           onTap: () async {
-            if (!_isEnabled) return;
-            final TimeOfDay? time = await showTimePicker(
+            // if (!_isEnabled) return;
+            // final TimeOfDay? time = await showTimePicker(
+            //   context: context,
+            //   initialTime: widget.snoozeTime,
+            // );
+            await showModalBottomSheet(
               context: context,
-              initialTime: widget.snoozeTime,
+              showDragHandle: true,
+              isScrollControlled: true,
+              builder: (subContext) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      child: CupertinoTimerPicker(
+                        mode: CupertinoTimerPickerMode.hm,
+                        onTimerDurationChanged: (duration) {
+                          widget.onDurationChanged(duration);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
-            widget.onTimeChanged(time);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

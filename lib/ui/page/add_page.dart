@@ -30,85 +30,86 @@ class _AddPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text("addAlarm.header".tr(), style: _topButtonTextStyle),
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: Text("common.complete".tr(), style: _topButtonTextStyle),
-          ),
-          const SizedBox(width: 20.0),
-        ],
-      ),
-      body: BlocBuilder<AddBloc, AddBlocState>(
-        builder: (context, state) {
-          return state.map(
-            initial: (_) => const Offstage(),
-            loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
-            error: (state) => Center(child: Text(state.exception.toString())),
-            loaded: (state) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: AlarmContentPanelWidget(
-                        onChangedTitle: (String value) {},
-                        onChangedContent: (String value) {},
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: TimerPanelWidget(
-                        time: TimeOfDay(
-                          hour: state.alarmModel.time.hour,
-                          minute: state.alarmModel.time.minute,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          title: Text("addAlarm.header".tr(), style: _topButtonTextStyle),
+          actions: [
+            GestureDetector(
+              onTap: context.read<AddBloc>().save,
+              child: Text("common.complete".tr(), style: _topButtonTextStyle),
+            ),
+            const SizedBox(width: 20.0),
+          ],
+        ),
+        body: BlocBuilder<AddBloc, AddBlocState>(
+          builder: (context, state) {
+            return state.map(
+              initial: (_) => const Offstage(),
+              loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
+              error: (state) => Center(child: Text(state.exception.toString())),
+              loaded: (state) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: AlarmContentPanelWidget(
+                          onChangedTitle: context.read<AddBloc>().updateTitle,
+                          onChangedContent: context.read<AddBloc>().updateContent,
                         ),
-                        onTimeChanged: (TimeOfDay time) {
-                          context.read<AddBloc>().updateTime(time);
-                        },
                       ),
-                    ),
-                    const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: RoutinePanelWidget(
-                        selectedWeekdays: state.alarmModel.weekdays,
-                        onTapSwitch: (bool value) {
-                          if (!value) context.read<AddBloc>().updateWeekdays([]);
-                        },
-                        onSelectedDaysChanged: (List<Weekday> weekdays) {
-                          context.read<AddBloc>().updateWeekdays(weekdays);
-                        },
-                      ),
-                    ),
-                    const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: SnoozePanelWidget(
-                        snoozeTime: TimeOfDay(
-                          hour: state.alarmModel.snoozeTime?.hour ?? 0,
-                          minute: state.alarmModel.snoozeTime?.minute ?? 0,
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TimerPanelWidget(
+                          time: TimeOfDay(
+                            hour: state.alarmModel.time.hour,
+                            minute: state.alarmModel.time.minute,
+                          ),
+                          onTimeChanged: context.read<AddBloc>().updateTime,
                         ),
-                        onTapSwitch: (bool value) {
-                          if (!value) context.read<AddBloc>().updateSnoozeTime();
-                        },
-                        onTimeChanged: (TimeOfDay? value) {
-                          if (value != null) {
-                            context.read<AddBloc>().updateSnoozeTime(value);
-                          }
-                        },
                       ),
-                    ),
-                    const SizedBox(height: 5.0),
-                  ],
-                ),
-              );
-            },
-          );
-        },
+                      const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: RoutinePanelWidget(
+                          selectedWeekdays: state.alarmModel.weekdays,
+                          onTapSwitch: (bool value) {
+                            if (!value) context.read<AddBloc>().updateWeekdays([]);
+                          },
+                          onSelectedDaysChanged: (List<Weekday> weekdays) {
+                            context.read<AddBloc>().updateWeekdays(weekdays);
+                          },
+                        ),
+                      ),
+                      const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: SnoozePanelWidget(
+                          snoozeTime: TimeOfDay(
+                            hour: state.alarmModel.snoozeTime?.hour ?? 0,
+                            minute: state.alarmModel.snoozeTime?.minute ?? 0,
+                          ),
+                          onTapSwitch: (bool value) {
+                            if (!value) context.read<AddBloc>().updateSnoozeTime();
+                          },
+                          onDurationChanged: (Duration? value) {
+                            if (value != null) {
+                              context.read<AddBloc>().updateSnoozeTime(value);
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

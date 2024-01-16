@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/bloc/add/add_bloc_state.dart';
 import 'package:easy_alarm/common/enums.dart';
+import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 import 'package:easy_alarm/model/time_model/time_model.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +34,19 @@ class AddBloc extends Cubit<AddBlocState> {
     });
   }
 
-  void updateTitle(String newTitle) {}
+  void updateTitle(String newTitle) {
+    state.mapOrNull(loaded: (state) {
+      final AlarmModel alarmModel = state.alarmModel.copyWith(title: newTitle);
+      emit(AddBlocState.loaded(alarmModel: alarmModel));
+    });
+  }
+
+  void updateContent(String newContent) {
+    state.mapOrNull(loaded: (state) {
+      final AlarmModel alarmModel = state.alarmModel.copyWith(content: newContent);
+      emit(AddBlocState.loaded(alarmModel: alarmModel));
+    });
+  }
 
   void updateTime(TimeOfDay newTime) {
     state.mapOrNull(loaded: (state) {
@@ -53,17 +68,29 @@ class AddBloc extends Cubit<AddBlocState> {
     });
   }
 
-  void updateSnoozeTime([TimeOfDay? newTime]) {
+  void updateSnoozeTime([Duration? duration]) {
     state.mapOrNull(loaded: (state) {
       late final AlarmModel alarmModel;
-      if (newTime == null) {
-        alarmModel = state.alarmModel.copyWith(snoozeTime: null);
+      if (duration != null) {
+        final int hour = duration.inMinutes ~/ 60;
+        final int minute = duration.inMinutes % 60;
+        alarmModel = state.alarmModel.copyWith(snoozeTime: TimeModel(hour: hour, minute: minute));
       } else {
-        final TimeModel newSnoozeTime = TimeModel(hour: newTime.hour, minute: newTime.minute);
-        alarmModel = state.alarmModel.copyWith(snoozeTime: newSnoozeTime);
+        alarmModel = state.alarmModel.copyWith(snoozeTime: null);
       }
 
       emit(AddBlocState.loaded(alarmModel: alarmModel));
+    });
+  }
+
+  void save() {
+    state.mapOrNull(loaded: (state) async {
+      log(state.alarmModel.toJson().toString());
+      await NotificationManager().schedule(
+        id: 1,
+        title: "title",
+        body: "body",
+      );
     });
   }
 }
