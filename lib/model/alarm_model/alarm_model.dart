@@ -19,6 +19,7 @@ class AlarmModel with _$AlarmModel {
     required TimeModel time,
     @Default([]) List<Weekday> weekdays,
     TimeModel? snoozeTime,
+    @Default(true) bool isEnabled,
   }) = _AlarmModel;
 
   factory AlarmModel.fromJson(Map<String, Object?> json) => _$AlarmModelFromJson(json);
@@ -26,7 +27,7 @@ class AlarmModel with _$AlarmModel {
   const AlarmModel._();
 
   String get timeText =>
-      "${time.hour}:${time.minute.toString().padLeft(2, '0')}${isAm ? "alarm.am".tr() : "alarm.pm".tr()}";
+      "${time.hour % 12}:${time.minute.toString().padLeft(2, '0')}${isAm ? "alarm.am".tr() : "alarm.pm".tr()}";
 
   String get snoozeTimeText {
     if (snoozeTime == null) {

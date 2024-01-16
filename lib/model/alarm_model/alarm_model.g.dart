@@ -20,6 +20,7 @@ _$AlarmModelImpl _$$AlarmModelImplFromJson(Map<String, dynamic> json) =>
       snoozeTime: json['snoozeTime'] == null
           ? null
           : TimeModel.fromJson(json['snoozeTime'] as Map<String, dynamic>),
+      isEnabled: json['isEnabled'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$AlarmModelImplToJson(_$AlarmModelImpl instance) =>
@@ -31,6 +32,7 @@ Map<String, dynamic> _$$AlarmModelImplToJson(_$AlarmModelImpl instance) =>
       'time': instance.time.toJson(),
       'weekdays': instance.weekdays.map((e) => _$WeekdayEnumMap[e]!).toList(),
       'snoozeTime': instance.snoozeTime?.toJson(),
+      'isEnabled': instance.isEnabled,
     };
 
 const _$WeekdayEnumMap = {

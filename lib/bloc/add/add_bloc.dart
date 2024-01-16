@@ -86,14 +86,10 @@ class AddBloc extends Cubit<AddBlocState> {
     });
   }
 
-  void save() {
-    state.mapOrNull(loaded: (state) async {
-      log(state.alarmModel.toJson().toString());
-      await NotificationManager().schedule(
-        id: 1,
-        title: "title",
-        body: "body",
-      );
+  Future<void> save() async {
+    await state.mapOrNull(loaded: (state) async {
+      final AlarmModel alarmModel = state.alarmModel.copyWith(id: UniqueKey().toString());
+      await _alarmManager.saveAlarm(alarmModel);
     });
   }
 }

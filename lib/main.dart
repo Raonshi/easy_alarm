@@ -12,7 +12,6 @@ void main(List<String> args) async {
   await EasyLocalization.ensureInitialized();
 
   NotificationManager().initConfig();
-  AlarmManager().init();
 
   runApp(
     EasyLocalization(

@@ -22,13 +22,14 @@
     },
     "alarm": {
         "setTimeLabel" : "시간 설정",
-        "am": "오전",
-        "pm": "오후",
+        "am": "AM",
+        "pm": "PM",
         "routineLabel": "루틴",
         "snoozeLabel" : "반복시간",
         "snoozeMinute": "{}분 마다 반복",
         "snoozeHour": "{}시간 마다 반복",
         "snoozeHourAndMinute": "{}시간 {}분 마다 반복",
+        "snoozeNone": "반복 없음",
         "contentLabel": "알람 내용",
         "title": "알람 제목",
         "content": "알람 내용"

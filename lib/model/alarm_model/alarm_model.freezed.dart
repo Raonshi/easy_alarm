@@ -27,6 +27,7 @@ mixin _$AlarmModel {
   TimeModel get time => throw _privateConstructorUsedError;
   List<Weekday> get weekdays => throw _privateConstructorUsedError;
   TimeModel? get snoozeTime => throw _privateConstructorUsedError;
+  bool get isEnabled => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $AlarmModelCopyWith<$Res> {
       bool isAm,
       TimeModel time,
       List<Weekday> weekdays,
-      TimeModel? snoozeTime});
+      TimeModel? snoozeTime,
+      bool isEnabled});
 
   $TimeModelCopyWith<$Res> get time;
   $TimeModelCopyWith<$Res>? get snoozeTime;
@@ -73,6 +75,7 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
     Object? time = null,
     Object? weekdays = null,
     Object? snoozeTime = freezed,
+    Object? isEnabled = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -103,6 +106,10 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
           ? _value.snoozeTime
           : snoozeTime // ignore: cast_nullable_to_non_nullable
               as TimeModel?,
+      isEnabled: null == isEnabled
+          ? _value.isEnabled
+          : isEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -142,7 +149,8 @@ abstract class _$$AlarmModelImplCopyWith<$Res>
       bool isAm,
       TimeModel time,
       List<Weekday> weekdays,
-      TimeModel? snoozeTime});
+      TimeModel? snoozeTime,
+      bool isEnabled});
 
   @override
   $TimeModelCopyWith<$Res> get time;
@@ -168,6 +176,7 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
     Object? time = null,
     Object? weekdays = null,
     Object? snoozeTime = freezed,
+    Object? isEnabled = null,
   }) {
     return _then(_$AlarmModelImpl(
       id: null == id
@@ -198,6 +207,10 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
           ? _value.snoozeTime
           : snoozeTime // ignore: cast_nullable_to_non_nullable
               as TimeModel?,
+      isEnabled: null == isEnabled
+          ? _value.isEnabled
+          : isEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -213,7 +226,8 @@ class _$AlarmModelImpl extends _AlarmModel {
       required this.isAm,
       required this.time,
       final List<Weekday> weekdays = const [],
-      this.snoozeTime})
+      this.snoozeTime,
+      this.isEnabled = true})
       : _weekdays = weekdays,
         super._();
 
@@ -243,10 +257,13 @@ class _$AlarmModelImpl extends _AlarmModel {
 
   @override
   final TimeModel? snoozeTime;
+  @override
+  @JsonKey()
+  final bool isEnabled;
 
   @override
   String toString() {
-    return 'AlarmModel(id: $id, title: $title, content: $content, isAm: $isAm, time: $time, weekdays: $weekdays, snoozeTime: $snoozeTime)';
+    return 'AlarmModel(id: $id, title: $title, content: $content, isAm: $isAm, time: $time, weekdays: $weekdays, snoozeTime: $snoozeTime, isEnabled: $isEnabled)';
   }
 
   @override
@@ -261,13 +278,15 @@ class _$AlarmModelImpl extends _AlarmModel {
             (identical(other.time, time) || other.time == time) &&
             const DeepCollectionEquality().equals(other._weekdays, _weekdays) &&
             (identical(other.snoozeTime, snoozeTime) ||
-                other.snoozeTime == snoozeTime));
+                other.snoozeTime == snoozeTime) &&
+            (identical(other.isEnabled, isEnabled) ||
+                other.isEnabled == isEnabled));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, content, isAm, time,
-      const DeepCollectionEquality().hash(_weekdays), snoozeTime);
+      const DeepCollectionEquality().hash(_weekdays), snoozeTime, isEnabled);
 
   @JsonKey(ignore: true)
   @override
@@ -291,7 +310,8 @@ abstract class _AlarmModel extends AlarmModel {
       required final bool isAm,
       required final TimeModel time,
       final List<Weekday> weekdays,
-      final TimeModel? snoozeTime}) = _$AlarmModelImpl;
+      final TimeModel? snoozeTime,
+      final bool isEnabled}) = _$AlarmModelImpl;
   const _AlarmModel._() : super._();
 
   factory _AlarmModel.fromJson(Map<String, dynamic> json) =
@@ -311,6 +331,8 @@ abstract class _AlarmModel extends AlarmModel {
   List<Weekday> get weekdays;
   @override
   TimeModel? get snoozeTime;
+  @override
+  bool get isEnabled;
   @override
   @JsonKey(ignore: true)
   _$$AlarmModelImplCopyWith<_$AlarmModelImpl> get copyWith =>

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_alarm/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/common/dummy.dart';
@@ -13,12 +15,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => AlarmsBloc(), child: const _HomePageBody());
+    return BlocProvider(
+      create: (context) => AlarmsBloc(),
+      child: const _HomePageBody(),
+    );
   }
 }
 
 class _HomePageBody extends StatelessWidget {
-  const _HomePageBody({super.key});
+  const _HomePageBody();
 
   TextStyle get _headerTextStyle => const TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black);
   TextStyle get _addBtnTextStyle => const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black);
@@ -34,7 +39,9 @@ class _HomePageBody extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () async {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage())).then((value) {
+                context.read<AlarmsBloc>().refreshAlarms();
+              });
             },
             child: Text("common.add".tr(), style: _addBtnTextStyle),
           ),
@@ -50,6 +57,7 @@ class _HomePageBody extends StatelessWidget {
                 loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
                 error: (state) => Center(child: Text(state.exception.toString())),
                 loaded: (state) {
+                  log(state.alarmModels.map((e) => e.toJson().toString()).toString());
                   if (state.alarmModels.isEmpty) {
                     return Expanded(
                       child: Center(
@@ -62,22 +70,28 @@ class _HomePageBody extends StatelessWidget {
                     );
                   } else {
                     return Expanded(
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(
-                          left: 20.0,
-                          right: 20.0,
-                          top: 12.0,
-                          bottom: 48.0,
-                        ),
-                        itemCount: state.alarmModels.length,
-                        itemBuilder: (context, index) {
-                          return AlarmItemWidget(
-                            item: state.alarmModels[index],
-                            onTapDelete: (String value) {},
-                          );
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          context.read<AlarmsBloc>().refreshAlarms();
                         },
-                        separatorBuilder: (context, index) => const SizedBox(height: 16.0),
+                        child: ListView.separated(
+                          padding: const EdgeInsets.only(
+                            left: 20.0,
+                            right: 20.0,
+                            top: 12.0,
+                            bottom: 48.0,
+                          ),
+                          itemCount: state.alarmModels.length,
+                          itemBuilder: (context, index) {
+                            return AlarmItemWidget(
+                              key: ValueKey(state.alarmModels[index].id),
+                              item: state.alarmModels[index],
+                              onTapDelete: context.read<AlarmsBloc>().deleteAlarm,
+                              onTapSwitch: context.read<AlarmsBloc>().toggleAlarm,
+                            );
+                          },
+                          separatorBuilder: (context, index) => const SizedBox(height: 16.0),
+                        ),
                       ),
                     );
                   }

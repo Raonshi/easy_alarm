@@ -12,38 +12,41 @@ class AlarmManager {
   List<AlarmModel> get cachedAlarms => _alarms;
 
   final String alarms = "ALARMS";
-  late final SharedPreferences _localStorage;
 
-  bool _isInitialized = false;
-
-  void init() async {
-    _localStorage = await SharedPreferences.getInstance();
-    _isInitialized = true;
+  Future<void> loadAlarms() async {
+    await SharedPreferences.getInstance().then((prefs) {
+      _alarms.clear();
+      final List<String> alarmStrings = prefs.getStringList(alarms) ?? [];
+      if (alarmStrings.isNotEmpty) {
+        _alarms.addAll(alarmStrings.map((e) => AlarmModel.fromJson(jsonDecode(e))));
+      }
+    });
   }
 
-  void loadAlarms() {
-    if (!_isInitialized) throw Exception("AlarmManager is not initialized");
-
-    _alarms.clear();
-    final List<String> alarmStrings = _localStorage.getStringList(alarms) ?? [];
-    if (alarmStrings.isNotEmpty) {
-      _alarms.addAll(alarmStrings.map((e) => AlarmModel.fromJson(jsonDecode(e))));
-    }
+  Future<void> saveAlarm(AlarmModel alarm) async {
+    await SharedPreferences.getInstance().then((prefs) async {
+      _alarms.add(alarm);
+      final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
+      await prefs.setStringList(alarms, alarmStrings);
+    });
   }
 
-  void saveAlarm(AlarmModel alarm) {
-    if (!_isInitialized) throw Exception("AlarmManager is not initialized");
+  Future<void> replaceAlarm(AlarmModel alarm) async {
+    await SharedPreferences.getInstance().then((prefs) async {
+      final int idx = _alarms.indexWhere((element) => element.id == alarm.id);
+      if (idx == -1) return;
 
-    _alarms.add(alarm);
-    final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
-    _localStorage.setStringList(alarms, alarmStrings);
+      _alarms.replaceRange(idx, idx + 1, [alarm]);
+      final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
+      await prefs.setStringList(alarms, alarmStrings);
+    });
   }
 
-  void deleteAlarm(String id) {
-    if (!_isInitialized) throw Exception("AlarmManager is not initialized");
-
-    _alarms.removeWhere((element) => element.id == id);
-    final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
-    _localStorage.setStringList(alarms, alarmStrings);
+  Future<void> deleteAlarm(String id) async {
+    await SharedPreferences.getInstance().then((prefs) async {
+      _alarms.removeWhere((element) => element.id == id);
+      final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
+      await prefs.setStringList(alarms, alarmStrings);
+    });
   }
 }

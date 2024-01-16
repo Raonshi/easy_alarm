@@ -38,7 +38,9 @@ class _AddPageBody extends StatelessWidget {
           title: Text("addAlarm.header".tr(), style: _topButtonTextStyle),
           actions: [
             GestureDetector(
-              onTap: context.read<AddBloc>().save,
+              onTap: () {
+                context.read<AddBloc>().save().then((value) => Navigator.pop(context));
+              },
               child: Text("common.complete".tr(), style: _topButtonTextStyle),
             ),
             const SizedBox(width: 20.0),
