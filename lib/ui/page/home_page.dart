@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+      lazy: false,
       create: (context) => AlarmsBloc(),
       child: const _HomePageBody(),
     );
@@ -38,7 +39,7 @@ class _HomePageBody extends StatelessWidget {
         title: Text('header.home'.tr(), style: _headerTextStyle),
         actions: [
           GestureDetector(
-            onTap: () async {
+            onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage())).then((value) {
                 context.read<AlarmsBloc>().refreshAlarms();
               });
@@ -76,12 +77,7 @@ class _HomePageBody extends StatelessWidget {
                             context.read<AlarmsBloc>().refreshAlarms();
                           },
                           child: ListView.separated(
-                            padding: const EdgeInsets.only(
-                              left: 20.0,
-                              right: 20.0,
-                              top: 12.0,
-                              bottom: 48.0,
-                            ),
+                            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 12.0, bottom: 48.0),
                             itemCount: state.alarmModels.length,
                             itemBuilder: (context, index) {
                               return AlarmItemWidget(

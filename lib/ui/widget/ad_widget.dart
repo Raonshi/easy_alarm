@@ -62,7 +62,7 @@ class _BottomAdWidgetState extends State<BottomAdWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: CustomColors.white,
-      height: 90,
+      height: 90.0,
       width: MediaQuery.of(context).size.width,
       child: _nativeAdIsLoaded ? AdWidget(ad: _nativeAd!) : const Center(child: Text('loading...')),
     );

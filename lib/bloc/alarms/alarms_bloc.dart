@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
@@ -21,10 +23,11 @@ class AlarmsBloc extends Cubit<AlarmsState> {
 
   void refreshAlarms() {
     state.mapOrNull(
-      loaded: (state) async {
-        emit(const AlarmsState.loading());
-        await _alarmManager.loadAlarms();
-        emit(AlarmsState.loaded(alarmModels: _alarmManager.cachedAlarms));
+      loaded: (state) {
+        _alarmManager.loadAlarms().then((value) => emit(state.copyWith(alarmModels: _alarmManager.cachedAlarms)));
+        // emit(const AlarmsState.loading());
+        // await _alarmManager.loadAlarms();
+        // emit(AlarmsState.loaded(alarmModels: _alarmManager.cachedAlarms));
       },
     );
   }
@@ -37,12 +40,12 @@ class AlarmsBloc extends Cubit<AlarmsState> {
         if (idx == -1) return;
 
         final AlarmModel newAlarm = alarms[idx].copyWith(isEnabled: !alarms[idx].isEnabled);
-        await _alarmManager.replaceAlarm(newAlarm);
-
-        // _notificationManager.schedule(id: , title: title, body: body)
-
         alarms.replaceRange(idx, idx + 1, [newAlarm]);
         emit(state.copyWith(alarmModels: alarms));
+
+        _alarmManager.replaceAlarm(newAlarm).then((value) {
+          // _notificationManager.schedule(id: , title: title, body: body);
+        });
       },
     );
   }
@@ -50,14 +53,14 @@ class AlarmsBloc extends Cubit<AlarmsState> {
   void deleteAlarm(String id) {
     state.mapOrNull(
       loaded: (state) async {
+        emit(const AlarmsState.loading());
         final List<AlarmModel> alarms = state.alarmModels.toList();
         final int idx = alarms.indexWhere((element) => element.id == id);
         if (idx == -1) return;
 
-        await _alarmManager.deleteAlarm(id);
-
         alarms.removeAt(idx);
-        emit(state.copyWith(alarmModels: alarms));
+        emit(AlarmsState.loaded(alarmModels: alarms));
+        await _alarmManager.deleteAlarm(id);
       },
     );
   }
