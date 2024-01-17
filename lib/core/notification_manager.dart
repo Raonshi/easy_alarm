@@ -84,4 +84,8 @@ class NotificationManager {
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }
+
+  Future<void> cancelAlarmNotification(int id) async {
+    await notiPlugin.cancel(id);
+  }
 }

@@ -20,7 +20,7 @@ AlarmModel _$AlarmModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AlarmModel {
-  String get id => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   bool get isAm => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $AlarmModelCopyWith<$Res> {
       _$AlarmModelCopyWithImpl<$Res, AlarmModel>;
   @useResult
   $Res call(
-      {String id,
+      {int id,
       String title,
       String content,
       bool isAm,
@@ -81,7 +81,7 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -143,7 +143,7 @@ abstract class _$$AlarmModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {int id,
       String title,
       String content,
       bool isAm,
@@ -182,7 +182,7 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -235,7 +235,7 @@ class _$AlarmModelImpl extends _AlarmModel {
       _$$AlarmModelImplFromJson(json);
 
   @override
-  final String id;
+  final int id;
   @override
   @JsonKey()
   final String title;
@@ -304,7 +304,7 @@ class _$AlarmModelImpl extends _AlarmModel {
 
 abstract class _AlarmModel extends AlarmModel {
   const factory _AlarmModel(
-      {required final String id,
+      {required final int id,
       final String title,
       final String content,
       required final bool isAm,
@@ -318,7 +318,7 @@ abstract class _AlarmModel extends AlarmModel {
       _$AlarmModelImpl.fromJson;
 
   @override
-  String get id;
+  int get id;
   @override
   String get title;
   @override

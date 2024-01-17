@@ -15,7 +15,7 @@ class AddBloc extends Cubit<AddBlocState> {
 
   void _init() async {
     state.mapOrNull(initial: (state) {
-      const String id = "";
+      final int id = _alarmManager.firstEmptyId;
       final TimeOfDay time = TimeOfDay.now();
 
       final TimeModel timeModel = TimeModel(hour: time.hour, minute: time.minute);
@@ -85,8 +85,7 @@ class AddBloc extends Cubit<AddBlocState> {
 
   Future<void> save() async {
     await state.mapOrNull(loaded: (state) async {
-      final AlarmModel alarmModel = state.alarmModel.copyWith(id: UniqueKey().toString());
-      await _alarmManager.saveAlarm(alarmModel);
+      await _alarmManager.saveAlarm(state.alarmModel);
     });
   }
 }

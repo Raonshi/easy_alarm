@@ -8,7 +8,7 @@ part of 'alarm_model.dart';
 
 _$AlarmModelImpl _$$AlarmModelImplFromJson(Map<String, dynamic> json) =>
     _$AlarmModelImpl(
-      id: json['id'] as String,
+      id: json['id'] as int,
       title: json['title'] as String? ?? "알람",
       content: json['content'] as String? ?? "",
       isAm: json['isAm'] as bool,

@@ -12,7 +12,7 @@ class AlarmModel with _$AlarmModel {
   // ignore: invalid_annotation_target
   @JsonSerializable(explicitToJson: true)
   const factory AlarmModel({
-    required String id,
+    required int id,
     @Default("알람") String title,
     @Default("") String content,
     required bool isAm,

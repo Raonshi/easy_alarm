@@ -12,8 +12,8 @@ class AlarmItemWidget extends StatelessWidget {
   });
 
   final AlarmModel item;
-  final ValueChanged<String> onTapDelete;
-  final ValueChanged<String> onTapSwitch;
+  final ValueChanged<int> onTapDelete;
+  final ValueChanged<int> onTapSwitch;
 
   TextStyle get _timeTextStyle => const TextStyle(fontSize: 32, fontWeight: FontWeight.w700);
 

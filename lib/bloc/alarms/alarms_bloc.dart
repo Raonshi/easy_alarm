@@ -1,12 +1,12 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
+import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 
 class AlarmsBloc extends Cubit<AlarmsState> {
   final AlarmManager _alarmManager = AlarmManager();
+  final NotificationManager _notificationManager = NotificationManager();
   AlarmsBloc() : super(const AlarmsState.initial()) {
     _init();
   }
@@ -14,25 +14,26 @@ class AlarmsBloc extends Cubit<AlarmsState> {
   void _init() {
     state.mapOrNull(
       initial: (state) async {
-        emit(const AlarmsState.loading());
-        await _alarmManager.loadAlarms();
-        emit(AlarmsState.loaded(alarmModels: _alarmManager.cachedAlarms));
+        await _fetchAlarms();
       },
     );
   }
 
   void refreshAlarms() {
     state.mapOrNull(
-      loaded: (state) {
-        _alarmManager.loadAlarms().then((value) => emit(state.copyWith(alarmModels: _alarmManager.cachedAlarms)));
-        // emit(const AlarmsState.loading());
-        // await _alarmManager.loadAlarms();
-        // emit(AlarmsState.loaded(alarmModels: _alarmManager.cachedAlarms));
+      loaded: (state) async {
+        _fetchAlarms();
       },
     );
   }
 
-  void toggleAlarm(String id) {
+  Future<void> _fetchAlarms() async {
+    emit(const AlarmsState.loading());
+    await _alarmManager.loadAlarms();
+    emit(AlarmsState.loaded(alarmModels: _alarmManager.cachedAlarms));
+  }
+
+  void toggleAlarm(int id) {
     state.mapOrNull(
       loaded: (state) async {
         final List<AlarmModel> alarms = state.alarmModels.toList();
@@ -44,13 +45,17 @@ class AlarmsBloc extends Cubit<AlarmsState> {
         emit(state.copyWith(alarmModels: alarms));
 
         _alarmManager.replaceAlarm(newAlarm).then((value) {
-          // _notificationManager.schedule(id: , title: title, body: body);
+          if (newAlarm.isEnabled) {
+            _notificationManager.schedule(id: newAlarm.id, title: newAlarm.title, body: newAlarm.content);
+          } else {
+            _notificationManager.cancelAlarmNotification(newAlarm.id);
+          }
         });
       },
     );
   }
 
-  void deleteAlarm(String id) {
+  void deleteAlarm(int id) {
     state.mapOrNull(
       loaded: (state) async {
         emit(const AlarmsState.loading());
