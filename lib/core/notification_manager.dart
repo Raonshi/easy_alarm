@@ -1,5 +1,9 @@
 import 'dart:developer';
 
+import 'package:easy_alarm/common/enums.dart';
+import 'package:easy_alarm/common/tools.dart';
+import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -64,12 +68,27 @@ class NotificationManager {
     );
   }
 
-  Future<void> schedule({required int id, required String title, required String body}) async {
+  Future<void> schedule({required AlarmModel alarm}) async {
+    final DateTime now = DateTime.now();
+
+    final DateTime dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      alarm.time.hour,
+      alarm.time.minute,
+    );
+
+    final tz.TZDateTime nextSchedule = tz.TZDateTime.from(
+      dateTime,
+      tz.local,
+    );
+
     await notiPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10)),
+      alarm.id,
+      alarm.title,
+      alarm.content,
+      nextSchedule,
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'channel_id',

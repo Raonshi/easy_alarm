@@ -44,11 +44,11 @@ class AlarmsBloc extends Cubit<AlarmsState> {
         alarms.replaceRange(idx, idx + 1, [newAlarm]);
         emit(state.copyWith(alarmModels: alarms));
 
-        _alarmManager.replaceAlarm(newAlarm).then((value) {
+        _alarmManager.replaceAlarm(newAlarm).then((value) async {
           if (newAlarm.isEnabled) {
-            _notificationManager.schedule(id: newAlarm.id, title: newAlarm.title, body: newAlarm.content);
+            await _notificationManager.schedule(alarm: newAlarm);
           } else {
-            _notificationManager.cancelAlarmNotification(newAlarm.id);
+            await _notificationManager.cancelAlarmNotification(newAlarm.id);
           }
         });
       },
@@ -66,6 +66,7 @@ class AlarmsBloc extends Cubit<AlarmsState> {
         alarms.removeAt(idx);
         emit(AlarmsState.loaded(alarmModels: alarms));
         await _alarmManager.deleteAlarm(id);
+        await _notificationManager.cancelAlarmNotification(id);
       },
     );
   }

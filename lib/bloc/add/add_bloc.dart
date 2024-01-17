@@ -2,12 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/bloc/add/add_bloc_state.dart';
 import 'package:easy_alarm/common/enums.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
+import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 import 'package:easy_alarm/model/time_model/time_model.dart';
 import 'package:flutter/material.dart';
 
 class AddBloc extends Cubit<AddBlocState> {
   final AlarmManager _alarmManager = AlarmManager();
+  final NotificationManager _notificationManager = NotificationManager();
 
   AddBloc() : super(const AddBlocState.initial()) {
     _init();
@@ -85,7 +87,8 @@ class AddBloc extends Cubit<AddBlocState> {
 
   Future<void> save() async {
     await state.mapOrNull(loaded: (state) async {
-      await _alarmManager.saveAlarm(state.alarmModel);
+      await _alarmManager.saveAlarm(state.alarmModel).then((value) {});
+      await _notificationManager.schedule(alarm: state.alarmModel);
     });
   }
 }
