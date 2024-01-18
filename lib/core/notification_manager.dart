@@ -1,9 +1,5 @@
 import 'dart:developer';
-
-import 'package:easy_alarm/common/enums.dart';
-import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -18,7 +14,7 @@ class NotificationManager {
 
   void initConfig() async {
     const AndroidInitializationSettings androidSetting = AndroidInitializationSettings(
-      'app_icon',
+      '@mipmap/ic_launcher',
     );
 
     const DarwinInitializationSettings iosSetting = DarwinInitializationSettings(

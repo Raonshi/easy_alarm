@@ -48,6 +48,7 @@ dependencies:
   shared_preferences: ^2.2.2
   google_mobile_ads: ^4.0.0
   app_tracking_transparency: ^2.0.4
+  alarm: ^3.0.5
 
 dev_dependencies:
   flutter_test:
