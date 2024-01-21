@@ -2,13 +2,14 @@ import 'dart:developer';
 
 import 'package:easy_alarm/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
+import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/ui/page/add_page.dart';
 import 'package:easy_alarm/ui/widget/ad_widget.dart';
 import 'package:easy_alarm/ui/widget/alarm_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -40,7 +41,10 @@ class _HomePageBody extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage())).then((value) {
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage())).then((value) {
+              //   context.read<AlarmsBloc>().refreshAlarms();
+              // });
+              navKey.currentContext!.pushNamed(Path.add.path).then((value) {
                 context.read<AlarmsBloc>().refreshAlarms();
               });
             },

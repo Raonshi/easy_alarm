@@ -1,8 +1,6 @@
 import 'dart:developer';
-
-import 'package:easy_alarm/core/alarm_manager.dart';
 import 'package:easy_alarm/core/notification_manager.dart';
-import 'package:easy_alarm/ui/page/home_page.dart';
+import 'package:easy_alarm/core/route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -30,7 +28,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Easy Alarm',
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -38,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      routerConfig: router,
     );
   }
 }
