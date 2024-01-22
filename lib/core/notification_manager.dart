@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -11,6 +13,8 @@ class NotificationManager {
   NotificationManager._internal();
 
   final FlutterLocalNotificationsPlugin notiPlugin = FlutterLocalNotificationsPlugin();
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  String? fcmToken;
 
   void initConfig() async {
     const AndroidInitializationSettings androidSetting = AndroidInitializationSettings(
@@ -37,8 +41,34 @@ class NotificationManager {
     );
 
     notiPlugin.initialize(initSettings);
+    await _initFcmToken();
     await _configureLocalTimeZone();
     log("[Notification Manager] initialized");
+  }
+
+  Future<void> _initFcmToken() async {
+    fcmToken = await _fcm.getToken();
+    log("FCM TOKEN : $fcmToken");
+
+    FirebaseMessaging.onMessage.listen((event) async {
+      final RemoteNotification? noti = event.notification;
+      if (noti != null) {
+        await notiPlugin.show(
+          noti.hashCode,
+          noti.title,
+          noti.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              noti.android?.channelId ?? "",
+              noti.android?.channelId ?? "",
+            ),
+            iOS: DarwinNotificationDetails(
+              subtitle: noti.apple?.subtitle,
+            ),
+          ),
+        );
+      }
+    });
   }
 
   Future<void> _configureLocalTimeZone() async {
@@ -58,6 +88,8 @@ class NotificationManager {
           'channel_name',
           importance: Importance.max,
           priority: Priority.high,
+          sound: RawResourceAndroidNotificationSound('assets/sounds/0.mp3'),
+          playSound: true,
         ),
         iOS: DarwinNotificationDetails(),
       ),

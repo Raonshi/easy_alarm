@@ -1,13 +1,20 @@
 import 'dart:developer';
 import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/core/route.dart';
+import 'package:easy_alarm/firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await EasyLocalization.ensureInitialized();
 
   NotificationManager().initConfig();

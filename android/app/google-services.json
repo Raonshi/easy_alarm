@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "903334829613",
+    "project_id": "easyalarm-ff296",
+    "storage_bucket": "easyalarm-ff296.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903334829613:android:2c711cef57b6e64e3062a4",
+        "android_client_info": {
+          "package_name": "com.raondev.easy_alarm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyGJQqTP7Ymcdjfg3_qtGbQusjdzhZ6tc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
