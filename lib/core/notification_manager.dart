@@ -110,7 +110,6 @@ class NotificationManager {
           'channel_name',
           importance: Importance.max,
           priority: Priority.high,
-          sound: RawResourceAndroidNotificationSound('assets/sounds/0.mp3'),
           playSound: true,
         ),
         iOS: DarwinNotificationDetails(),
