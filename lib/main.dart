@@ -11,17 +11,22 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+  // Receive background notification message
   FirebaseMessaging.onBackgroundMessage(_onBackgroundNotification);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await EasyLocalization.ensureInitialized();
+  await Future.wait([
+    EasyLocalization.ensureInitialized(),
+    NotificationManager().init(),
+    MobileAds.instance.initialize(),
+  ]);
 
-  NotificationManager().initConfig();
-  await MobileAds.instance.initialize();
+  // await EasyLocalization.ensureInitialized();
+  // await NotificationManager().init();
+  // await MobileAds.instance.initialize();
+
+  // Receive foreground notification message
+  FirebaseMessaging.onMessage.listen(_onForegroundNotification);
 
   runApp(
     EasyLocalization(
@@ -38,6 +43,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Receive foreground notification message
+    FirebaseMessaging.onMessage.listen((event) async {
+      final RemoteNotification? noti = event.notification;
+      if (noti != null) {
+        await NotificationManager().show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
+      }
+    });
+
     return MaterialApp.router(
       title: 'Easy Alarm',
       localizationsDelegates: context.localizationDelegates,
@@ -51,15 +64,24 @@ class MyApp extends StatelessWidget {
   }
 }
 
+Future<void> _onForegroundNotification(RemoteMessage message) async {
+  final RemoteNotification? noti = message.notification;
+  log("Foreground Notification: ${noti?.title ?? ""} ${noti?.body ?? ""}");
+  
+  if (noti != null) {
+    await NotificationManager().show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
+  }
+}
+
 @pragma('vm:entry-point')
 Future<void> _onBackgroundNotification(RemoteMessage message) async {
-  await Firebase.initializeApp(name: "bgNoti", options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final RemoteNotification? noti = message.notification;
 
   log("Background Notification: ${noti?.title ?? ""} ${noti?.body ?? ""}");
 
   if (noti != null) {
-    NotificationManager().initConfig();
+    await NotificationManager().initConfig();
     await NotificationManager().show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
   }
 }

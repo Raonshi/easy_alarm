@@ -16,37 +16,19 @@ class NotificationManager {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   String? fcmToken;
 
-  void initConfig() async {
+  Future<void> init() async {
+    await _initPermission();
+    await initConfig();
+    log("[Notification Manager] initialized");
+  }
+
+  Future<void> initConfig() async {
+    await Future.wait([initNotification(), _initFcmToken(), _configureLocalTimeZone()]);
+  }
+
+  Future<void> _initPermission() async {
     await _isAndroidPermissionGranted();
     await _requestPermissions();
-
-    const AndroidInitializationSettings androidSetting = AndroidInitializationSettings(
-      'mipmap/ic_launcher',
-    );
-
-    const DarwinInitializationSettings iosSetting = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      requestProvisionalPermission: false,
-      requestCriticalPermission: false,
-      defaultPresentAlert: true,
-      defaultPresentBadge: true,
-      defaultPresentSound: true,
-      defaultPresentBanner: true,
-      defaultPresentList: true,
-      notificationCategories: [],
-    );
-
-    const InitializationSettings initSettings = InitializationSettings(
-      android: androidSetting,
-      iOS: iosSetting,
-    );
-
-    await notiPlugin.initialize(initSettings);
-    await _initFcmToken();
-    await _configureLocalTimeZone();
-    log("[Notification Manager] initialized");
   }
 
   Future<void> _isAndroidPermissionGranted() async {
@@ -80,17 +62,36 @@ class NotificationManager {
     }
   }
 
+  Future<void> initNotification() async {
+    const AndroidInitializationSettings androidSetting = AndroidInitializationSettings(
+      'mipmap/ic_launcher',
+    );
+
+    const DarwinInitializationSettings iosSetting = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      requestProvisionalPermission: false,
+      requestCriticalPermission: false,
+      defaultPresentAlert: true,
+      defaultPresentBadge: true,
+      defaultPresentSound: true,
+      defaultPresentBanner: true,
+      defaultPresentList: true,
+      notificationCategories: [],
+    );
+
+    const InitializationSettings initSettings = InitializationSettings(
+      android: androidSetting,
+      iOS: iosSetting,
+    );
+
+    await notiPlugin.initialize(initSettings);
+  }
+
   Future<void> _initFcmToken() async {
     fcmToken = await _fcm.getToken();
     log("FCM TOKEN : $fcmToken");
-
-    // Receive foreground notification message
-    FirebaseMessaging.onMessage.listen((event) async {
-      final RemoteNotification? noti = event.notification;
-      if (noti != null) {
-        await show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
-      }
-    });
   }
 
   Future<void> _configureLocalTimeZone() async {
