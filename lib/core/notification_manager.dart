@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -16,8 +17,11 @@ class NotificationManager {
   String? fcmToken;
 
   void initConfig() async {
+    await _isAndroidPermissionGranted();
+    await _requestPermissions();
+
     const AndroidInitializationSettings androidSetting = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      'mipmap/ic_launcher',
     );
 
     const DarwinInitializationSettings iosSetting = DarwinInitializationSettings(
@@ -39,33 +43,52 @@ class NotificationManager {
       iOS: iosSetting,
     );
 
-    notiPlugin.initialize(initSettings);
+    await notiPlugin.initialize(initSettings);
     await _initFcmToken();
     await _configureLocalTimeZone();
     log("[Notification Manager] initialized");
+  }
+
+  Future<void> _isAndroidPermissionGranted() async {
+    if (Platform.isAndroid) {
+      final bool granted = await notiPlugin
+              .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+              ?.areNotificationsEnabled() ??
+          false;
+    }
+  }
+
+  Future<void> _requestPermissions() async {
+    if (Platform.isIOS || Platform.isMacOS) {
+      await notiPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+      await notiPlugin
+          .resolvePlatformSpecificImplementation<MacOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+    } else if (Platform.isAndroid) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+          notiPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+      final bool? grantedNotificationPermission = await androidImplementation?.requestNotificationsPermission();
+    }
   }
 
   Future<void> _initFcmToken() async {
     fcmToken = await _fcm.getToken();
     log("FCM TOKEN : $fcmToken");
 
+    // Receive foreground notification message
     FirebaseMessaging.onMessage.listen((event) async {
       final RemoteNotification? noti = event.notification;
       if (noti != null) {
-        await notiPlugin.show(
-          noti.hashCode,
-          noti.title,
-          noti.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              noti.android?.channelId ?? "",
-              noti.android?.channelId ?? "",
-            ),
-            iOS: DarwinNotificationDetails(
-              subtitle: noti.apple?.subtitle,
-            ),
-          ),
-        );
+        await show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
       }
     });
   }
