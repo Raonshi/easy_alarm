@@ -21,10 +21,6 @@ void main(List<String> args) async {
     MobileAds.instance.initialize(),
   ]);
 
-  // await EasyLocalization.ensureInitialized();
-  // await NotificationManager().init();
-  // await MobileAds.instance.initialize();
-
   // Receive foreground notification message
   FirebaseMessaging.onMessage.listen(_onForegroundNotification);
 
@@ -43,14 +39,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Receive foreground notification message
-    FirebaseMessaging.onMessage.listen((event) async {
-      final RemoteNotification? noti = event.notification;
-      if (noti != null) {
-        await NotificationManager().show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
-      }
-    });
-
     return MaterialApp.router(
       title: 'Easy Alarm',
       localizationsDelegates: context.localizationDelegates,
@@ -67,7 +55,6 @@ class MyApp extends StatelessWidget {
 Future<void> _onForegroundNotification(RemoteMessage message) async {
   final RemoteNotification? noti = message.notification;
   log("Foreground Notification: ${noti?.title ?? ""} ${noti?.body ?? ""}");
-  
   if (noti != null) {
     await NotificationManager().show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
   }
