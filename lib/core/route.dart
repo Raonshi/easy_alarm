@@ -15,9 +15,11 @@ enum Path {
 }
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+String initialRoute = Path.home.path;
 
 final GoRouter router = GoRouter(
   navigatorKey: navKey,
+  initialLocation: initialRoute,
   routes: [
     GoRoute(
       path: Path.home.path,

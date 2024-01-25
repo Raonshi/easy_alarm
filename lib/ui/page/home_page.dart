@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:easy_alarm/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
+import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/widget/ad_widget.dart';
@@ -34,6 +35,12 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NotificationManager().notiPlugin.getNotificationAppLaunchDetails().then((detail) {
+      if (detail?.didNotificationLaunchApp ?? false) {
+        navKey.currentContext!.pushNamed(Path.alarm.path);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,

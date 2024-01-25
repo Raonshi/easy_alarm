@@ -1,9 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:easy_alarm/core/route.dart';
+import 'package:easy_alarm/main.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:go_router/go_router.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
@@ -86,7 +90,11 @@ class NotificationManager {
       iOS: iosSetting,
     );
 
-    await notiPlugin.initialize(initSettings);
+    await notiPlugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: onTapForegroundNotification,
+      onDidReceiveBackgroundNotificationResponse: onTapBackgroundNotification,
+    );
   }
 
   Future<void> _initFcmToken() async {

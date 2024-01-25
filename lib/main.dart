@@ -7,6 +7,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main(List<String> args) async {
@@ -71,4 +73,13 @@ Future<void> _onBackgroundNotification(RemoteMessage message) async {
     await NotificationManager().initConfig();
     await NotificationManager().show(id: 0, title: noti.title ?? "", body: noti.body ?? "");
   }
+}
+
+Future<void> onTapForegroundNotification(NotificationResponse details) async {
+  navKey.currentContext!.pushNamed(Path.alarm.path);
+}
+
+@pragma('vm:entry-point')
+Future<void> onTapBackgroundNotification(NotificationResponse details) async {
+  navKey.currentContext!.pushNamed(Path.alarm.path);
 }
