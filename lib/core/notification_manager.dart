@@ -1,13 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
-import 'package:easy_alarm/core/route.dart';
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/main.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:go_router/go_router.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
@@ -23,7 +20,7 @@ class NotificationManager {
   Future<void> init() async {
     await _initPermission();
     await initConfig();
-    log("[Notification Manager] initialized");
+    lgr.d("[Notification Manager] initialized");
   }
 
   Future<void> initConfig() async {
@@ -37,7 +34,7 @@ class NotificationManager {
 
   Future<void> _isAndroidPermissionGranted() async {
     if (Platform.isAndroid) {
-      final bool granted = await notiPlugin
+      await notiPlugin
               .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
               ?.areNotificationsEnabled() ??
           false;
@@ -62,7 +59,7 @@ class NotificationManager {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
           notiPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
 
-      final bool? grantedNotificationPermission = await androidImplementation?.requestNotificationsPermission();
+      await androidImplementation?.requestNotificationsPermission();
     }
   }
 
@@ -99,7 +96,7 @@ class NotificationManager {
 
   Future<void> _initFcmToken() async {
     fcmToken = await _fcm.getToken();
-    log("FCM TOKEN : $fcmToken");
+    lgr.d("FCM TOKEN : $fcmToken");
   }
 
   Future<void> _configureLocalTimeZone() async {

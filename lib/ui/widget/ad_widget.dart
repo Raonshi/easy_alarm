@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/secret/keys.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:flutter/material.dart';
@@ -22,17 +22,17 @@ class _BottomAdWidgetState extends State<BottomAdWidget> {
       request: const AdRequest(),
       listener: NativeAdListener(
         onAdLoaded: (Ad ad) {
-          log('$_nativeAd loaded.');
+          lgr.d('$_nativeAd loaded.');
           setState(() {
             _nativeAdIsLoaded = true;
           });
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          log('$NativeAd failedToLoad: $error');
+          lgr.d('$NativeAd failedToLoad: $error');
           ad.dispose();
         },
-        onAdOpened: (Ad ad) => log('$NativeAd onAdOpened.'),
-        onAdClosed: (Ad ad) => log('$NativeAd onAdClosed.'),
+        onAdOpened: (Ad ad) => lgr.d('$NativeAd onAdOpened.'),
+        onAdClosed: (Ad ad) => lgr.d('$NativeAd onAdClosed.'),
       ),
       nativeTemplateStyle: NativeTemplateStyle(
         templateType: TemplateType.small,

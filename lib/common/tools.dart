@@ -1,4 +1,7 @@
 import 'package:easy_alarm/common/enums.dart';
+import 'package:logger/logger.dart';
+
+Logger get lgr => Logger();
 
 List<DateTime> getThisWeekDateTime(List<Weekday> weekdays) {
   final DateTime now = DateTime.now();

@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:easy_alarm/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/style/colors.dart';
@@ -35,6 +34,7 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // This function called when user tap notification at terminated state
     NotificationManager().notiPlugin.getNotificationAppLaunchDetails().then((detail) {
       if (detail?.didNotificationLaunchApp ?? false) {
         navKey.currentContext!.pushNamed(Path.alarm.path);
@@ -70,7 +70,7 @@ class _HomePageBody extends StatelessWidget {
                   loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
                   error: (state) => Center(child: Text(state.exception.toString())),
                   loaded: (state) {
-                    log(state.alarmModels.map((e) => e.toJson().toString()).toString());
+                    lgr.d(state.alarmModels.map((e) => e.toJson().toString()).toString());
                     if (state.alarmModels.isEmpty) {
                       return Expanded(
                         child: Center(

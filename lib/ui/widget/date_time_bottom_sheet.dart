@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +38,7 @@ class DateTimeBottomSheet extends StatelessWidget {
               mode: CupertinoDatePickerMode.time,
               onDateTimeChanged: (dateTime) {
                 final TimeOfDay time = TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
-                log("time: $time");
+                lgr.d("time: $time");
               },
             ),
           ),
