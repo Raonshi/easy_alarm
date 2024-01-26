@@ -105,10 +105,10 @@ class NotificationManager {
     tz.setLocalLocation(tz.getLocation(timeZoneName));
   }
 
-  Future<void> show({required int id, required String title, required String body}) async {
+  Future<void> show({required int id, String? title, required String body}) async {
     await notiPlugin.show(
       id,
-      title,
+      title ?? "이지알람",
       body,
       const NotificationDetails(
         android: AndroidNotificationDetails(

@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/core/route.dart';
@@ -21,10 +22,13 @@ void main(List<String> args) async {
     EasyLocalization.ensureInitialized(),
     NotificationManager().init(),
     MobileAds.instance.initialize(),
+    Alarm.init(showDebugLogs: true),
   ]);
 
   // Receive foreground notification message
   FirebaseMessaging.onMessage.listen(_onForegroundNotification);
+
+  Alarm.setNotificationOnAppKillContent("title", "body");
 
   runApp(
     EasyLocalization(

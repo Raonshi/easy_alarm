@@ -73,5 +73,8 @@
             </intent-filter>
         </receiver>
         <service android:name="com.gdelataillade.alarm.services.NotificationOnKillService" />
+
+        <!-- App closing detector -->
+        <service android:name="com.raondev.easy_alarm.NotificationService"/>
     </application>
 </manifest>
