@@ -1,15 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
-import 'package:easy_alarm/core/notification_manager.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 
-import 'add_bloc_state.dart';
+import 'add_state.dart';
 
-class AddBloc extends Cubit<AddBlocState> {
+class AddBloc extends Cubit<AddState> {
   final AlarmManager _alarmManager = AlarmManager();
-  final NotificationManager _notificationManager = NotificationManager();
 
-  AddBloc() : super(const AddBlocState.initial()) {
+  AddBloc() : super(const AddState.initial()) {
     _init();
   }
 
@@ -19,7 +17,7 @@ class AddBloc extends Cubit<AddBlocState> {
       final int timestamp = DateTime.now().millisecondsSinceEpoch;
 
       emit(
-        AddBlocState.loaded(
+        AddState.loaded(
           alarm: AlarmEntity(
             id: id,
             isAm: DateTime.now().hour < 12 ? true : false,
@@ -63,7 +61,7 @@ class AddBloc extends Cubit<AddBlocState> {
     state.mapOrNull(loaded: (state) {
       late final AlarmEntity newAlarm;
       if (duration != null) {
-        newAlarm = state.alarm.copyWith(snoozeDuration: duration.inMilliseconds);
+        newAlarm = state.alarm.copyWith(snoozeDuration: duration.inMinutes);
       } else {
         newAlarm = state.alarm.copyWith(snoozeDuration: null);
       }
@@ -74,10 +72,7 @@ class AddBloc extends Cubit<AddBlocState> {
 
   Future<void> save() async {
     await state.mapOrNull(loaded: (state) async {
-      await Future.wait([
-        _alarmManager.saveAlarm(state.alarm),
-        _notificationManager.addAlarm(state.alarm),
-      ]);
+      await _alarmManager.saveAlarm(state.alarm);
     });
   }
 }

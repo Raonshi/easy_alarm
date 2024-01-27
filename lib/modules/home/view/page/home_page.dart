@@ -32,6 +32,8 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<AlarmsBloc>().refreshAlarms();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'add_bloc_state.dart';
+part of 'add_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$AddBlocState {
+mixin _$AddState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
@@ -69,16 +69,15 @@ mixin _$AddBlocState {
 }
 
 /// @nodoc
-abstract class $AddBlocStateCopyWith<$Res> {
-  factory $AddBlocStateCopyWith(
-          AddBlocState value, $Res Function(AddBlocState) then) =
-      _$AddBlocStateCopyWithImpl<$Res, AddBlocState>;
+abstract class $AddStateCopyWith<$Res> {
+  factory $AddStateCopyWith(AddState value, $Res Function(AddState) then) =
+      _$AddStateCopyWithImpl<$Res, AddState>;
 }
 
 /// @nodoc
-class _$AddBlocStateCopyWithImpl<$Res, $Val extends AddBlocState>
-    implements $AddBlocStateCopyWith<$Res> {
-  _$AddBlocStateCopyWithImpl(this._value, this._then);
+class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
+    implements $AddStateCopyWith<$Res> {
+  _$AddStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -95,7 +94,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$AddStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -109,7 +108,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'AddBlocState.initial()';
+    return 'AddState.initial()';
   }
 
   @override
@@ -196,7 +195,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements AddBlocState {
+abstract class _Initial implements AddState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -209,7 +208,7 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$AddStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
@@ -223,7 +222,7 @@ class _$LoadingImpl implements _Loading {
 
   @override
   String toString() {
-    return 'AddBlocState.loading()';
+    return 'AddState.loading()';
   }
 
   @override
@@ -310,7 +309,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements AddBlocState {
+abstract class _Loading implements AddState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -325,7 +324,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$AddStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
@@ -355,7 +354,7 @@ class _$ErrorImpl implements _Error {
 
   @override
   String toString() {
-    return 'AddBlocState.error(exception: $exception)';
+    return 'AddState.error(exception: $exception)';
   }
 
   @override
@@ -451,7 +450,7 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements AddBlocState {
+abstract class _Error implements AddState {
   const factory _Error({required final Exception exception}) = _$ErrorImpl;
 
   Exception get exception;
@@ -473,7 +472,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadedImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$LoadedImpl>
+    extends _$AddStateCopyWithImpl<$Res, _$LoadedImpl>
     implements _$$LoadedImplCopyWith<$Res> {
   __$$LoadedImplCopyWithImpl(
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
@@ -511,7 +510,7 @@ class _$LoadedImpl implements _Loaded {
 
   @override
   String toString() {
-    return 'AddBlocState.loaded(alarm: $alarm)';
+    return 'AddState.loaded(alarm: $alarm)';
   }
 
   @override
@@ -606,7 +605,7 @@ class _$LoadedImpl implements _Loaded {
   }
 }
 
-abstract class _Loaded implements AddBlocState {
+abstract class _Loaded implements AddState {
   const factory _Loaded({required final AlarmEntity alarm}) = _$LoadedImpl;
 
   AlarmEntity get alarm;

@@ -1,5 +1,5 @@
-import 'package:easy_alarm/modules/alarm/view/add_page.dart';
-import 'package:easy_alarm/modules/alarm/view/alarm_page.dart';
+import 'package:easy_alarm/modules/alarm/view/page/add_page.dart';
+import 'package:easy_alarm/modules/alarm/view/page/alarm_page.dart';
 import 'package:easy_alarm/modules/home/view/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -30,12 +30,12 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: Path.add.path,
           name: Path.add.path,
-          pageBuilder: (context, state) => const NoTransitionPage(child: AddPage()),
+          builder: (context, state) => const AddPage(),
         ),
         GoRoute(
           path: Path.alarm.path,
           name: Path.alarm.path,
-          pageBuilder: (context, state) => NoTransitionPage(child: AlarmPage(state: state)),
+          builder: (context, state) => AlarmPage(state: state),
         ),
       ],
     ),
