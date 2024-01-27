@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/main.dart';
 import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -14,7 +14,7 @@ class NotificationManager {
   NotificationManager._internal();
 
   final FlutterLocalNotificationsPlugin notiPlugin = FlutterLocalNotificationsPlugin();
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  // final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   String? fcmToken;
 
   Future<void> init() async {
@@ -24,7 +24,8 @@ class NotificationManager {
   }
 
   Future<void> initConfig() async {
-    await Future.wait([initNotification(), _initFcmToken(), _configureLocalTimeZone()]);
+    // await Future.wait([initNotification(), _initFcmToken(), _configureLocalTimeZone()]);
+    await Future.wait([initNotification(),  _configureLocalTimeZone()]);
   }
 
   Future<void> _initPermission() async {
@@ -94,10 +95,10 @@ class NotificationManager {
     );
   }
 
-  Future<void> _initFcmToken() async {
-    fcmToken = await _fcm.getToken();
-    lgr.d("FCM TOKEN : $fcmToken");
-  }
+  // Future<void> _initFcmToken() async {
+  //   fcmToken = await _fcm.getToken();
+  //   lgr.d("FCM TOKEN : $fcmToken");
+  // }
 
   Future<void> _configureLocalTimeZone() async {
     tz.initializeTimeZones();
