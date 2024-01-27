@@ -4,7 +4,7 @@ import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_bloc.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_state.dart';
 import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/ui/widget/ad_widget.dart';
+import 'package:easy_alarm/modules/main/view/widget/bottom_ad_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,7 +102,7 @@ class _AlarmPageBody extends StatelessWidget {
                           } else {
                             showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
                           }
-                          navKey.currentContext!.goNamed(Path.home.path);
+                          mainNavKey.currentContext!.replaceNamed(Path.home.path);
                         }),
                         child: Container(
                           decoration: _waitForNextAlarmDecoration,
@@ -114,7 +114,7 @@ class _AlarmPageBody extends StatelessWidget {
                         onTap: () => context
                             .read<RingingBloc>()
                             .stopAlarm()
-                            .then((value) => navKey.currentContext!.goNamed(Path.home.path)),
+                            .then((value) => mainNavKey.currentContext!.replaceNamed(Path.home.path)),
                         child: Container(
                           decoration: _closeButtonDecoration,
                           padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 18.0),

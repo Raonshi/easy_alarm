@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 Logger get lgr => Logger();
 
 void showSnackBar(String message) {
-  ScaffoldMessenger.of(navKey.currentContext!).showSnackBar(
+  ScaffoldMessenger.of(mainNavKey.currentContext!).showSnackBar(
     SnackBar(content: Text(message)),
   );
 }

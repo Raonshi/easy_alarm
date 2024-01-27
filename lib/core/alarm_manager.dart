@@ -47,13 +47,13 @@ class AlarmManager {
 
   Future<void> initAlarm() async {
     await Alarm.init(showDebugLogs: true);
-    await Alarm.setNotificationOnAppKillContent("title", "body");
+    await Alarm.setNotificationOnAppKillContent("이지 알람", "앱이 종료되면 알람이 울리지 않을 수 있습니다.");
 
     Alarm.ringStream.stream.listen(_handleAlarmRinging);
   }
 
   Future<void> _handleAlarmRinging(AlarmSettings settings) async {
-    navKey.currentContext!.pushNamed(Path.alarm.path, extra: settings);
+    mainNavKey.currentContext!.replaceNamed(Path.alarm.path, extra: settings);
   }
 
   /// Remove every alarms from the system and the storage.
