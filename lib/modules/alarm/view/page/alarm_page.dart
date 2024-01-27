@@ -4,7 +4,6 @@ import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_bloc.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_state.dart';
 import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/modules/main/view/widget/bottom_ad_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,9 +64,11 @@ class _AlarmPageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.grey10,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0.0,
+        backgroundColor: CustomColors.grey10,
         automaticallyImplyLeading: false,
       ),
       body: BlocBuilder<RingingBloc, RingingState>(
@@ -104,27 +105,30 @@ class _AlarmPageBody extends StatelessWidget {
                           }
                           mainNavKey.currentContext!.replaceNamed(Path.home.path);
                         }),
-                        child: Container(
-                          decoration: _waitForNextAlarmDecoration,
-                          padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 18.0),
-                          child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
+                        child: Expanded(
+                          child: Container(
+                            decoration: _waitForNextAlarmDecoration,
+                            padding: const EdgeInsets.symmetric(vertical: 18.0),
+                            child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 53.0),
                       GestureDetector(
                         onTap: () => context
                             .read<RingingBloc>()
                             .stopAlarm()
                             .then((value) => mainNavKey.currentContext!.replaceNamed(Path.home.path)),
-                        child: Container(
-                          decoration: _closeButtonDecoration,
-                          padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 18.0),
-                          child: Text("alarm.closeAlarm".tr(), style: _closeAlarmTextStyle),
+                        child: Expanded(
+                          child: Container(
+                            decoration: _closeButtonDecoration,
+                            padding: const EdgeInsets.symmetric(vertical: 18.0),
+                            child: Text("alarm.closeAlarm".tr(), style: _closeAlarmTextStyle),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24.0),
-                  const BottomAdWidget(),
                 ],
               );
             },

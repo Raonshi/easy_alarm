@@ -21,11 +21,10 @@ AlarmEntity _$AlarmEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AlarmEntity {
   int get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
-  bool get isAm => throw _privateConstructorUsedError;
   int get timestamp => throw _privateConstructorUsedError;
   List<int> get weekdays => throw _privateConstructorUsedError;
+  bool get vibration => throw _privateConstructorUsedError;
+  SoundAssetPath get sound => throw _privateConstructorUsedError;
   int? get snoozeDuration => throw _privateConstructorUsedError;
   bool get isEnabled => throw _privateConstructorUsedError;
 
@@ -43,11 +42,10 @@ abstract class $AlarmEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      String title,
-      String content,
-      bool isAm,
       int timestamp,
       List<int> weekdays,
+      bool vibration,
+      SoundAssetPath sound,
       int? snoozeDuration,
       bool isEnabled});
 }
@@ -66,11 +64,10 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
   @override
   $Res call({
     Object? id = null,
-    Object? title = null,
-    Object? content = null,
-    Object? isAm = null,
     Object? timestamp = null,
     Object? weekdays = null,
+    Object? vibration = null,
+    Object? sound = null,
     Object? snoozeDuration = freezed,
     Object? isEnabled = null,
   }) {
@@ -79,18 +76,6 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      isAm: null == isAm
-          ? _value.isAm
-          : isAm // ignore: cast_nullable_to_non_nullable
-              as bool,
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -99,6 +84,14 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
           ? _value.weekdays
           : weekdays // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      vibration: null == vibration
+          ? _value.vibration
+          : vibration // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sound: null == sound
+          ? _value.sound
+          : sound // ignore: cast_nullable_to_non_nullable
+              as SoundAssetPath,
       snoozeDuration: freezed == snoozeDuration
           ? _value.snoozeDuration
           : snoozeDuration // ignore: cast_nullable_to_non_nullable
@@ -121,11 +114,10 @@ abstract class _$$AlarmEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
-      String title,
-      String content,
-      bool isAm,
       int timestamp,
       List<int> weekdays,
+      bool vibration,
+      SoundAssetPath sound,
       int? snoozeDuration,
       bool isEnabled});
 }
@@ -142,11 +134,10 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? title = null,
-    Object? content = null,
-    Object? isAm = null,
     Object? timestamp = null,
     Object? weekdays = null,
+    Object? vibration = null,
+    Object? sound = null,
     Object? snoozeDuration = freezed,
     Object? isEnabled = null,
   }) {
@@ -155,18 +146,6 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      isAm: null == isAm
-          ? _value.isAm
-          : isAm // ignore: cast_nullable_to_non_nullable
-              as bool,
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -175,6 +154,14 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
           ? _value._weekdays
           : weekdays // ignore: cast_nullable_to_non_nullable
               as List<int>,
+      vibration: null == vibration
+          ? _value.vibration
+          : vibration // ignore: cast_nullable_to_non_nullable
+              as bool,
+      sound: null == sound
+          ? _value.sound
+          : sound // ignore: cast_nullable_to_non_nullable
+              as SoundAssetPath,
       snoozeDuration: freezed == snoozeDuration
           ? _value.snoozeDuration
           : snoozeDuration // ignore: cast_nullable_to_non_nullable
@@ -193,11 +180,10 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
 class _$AlarmEntityImpl extends _AlarmEntity {
   const _$AlarmEntityImpl(
       {required this.id,
-      this.title = "알람",
-      this.content = "",
-      required this.isAm,
       required this.timestamp,
       required final List<int> weekdays,
+      this.vibration = false,
+      required this.sound,
       this.snoozeDuration,
       this.isEnabled = true})
       : _weekdays = weekdays,
@@ -209,14 +195,6 @@ class _$AlarmEntityImpl extends _AlarmEntity {
   @override
   final int id;
   @override
-  @JsonKey()
-  final String title;
-  @override
-  @JsonKey()
-  final String content;
-  @override
-  final bool isAm;
-  @override
   final int timestamp;
   final List<int> _weekdays;
   @override
@@ -227,6 +205,11 @@ class _$AlarmEntityImpl extends _AlarmEntity {
   }
 
   @override
+  @JsonKey()
+  final bool vibration;
+  @override
+  final SoundAssetPath sound;
+  @override
   final int? snoozeDuration;
   @override
   @JsonKey()
@@ -234,7 +217,7 @@ class _$AlarmEntityImpl extends _AlarmEntity {
 
   @override
   String toString() {
-    return 'AlarmEntity(id: $id, title: $title, content: $content, isAm: $isAm, timestamp: $timestamp, weekdays: $weekdays, snoozeDuration: $snoozeDuration, isEnabled: $isEnabled)';
+    return 'AlarmEntity(id: $id, timestamp: $timestamp, weekdays: $weekdays, vibration: $vibration, sound: $sound, snoozeDuration: $snoozeDuration, isEnabled: $isEnabled)';
   }
 
   @override
@@ -243,12 +226,12 @@ class _$AlarmEntityImpl extends _AlarmEntity {
         (other.runtimeType == runtimeType &&
             other is _$AlarmEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.isAm, isAm) || other.isAm == isAm) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             const DeepCollectionEquality().equals(other._weekdays, _weekdays) &&
+            (identical(other.vibration, vibration) ||
+                other.vibration == vibration) &&
+            (identical(other.sound, sound) || other.sound == sound) &&
             (identical(other.snoozeDuration, snoozeDuration) ||
                 other.snoozeDuration == snoozeDuration) &&
             (identical(other.isEnabled, isEnabled) ||
@@ -260,11 +243,10 @@ class _$AlarmEntityImpl extends _AlarmEntity {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      title,
-      content,
-      isAm,
       timestamp,
       const DeepCollectionEquality().hash(_weekdays),
+      vibration,
+      sound,
       snoozeDuration,
       isEnabled);
 
@@ -285,11 +267,10 @@ class _$AlarmEntityImpl extends _AlarmEntity {
 abstract class _AlarmEntity extends AlarmEntity {
   const factory _AlarmEntity(
       {required final int id,
-      final String title,
-      final String content,
-      required final bool isAm,
       required final int timestamp,
       required final List<int> weekdays,
+      final bool vibration,
+      required final SoundAssetPath sound,
       final int? snoozeDuration,
       final bool isEnabled}) = _$AlarmEntityImpl;
   const _AlarmEntity._() : super._();
@@ -300,15 +281,13 @@ abstract class _AlarmEntity extends AlarmEntity {
   @override
   int get id;
   @override
-  String get title;
-  @override
-  String get content;
-  @override
-  bool get isAm;
-  @override
   int get timestamp;
   @override
   List<int> get weekdays;
+  @override
+  bool get vibration;
+  @override
+  SoundAssetPath get sound;
   @override
   int? get snoozeDuration;
   @override

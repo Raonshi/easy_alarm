@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_alarm/common/asset_path.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 
@@ -20,26 +21,12 @@ class AddBloc extends Cubit<AddState> {
         AddState.loaded(
           alarm: AlarmEntity(
             id: id,
-            isAm: DateTime.now().hour < 12 ? true : false,
             timestamp: timestamp,
             weekdays: [],
+            sound: SoundAssetPath.defaultSound,
           ),
         ),
       );
-    });
-  }
-
-  void updateTitle(String newTitle) {
-    state.mapOrNull(loaded: (state) {
-      final AlarmEntity newAlarm = state.alarm.copyWith(title: newTitle);
-      emit(state.copyWith(alarm: newAlarm));
-    });
-  }
-
-  void updateContent(String newContent) {
-    state.mapOrNull(loaded: (state) {
-      final AlarmEntity newAlarm = state.alarm.copyWith(content: newContent);
-      emit(state.copyWith(alarm: newAlarm));
     });
   }
 
@@ -66,6 +53,20 @@ class AddBloc extends Cubit<AddState> {
         newAlarm = state.alarm.copyWith(snoozeDuration: null);
       }
 
+      emit(state.copyWith(alarm: newAlarm));
+    });
+  }
+
+  void updateVibration(bool newVibration) {
+    state.mapOrNull(loaded: (state) {
+      final AlarmEntity newAlarm = state.alarm.copyWith(vibration: newVibration);
+      emit(state.copyWith(alarm: newAlarm));
+    });
+  }
+
+  void updateSound(SoundAssetPath newSound) {
+    state.mapOrNull(loaded: (state) {
+      final AlarmEntity newAlarm = state.alarm.copyWith(sound: newSound);
       emit(state.copyWith(alarm: newAlarm));
     });
   }

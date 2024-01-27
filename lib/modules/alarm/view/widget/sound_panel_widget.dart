@@ -1,16 +1,15 @@
 import 'package:easy_alarm/common/asset_path.dart';
 import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/ui/widget/week_day_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class SoundPanelWidget extends StatefulWidget {
   const SoundPanelWidget({
     super.key,
-    required this.onTapSwitch,
+    required this.onSelectSound,
   });
 
-  final ValueChanged<bool> onTapSwitch;
+  final ValueChanged<SoundAssetPath> onSelectSound;
 
   @override
   State<SoundPanelWidget> createState() => _SoundPanelWidgetState();
@@ -40,7 +39,7 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
                 isExpanded: true,
                 onChanged: (value) {
                   setState(() => _selectedSound = value as SoundAssetPath);
-                  widget.onTapSwitch(true);
+                  widget.onSelectSound(_selectedSound);
                 },
                 items: SoundAssetPath.values
                     .map(

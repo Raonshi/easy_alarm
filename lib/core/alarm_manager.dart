@@ -115,9 +115,11 @@ class AlarmManager {
     final AlarmSettings setting = AlarmSettings(
       id: alarm.id,
       dateTime: dateTime,
-      assetAudioPath: "assets/sound/0.mp3",
-      notificationTitle: alarm.title,
-      notificationBody: alarm.content,
+      assetAudioPath: alarm.sound.path,
+      vibrate: alarm.vibration,
+      fadeDuration: 2.0,
+      notificationTitle: "이지 알람",
+      notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
     );
     await Alarm.set(alarmSettings: setting);
     lgr.d("$_tag _addAlarm\n - Stored Alarm List : $_alarms\n - System Alarm List : ${Alarm.getAlarms()}");

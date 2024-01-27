@@ -34,8 +34,12 @@ class _HomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.grey10,
       appBar: AppBar(
         centerTitle: false,
+        elevation: 0.0,
+        scrolledUnderElevation: 0.0,
+        backgroundColor: CustomColors.grey10,
         title: Text('header.home'.tr(), style: _headerTextStyle),
         actions: [
           GestureDetector(

@@ -1,3 +1,4 @@
+import 'package:easy_alarm/common/asset_path.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'alarm_entity.freezed.dart';
@@ -9,11 +10,10 @@ class AlarmEntity with _$AlarmEntity {
   @JsonSerializable(explicitToJson: true)
   const factory AlarmEntity({
     required int id,
-    @Default("알람") String title,
-    @Default("") String content,
-    required bool isAm,
     required int timestamp,
     required List<int> weekdays,
+    @Default(false) bool vibration,
+    required SoundAssetPath sound,
     int? snoozeDuration,
     @Default(true) bool isEnabled,
   }) = _AlarmEntity;
