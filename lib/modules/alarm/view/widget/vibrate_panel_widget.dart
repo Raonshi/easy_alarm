@@ -30,6 +30,16 @@ class _VibratePanelWidgetState extends State<VibratePanelWidget> {
             Text("alarm.vibrateLabel".tr(), style: _labelTextStyle),
             Switch(
               value: _isEnabled,
+              inactiveTrackColor: CustomColors.grey10,
+              activeColor: CustomColors.blue40,
+              thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) return CustomColors.white;
+                return CustomColors.grey40;
+              }),
+              trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) return Colors.transparent;
+                return CustomColors.grey40;
+              }),
               onChanged: (value) {
                 setState(() => _isEnabled = value);
                 widget.onTapSwitch(value);
