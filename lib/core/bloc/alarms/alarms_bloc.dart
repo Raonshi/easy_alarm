@@ -1,12 +1,11 @@
 import 'package:bloc/bloc.dart';
-import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
-import 'package:easy_alarm/core/notification_manager.dart';
-import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
+import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
+
+import 'alarms_state.dart';
 
 class AlarmsBloc extends Cubit<AlarmsState> {
   final AlarmManager _alarmManager = AlarmManager();
-  final NotificationManager _notificationManager = NotificationManager();
   AlarmsBloc() : super(const AlarmsState.initial()) {
     _init();
   }
@@ -30,25 +29,25 @@ class AlarmsBloc extends Cubit<AlarmsState> {
   Future<void> _fetchAlarms() async {
     emit(const AlarmsState.loading());
     await _alarmManager.loadAlarms();
-    emit(AlarmsState.loaded(alarmModels: _alarmManager.cachedAlarms));
+    emit(AlarmsState.loaded(alarms: _alarmManager.cachedAlarms));
   }
 
   void toggleAlarm(int id) {
     state.mapOrNull(
       loaded: (state) async {
-        final List<AlarmModel> alarms = state.alarmModels.toList();
+        final List<AlarmEntity> alarms = state.alarms.toList();
         final int idx = alarms.indexWhere((element) => element.id == id);
         if (idx == -1) return;
 
-        final AlarmModel newAlarm = alarms[idx].copyWith(isEnabled: !alarms[idx].isEnabled);
+        final AlarmEntity newAlarm = alarms[idx].copyWith(isEnabled: !alarms[idx].isEnabled);
         alarms.replaceRange(idx, idx + 1, [newAlarm]);
-        emit(state.copyWith(alarmModels: alarms));
+        emit(state.copyWith(alarms: alarms));
 
         _alarmManager.replaceAlarm(newAlarm).then((value) async {
           if (newAlarm.isEnabled) {
-            await _notificationManager.schedule(alarm: newAlarm);
+            // await _notificationManager.schedule(alarm: newAlarm);
           } else {
-            await _notificationManager.cancelAlarmNotification(newAlarm.id);
+            // await _notificationManager.cancelAlarmNotification(newAlarm.id);
           }
         });
       },
@@ -59,14 +58,14 @@ class AlarmsBloc extends Cubit<AlarmsState> {
     state.mapOrNull(
       loaded: (state) async {
         emit(const AlarmsState.loading());
-        final List<AlarmModel> alarms = state.alarmModels.toList();
+        final List<AlarmEntity> alarms = state.alarms.toList();
         final int idx = alarms.indexWhere((element) => element.id == id);
         if (idx == -1) return;
 
         alarms.removeAt(idx);
-        emit(AlarmsState.loaded(alarmModels: alarms));
+        emit(AlarmsState.loaded(alarms: alarms));
         await _alarmManager.deleteAlarm(id);
-        await _notificationManager.cancelAlarmNotification(id);
+        // await _notificationManager.cancelAlarmNotification(id);
       },
     );
   }

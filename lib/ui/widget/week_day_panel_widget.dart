@@ -1,4 +1,3 @@
-import 'package:easy_alarm/common/enums.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -7,21 +6,20 @@ class WeekdayPanelWidget extends StatefulWidget {
       {super.key, required this.clickable, this.onSelectedDaysChanged, required this.selectedWeekdays});
 
   final bool clickable;
-  final ValueChanged<List<Weekday>>? onSelectedDaysChanged;
-  final List<Weekday> selectedWeekdays;
+  final ValueChanged<List<int>>? onSelectedDaysChanged;
+  final List<int> selectedWeekdays;
 
   @override
   State<WeekdayPanelWidget> createState() => _WeekdayPanelWidgetState();
 }
 
 class _WeekdayPanelWidgetState extends State<WeekdayPanelWidget> {
-  final List<Weekday> _weekdays = [];
   final List<bool> _selectedDays = [];
+  final List<int> _weekdaysInKorean = [1, 2, 3, 4, 5, 6, 7];
 
   @override
   void initState() {
-    _weekdays.addAll(widget.selectedWeekdays);
-    _selectedDays.addAll(Weekday.values.map((weekday) => widget.selectedWeekdays.contains(weekday)).toList());
+    _selectedDays.addAll(_weekdaysInKorean.map((weekday) => widget.selectedWeekdays.contains(weekday)).toList());
     super.initState();
   }
 
@@ -29,24 +27,24 @@ class _WeekdayPanelWidgetState extends State<WeekdayPanelWidget> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: Weekday.values.map((weekday) {
-        final index = Weekday.values.indexOf(weekday);
+      children: _weekdaysInKorean.map((weekday) {
         return _DayItem(
-          dayText: weekday.text,
-          isSelected: _selectedDays[index],
+          weekday: weekday,
+          isSelected: _selectedDays[weekday - 1],
           activeBackgroundColor: getActiveBackgroundColor(weekday),
           activeForegroundColor: getActiveForegroundColor(weekday),
           inactiveBackgroundColor: CustomColors.grey30,
           inactiveForegroundColor: CustomColors.grey70,
           onTap: (isSelected) {
             setState(() {
-              _selectedDays[index] = isSelected;
+              _selectedDays[weekday - 1] = isSelected;
             });
 
             if (widget.onSelectedDaysChanged != null) {
-              widget.onSelectedDaysChanged!(
-                Weekday.values.where((element) => _selectedDays[Weekday.values.indexOf(element)]).toList(),
-              );
+              final List<int> selectedWeekDays =
+                  _weekdaysInKorean.where((element) => _selectedDays[_weekdaysInKorean.indexOf(element)]).toList();
+
+              widget.onSelectedDaysChanged!(selectedWeekDays);
             }
           },
           clickable: widget.clickable,
@@ -55,22 +53,22 @@ class _WeekdayPanelWidgetState extends State<WeekdayPanelWidget> {
     );
   }
 
-  Color getActiveBackgroundColor(Weekday weekday) {
-    if (weekday == Weekday.saturday) return CustomColors.blue30;
-    if (weekday == Weekday.sunday) return CustomColors.red30;
+  Color getActiveBackgroundColor(int weekday) {
+    if (weekday == 6) return CustomColors.blue30;
+    if (weekday == 7) return CustomColors.red30;
     return CustomColors.green30;
   }
 
-  Color getActiveForegroundColor(Weekday weekday) {
-    if (weekday == Weekday.saturday) return CustomColors.blue70;
-    if (weekday == Weekday.sunday) return CustomColors.red70;
+  Color getActiveForegroundColor(int weekday) {
+    if (weekday == 6) return CustomColors.blue70;
+    if (weekday == 7) return CustomColors.red70;
     return CustomColors.green70;
   }
 }
 
 class _DayItem extends StatelessWidget {
   const _DayItem({
-    required this.dayText,
+    required this.weekday,
     required this.activeBackgroundColor,
     required this.activeForegroundColor,
     required this.inactiveBackgroundColor,
@@ -81,7 +79,7 @@ class _DayItem extends StatelessWidget {
   });
   final ValueChanged<bool> onTap;
 
-  final String dayText;
+  final int weekday;
   final bool isSelected;
   final bool clickable;
   final Color activeBackgroundColor;
@@ -114,5 +112,26 @@ class _DayItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String get dayText {
+    switch (weekday) {
+      case 1:
+        return "월";
+      case 2:
+        return "화";
+      case 3:
+        return "수";
+      case 4:
+        return "목";
+      case 5:
+        return "금";
+      case 6:
+        return "토";
+      case 7:
+        return "일";
+      default:
+        return "";
+    }
   }
 }

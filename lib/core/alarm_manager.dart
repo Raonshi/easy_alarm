@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
+import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AlarmManager {
@@ -7,8 +7,8 @@ class AlarmManager {
   factory AlarmManager() => _instance;
   AlarmManager._internal();
 
-  final List<AlarmModel> _alarms = [];
-  List<AlarmModel> get cachedAlarms => _alarms;
+  final List<AlarmEntity> _alarms = [];
+  List<AlarmEntity> get cachedAlarms => _alarms;
 
   final String alarms = "ALARMS";
 
@@ -29,7 +29,7 @@ class AlarmManager {
       _alarms.clear();
       final List<String> alarmStrings = prefs.getStringList(alarms) ?? [];
       if (alarmStrings.isNotEmpty) {
-        _alarms.addAll(alarmStrings.map((e) => AlarmModel.fromJson(jsonDecode(e))));
+        _alarms.addAll(alarmStrings.map((e) => AlarmEntity.fromJson(jsonDecode(e))));
       }
     });
   }
@@ -41,7 +41,7 @@ class AlarmManager {
     });
   }
 
-  Future<void> saveAlarm(AlarmModel alarm) async {
+  Future<void> saveAlarm(AlarmEntity alarm) async {
     await SharedPreferences.getInstance().then((prefs) async {
       _alarms.add(alarm);
       final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
@@ -49,7 +49,7 @@ class AlarmManager {
     });
   }
 
-  Future<void> replaceAlarm(AlarmModel alarm) async {
+  Future<void> replaceAlarm(AlarmEntity alarm) async {
     await SharedPreferences.getInstance().then((prefs) async {
       final int idx = _alarms.indexWhere((element) => element.id == alarm.id);
       if (idx == -1) return;

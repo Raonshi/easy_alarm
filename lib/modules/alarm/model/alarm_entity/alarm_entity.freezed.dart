@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'alarm_model.dart';
+part of 'alarm_entity.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,51 +14,48 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-AlarmModel _$AlarmModelFromJson(Map<String, dynamic> json) {
-  return _AlarmModel.fromJson(json);
+AlarmEntity _$AlarmEntityFromJson(Map<String, dynamic> json) {
+  return _AlarmEntity.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AlarmModel {
+mixin _$AlarmEntity {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   bool get isAm => throw _privateConstructorUsedError;
-  TimeModel get time => throw _privateConstructorUsedError;
-  List<Weekday> get weekdays => throw _privateConstructorUsedError;
-  TimeModel? get snoozeTime => throw _privateConstructorUsedError;
+  int get timestamp => throw _privateConstructorUsedError;
+  List<int> get weekdays => throw _privateConstructorUsedError;
+  int? get snoozeDuration => throw _privateConstructorUsedError;
   bool get isEnabled => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $AlarmModelCopyWith<AlarmModel> get copyWith =>
+  $AlarmEntityCopyWith<AlarmEntity> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AlarmModelCopyWith<$Res> {
-  factory $AlarmModelCopyWith(
-          AlarmModel value, $Res Function(AlarmModel) then) =
-      _$AlarmModelCopyWithImpl<$Res, AlarmModel>;
+abstract class $AlarmEntityCopyWith<$Res> {
+  factory $AlarmEntityCopyWith(
+          AlarmEntity value, $Res Function(AlarmEntity) then) =
+      _$AlarmEntityCopyWithImpl<$Res, AlarmEntity>;
   @useResult
   $Res call(
       {int id,
       String title,
       String content,
       bool isAm,
-      TimeModel time,
-      List<Weekday> weekdays,
-      TimeModel? snoozeTime,
+      int timestamp,
+      List<int> weekdays,
+      int? snoozeDuration,
       bool isEnabled});
-
-  $TimeModelCopyWith<$Res> get time;
-  $TimeModelCopyWith<$Res>? get snoozeTime;
 }
 
 /// @nodoc
-class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
-    implements $AlarmModelCopyWith<$Res> {
-  _$AlarmModelCopyWithImpl(this._value, this._then);
+class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
+    implements $AlarmEntityCopyWith<$Res> {
+  _$AlarmEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -72,9 +69,9 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
     Object? title = null,
     Object? content = null,
     Object? isAm = null,
-    Object? time = null,
+    Object? timestamp = null,
     Object? weekdays = null,
-    Object? snoozeTime = freezed,
+    Object? snoozeDuration = freezed,
     Object? isEnabled = null,
   }) {
     return _then(_value.copyWith(
@@ -94,52 +91,32 @@ class _$AlarmModelCopyWithImpl<$Res, $Val extends AlarmModel>
           ? _value.isAm
           : isAm // ignore: cast_nullable_to_non_nullable
               as bool,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as TimeModel,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as int,
       weekdays: null == weekdays
           ? _value.weekdays
           : weekdays // ignore: cast_nullable_to_non_nullable
-              as List<Weekday>,
-      snoozeTime: freezed == snoozeTime
-          ? _value.snoozeTime
-          : snoozeTime // ignore: cast_nullable_to_non_nullable
-              as TimeModel?,
+              as List<int>,
+      snoozeDuration: freezed == snoozeDuration
+          ? _value.snoozeDuration
+          : snoozeDuration // ignore: cast_nullable_to_non_nullable
+              as int?,
       isEnabled: null == isEnabled
           ? _value.isEnabled
           : isEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $TimeModelCopyWith<$Res> get time {
-    return $TimeModelCopyWith<$Res>(_value.time, (value) {
-      return _then(_value.copyWith(time: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $TimeModelCopyWith<$Res>? get snoozeTime {
-    if (_value.snoozeTime == null) {
-      return null;
-    }
-
-    return $TimeModelCopyWith<$Res>(_value.snoozeTime!, (value) {
-      return _then(_value.copyWith(snoozeTime: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$$AlarmModelImplCopyWith<$Res>
-    implements $AlarmModelCopyWith<$Res> {
-  factory _$$AlarmModelImplCopyWith(
-          _$AlarmModelImpl value, $Res Function(_$AlarmModelImpl) then) =
-      __$$AlarmModelImplCopyWithImpl<$Res>;
+abstract class _$$AlarmEntityImplCopyWith<$Res>
+    implements $AlarmEntityCopyWith<$Res> {
+  factory _$$AlarmEntityImplCopyWith(
+          _$AlarmEntityImpl value, $Res Function(_$AlarmEntityImpl) then) =
+      __$$AlarmEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -147,23 +124,18 @@ abstract class _$$AlarmModelImplCopyWith<$Res>
       String title,
       String content,
       bool isAm,
-      TimeModel time,
-      List<Weekday> weekdays,
-      TimeModel? snoozeTime,
+      int timestamp,
+      List<int> weekdays,
+      int? snoozeDuration,
       bool isEnabled});
-
-  @override
-  $TimeModelCopyWith<$Res> get time;
-  @override
-  $TimeModelCopyWith<$Res>? get snoozeTime;
 }
 
 /// @nodoc
-class __$$AlarmModelImplCopyWithImpl<$Res>
-    extends _$AlarmModelCopyWithImpl<$Res, _$AlarmModelImpl>
-    implements _$$AlarmModelImplCopyWith<$Res> {
-  __$$AlarmModelImplCopyWithImpl(
-      _$AlarmModelImpl _value, $Res Function(_$AlarmModelImpl) _then)
+class __$$AlarmEntityImplCopyWithImpl<$Res>
+    extends _$AlarmEntityCopyWithImpl<$Res, _$AlarmEntityImpl>
+    implements _$$AlarmEntityImplCopyWith<$Res> {
+  __$$AlarmEntityImplCopyWithImpl(
+      _$AlarmEntityImpl _value, $Res Function(_$AlarmEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -173,12 +145,12 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
     Object? title = null,
     Object? content = null,
     Object? isAm = null,
-    Object? time = null,
+    Object? timestamp = null,
     Object? weekdays = null,
-    Object? snoozeTime = freezed,
+    Object? snoozeDuration = freezed,
     Object? isEnabled = null,
   }) {
-    return _then(_$AlarmModelImpl(
+    return _then(_$AlarmEntityImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -195,18 +167,18 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
           ? _value.isAm
           : isAm // ignore: cast_nullable_to_non_nullable
               as bool,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as TimeModel,
+      timestamp: null == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as int,
       weekdays: null == weekdays
           ? _value._weekdays
           : weekdays // ignore: cast_nullable_to_non_nullable
-              as List<Weekday>,
-      snoozeTime: freezed == snoozeTime
-          ? _value.snoozeTime
-          : snoozeTime // ignore: cast_nullable_to_non_nullable
-              as TimeModel?,
+              as List<int>,
+      snoozeDuration: freezed == snoozeDuration
+          ? _value.snoozeDuration
+          : snoozeDuration // ignore: cast_nullable_to_non_nullable
+              as int?,
       isEnabled: null == isEnabled
           ? _value.isEnabled
           : isEnabled // ignore: cast_nullable_to_non_nullable
@@ -218,21 +190,21 @@ class __$$AlarmModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$AlarmModelImpl extends _AlarmModel {
-  const _$AlarmModelImpl(
+class _$AlarmEntityImpl extends _AlarmEntity {
+  const _$AlarmEntityImpl(
       {required this.id,
       this.title = "알람",
       this.content = "",
       required this.isAm,
-      required this.time,
-      final List<Weekday> weekdays = const [],
-      this.snoozeTime,
+      required this.timestamp,
+      required final List<int> weekdays,
+      this.snoozeDuration,
       this.isEnabled = true})
       : _weekdays = weekdays,
         super._();
 
-  factory _$AlarmModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AlarmModelImplFromJson(json);
+  factory _$AlarmEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AlarmEntityImplFromJson(json);
 
   @override
   final int id;
@@ -245,77 +217,85 @@ class _$AlarmModelImpl extends _AlarmModel {
   @override
   final bool isAm;
   @override
-  final TimeModel time;
-  final List<Weekday> _weekdays;
+  final int timestamp;
+  final List<int> _weekdays;
   @override
-  @JsonKey()
-  List<Weekday> get weekdays {
+  List<int> get weekdays {
     if (_weekdays is EqualUnmodifiableListView) return _weekdays;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_weekdays);
   }
 
   @override
-  final TimeModel? snoozeTime;
+  final int? snoozeDuration;
   @override
   @JsonKey()
   final bool isEnabled;
 
   @override
   String toString() {
-    return 'AlarmModel(id: $id, title: $title, content: $content, isAm: $isAm, time: $time, weekdays: $weekdays, snoozeTime: $snoozeTime, isEnabled: $isEnabled)';
+    return 'AlarmEntity(id: $id, title: $title, content: $content, isAm: $isAm, timestamp: $timestamp, weekdays: $weekdays, snoozeDuration: $snoozeDuration, isEnabled: $isEnabled)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AlarmModelImpl &&
+            other is _$AlarmEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.isAm, isAm) || other.isAm == isAm) &&
-            (identical(other.time, time) || other.time == time) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
             const DeepCollectionEquality().equals(other._weekdays, _weekdays) &&
-            (identical(other.snoozeTime, snoozeTime) ||
-                other.snoozeTime == snoozeTime) &&
+            (identical(other.snoozeDuration, snoozeDuration) ||
+                other.snoozeDuration == snoozeDuration) &&
             (identical(other.isEnabled, isEnabled) ||
                 other.isEnabled == isEnabled));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, content, isAm, time,
-      const DeepCollectionEquality().hash(_weekdays), snoozeTime, isEnabled);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      content,
+      isAm,
+      timestamp,
+      const DeepCollectionEquality().hash(_weekdays),
+      snoozeDuration,
+      isEnabled);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AlarmModelImplCopyWith<_$AlarmModelImpl> get copyWith =>
-      __$$AlarmModelImplCopyWithImpl<_$AlarmModelImpl>(this, _$identity);
+  _$$AlarmEntityImplCopyWith<_$AlarmEntityImpl> get copyWith =>
+      __$$AlarmEntityImplCopyWithImpl<_$AlarmEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AlarmModelImplToJson(
+    return _$$AlarmEntityImplToJson(
       this,
     );
   }
 }
 
-abstract class _AlarmModel extends AlarmModel {
-  const factory _AlarmModel(
+abstract class _AlarmEntity extends AlarmEntity {
+  const factory _AlarmEntity(
       {required final int id,
       final String title,
       final String content,
       required final bool isAm,
-      required final TimeModel time,
-      final List<Weekday> weekdays,
-      final TimeModel? snoozeTime,
-      final bool isEnabled}) = _$AlarmModelImpl;
-  const _AlarmModel._() : super._();
+      required final int timestamp,
+      required final List<int> weekdays,
+      final int? snoozeDuration,
+      final bool isEnabled}) = _$AlarmEntityImpl;
+  const _AlarmEntity._() : super._();
 
-  factory _AlarmModel.fromJson(Map<String, dynamic> json) =
-      _$AlarmModelImpl.fromJson;
+  factory _AlarmEntity.fromJson(Map<String, dynamic> json) =
+      _$AlarmEntityImpl.fromJson;
 
   @override
   int get id;
@@ -326,15 +306,15 @@ abstract class _AlarmModel extends AlarmModel {
   @override
   bool get isAm;
   @override
-  TimeModel get time;
+  int get timestamp;
   @override
-  List<Weekday> get weekdays;
+  List<int> get weekdays;
   @override
-  TimeModel? get snoozeTime;
+  int? get snoozeDuration;
   @override
   bool get isEnabled;
   @override
   @JsonKey(ignore: true)
-  _$$AlarmModelImplCopyWith<_$AlarmModelImpl> get copyWith =>
+  _$$AlarmEntityImplCopyWith<_$AlarmEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

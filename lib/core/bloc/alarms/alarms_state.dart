@@ -1,4 +1,4 @@
-import 'package:easy_alarm/model/alarm_model/alarm_model.dart';
+import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'alarms_state.freezed.dart';
@@ -12,6 +12,6 @@ class AlarmsState with _$AlarmsState {
   }) = _Error;
 
   const factory AlarmsState.loaded({
-    required List<AlarmModel> alarmModels,
+    required List<AlarmEntity> alarms,
   }) = _Loaded;
 }

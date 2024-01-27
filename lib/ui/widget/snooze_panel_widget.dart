@@ -60,11 +60,6 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
         const SizedBox(height: 10.0),
         GestureDetector(
           onTap: () async {
-            // if (!_isEnabled) return;
-            // final TimeOfDay? time = await showTimePicker(
-            //   context: context,
-            //   initialTime: widget.snoozeTime,
-            // );
             await showModalBottomSheet(
               context: context,
               showDragHandle: true,

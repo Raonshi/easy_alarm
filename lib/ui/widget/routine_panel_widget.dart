@@ -1,4 +1,3 @@
-import 'package:easy_alarm/common/enums.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/widget/week_day_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,9 +11,9 @@ class RoutinePanelWidget extends StatefulWidget {
     required this.onSelectedDaysChanged,
   });
 
-  final List<Weekday> selectedWeekdays;
+  final List<int> selectedWeekdays;
   final ValueChanged<bool> onTapSwitch;
-  final ValueChanged<List<Weekday>> onSelectedDaysChanged;
+  final ValueChanged<List<int>> onSelectedDaysChanged;
 
   @override
   State<RoutinePanelWidget> createState() => _RoutinePanelWidgetState();

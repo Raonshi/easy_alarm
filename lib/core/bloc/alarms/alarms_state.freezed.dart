@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'add_bloc_state.dart';
+part of 'alarms_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,13 +15,13 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$AddBlocState {
+mixin _$AlarmsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmModel alarmModel) loaded,
+    required TResult Function(List<AlarmEntity> alarms) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,7 +29,7 @@ mixin _$AddBlocState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmModel alarmModel)? loaded,
+    TResult? Function(List<AlarmEntity> alarms)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -37,7 +37,7 @@ mixin _$AddBlocState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmModel alarmModel)? loaded,
+    TResult Function(List<AlarmEntity> alarms)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -69,16 +69,16 @@ mixin _$AddBlocState {
 }
 
 /// @nodoc
-abstract class $AddBlocStateCopyWith<$Res> {
-  factory $AddBlocStateCopyWith(
-          AddBlocState value, $Res Function(AddBlocState) then) =
-      _$AddBlocStateCopyWithImpl<$Res, AddBlocState>;
+abstract class $AlarmsStateCopyWith<$Res> {
+  factory $AlarmsStateCopyWith(
+          AlarmsState value, $Res Function(AlarmsState) then) =
+      _$AlarmsStateCopyWithImpl<$Res, AlarmsState>;
 }
 
 /// @nodoc
-class _$AddBlocStateCopyWithImpl<$Res, $Val extends AddBlocState>
-    implements $AddBlocStateCopyWith<$Res> {
-  _$AddBlocStateCopyWithImpl(this._value, this._then);
+class _$AlarmsStateCopyWithImpl<$Res, $Val extends AlarmsState>
+    implements $AlarmsStateCopyWith<$Res> {
+  _$AlarmsStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -95,7 +95,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$AlarmsStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -109,7 +109,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'AddBlocState.initial()';
+    return 'AlarmsState.initial()';
   }
 
   @override
@@ -127,7 +127,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmModel alarmModel) loaded,
+    required TResult Function(List<AlarmEntity> alarms) loaded,
   }) {
     return initial();
   }
@@ -138,7 +138,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmModel alarmModel)? loaded,
+    TResult? Function(List<AlarmEntity> alarms)? loaded,
   }) {
     return initial?.call();
   }
@@ -149,7 +149,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmModel alarmModel)? loaded,
+    TResult Function(List<AlarmEntity> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -196,7 +196,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements AddBlocState {
+abstract class _Initial implements AlarmsState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -209,7 +209,7 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$AlarmsStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
@@ -223,7 +223,7 @@ class _$LoadingImpl implements _Loading {
 
   @override
   String toString() {
-    return 'AddBlocState.loading()';
+    return 'AlarmsState.loading()';
   }
 
   @override
@@ -241,7 +241,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmModel alarmModel) loaded,
+    required TResult Function(List<AlarmEntity> alarms) loaded,
   }) {
     return loading();
   }
@@ -252,7 +252,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmModel alarmModel)? loaded,
+    TResult? Function(List<AlarmEntity> alarms)? loaded,
   }) {
     return loading?.call();
   }
@@ -263,7 +263,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmModel alarmModel)? loaded,
+    TResult Function(List<AlarmEntity> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -310,7 +310,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements AddBlocState {
+abstract class _Loading implements AlarmsState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -325,7 +325,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$AlarmsStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
@@ -355,7 +355,7 @@ class _$ErrorImpl implements _Error {
 
   @override
   String toString() {
-    return 'AddBlocState.error(exception: $exception)';
+    return 'AlarmsState.error(exception: $exception)';
   }
 
   @override
@@ -382,7 +382,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmModel alarmModel) loaded,
+    required TResult Function(List<AlarmEntity> alarms) loaded,
   }) {
     return error(exception);
   }
@@ -393,7 +393,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmModel alarmModel)? loaded,
+    TResult? Function(List<AlarmEntity> alarms)? loaded,
   }) {
     return error?.call(exception);
   }
@@ -404,7 +404,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmModel alarmModel)? loaded,
+    TResult Function(List<AlarmEntity> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -451,7 +451,7 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements AddBlocState {
+abstract class _Error implements AlarmsState {
   const factory _Error({required final Exception exception}) = _$ErrorImpl;
 
   Exception get exception;
@@ -466,14 +466,12 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({AlarmModel alarmModel});
-
-  $AlarmModelCopyWith<$Res> get alarmModel;
+  $Res call({List<AlarmEntity> alarms});
 }
 
 /// @nodoc
 class __$$LoadedImplCopyWithImpl<$Res>
-    extends _$AddBlocStateCopyWithImpl<$Res, _$LoadedImpl>
+    extends _$AlarmsStateCopyWithImpl<$Res, _$LoadedImpl>
     implements _$$LoadedImplCopyWith<$Res> {
   __$$LoadedImplCopyWithImpl(
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
@@ -482,36 +480,34 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? alarmModel = null,
+    Object? alarms = null,
   }) {
     return _then(_$LoadedImpl(
-      alarmModel: null == alarmModel
-          ? _value.alarmModel
-          : alarmModel // ignore: cast_nullable_to_non_nullable
-              as AlarmModel,
+      alarms: null == alarms
+          ? _value._alarms
+          : alarms // ignore: cast_nullable_to_non_nullable
+              as List<AlarmEntity>,
     ));
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $AlarmModelCopyWith<$Res> get alarmModel {
-    return $AlarmModelCopyWith<$Res>(_value.alarmModel, (value) {
-      return _then(_value.copyWith(alarmModel: value));
-    });
   }
 }
 
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required this.alarmModel});
+  const _$LoadedImpl({required final List<AlarmEntity> alarms})
+      : _alarms = alarms;
 
+  final List<AlarmEntity> _alarms;
   @override
-  final AlarmModel alarmModel;
+  List<AlarmEntity> get alarms {
+    if (_alarms is EqualUnmodifiableListView) return _alarms;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_alarms);
+  }
 
   @override
   String toString() {
-    return 'AddBlocState.loaded(alarmModel: $alarmModel)';
+    return 'AlarmsState.loaded(alarms: $alarms)';
   }
 
   @override
@@ -519,12 +515,12 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
-            (identical(other.alarmModel, alarmModel) ||
-                other.alarmModel == alarmModel));
+            const DeepCollectionEquality().equals(other._alarms, _alarms));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, alarmModel);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_alarms));
 
   @JsonKey(ignore: true)
   @override
@@ -538,9 +534,9 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmModel alarmModel) loaded,
+    required TResult Function(List<AlarmEntity> alarms) loaded,
   }) {
-    return loaded(alarmModel);
+    return loaded(alarms);
   }
 
   @override
@@ -549,9 +545,9 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmModel alarmModel)? loaded,
+    TResult? Function(List<AlarmEntity> alarms)? loaded,
   }) {
-    return loaded?.call(alarmModel);
+    return loaded?.call(alarms);
   }
 
   @override
@@ -560,11 +556,11 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmModel alarmModel)? loaded,
+    TResult Function(List<AlarmEntity> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(alarmModel);
+      return loaded(alarms);
     }
     return orElse();
   }
@@ -607,10 +603,11 @@ class _$LoadedImpl implements _Loaded {
   }
 }
 
-abstract class _Loaded implements AddBlocState {
-  const factory _Loaded({required final AlarmModel alarmModel}) = _$LoadedImpl;
+abstract class _Loaded implements AlarmsState {
+  const factory _Loaded({required final List<AlarmEntity> alarms}) =
+      _$LoadedImpl;
 
-  AlarmModel get alarmModel;
+  List<AlarmEntity> get alarms;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;

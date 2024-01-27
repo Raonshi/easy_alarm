@@ -1,6 +1,5 @@
-import 'package:easy_alarm/bloc/add/add_bloc.dart';
-import 'package:easy_alarm/bloc/add/add_bloc_state.dart';
-import 'package:easy_alarm/common/enums.dart';
+import 'package:easy_alarm/modules/alarm/bloc/add_bloc.dart';
+import 'package:easy_alarm/modules/alarm/bloc/add_bloc_state.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/widget/alarm_content_panel_widget.dart';
 import 'package:easy_alarm/ui/widget/routine_panel_widget.dart';
@@ -66,10 +65,7 @@ class _AddPageBody extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: TimerPanelWidget(
-                          time: TimeOfDay(
-                            hour: state.alarmModel.time.hour,
-                            minute: state.alarmModel.time.minute,
-                          ),
+                          time: state.alarm.dateTime,
                           onTimeChanged: context.read<AddBloc>().updateTime,
                         ),
                       ),
@@ -77,11 +73,11 @@ class _AddPageBody extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: RoutinePanelWidget(
-                          selectedWeekdays: state.alarmModel.weekdays,
+                          selectedWeekdays: state.alarm.weekdays,
                           onTapSwitch: (bool value) {
                             if (!value) context.read<AddBloc>().updateWeekdays([]);
                           },
-                          onSelectedDaysChanged: (List<Weekday> weekdays) {
+                          onSelectedDaysChanged: (List<int> weekdays) {
                             context.read<AddBloc>().updateWeekdays(weekdays);
                           },
                         ),
@@ -91,8 +87,8 @@ class _AddPageBody extends StatelessWidget {
                         padding: const EdgeInsets.all(20.0),
                         child: SnoozePanelWidget(
                           snoozeTime: TimeOfDay(
-                            hour: state.alarmModel.snoozeTime?.hour ?? 0,
-                            minute: state.alarmModel.snoozeTime?.minute ?? 0,
+                            hour: state.alarm.snoozeDuration != null ? state.alarm.snoozeDuration! ~/ 60 : 0,
+                            minute: state.alarm.snoozeDuration != null ? state.alarm.snoozeDuration! % 60 : 0,
                           ),
                           onTapSwitch: (bool value) {
                             if (!value) context.read<AddBloc>().updateSnoozeTime();

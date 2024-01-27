@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 class TimerPanelWidget extends StatelessWidget {
   const TimerPanelWidget({super.key, required this.time, required this.onTimeChanged});
 
-  final TimeOfDay time;
-  final ValueChanged<TimeOfDay> onTimeChanged;
+  final DateTime time;
+  final ValueChanged<DateTime> onTimeChanged;
 
   TextStyle get _labelTextStyle =>
       const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: CustomColors.black);
@@ -40,7 +40,7 @@ class TimerPanelWidget extends StatelessWidget {
                         mode: CupertinoDatePickerMode.time,
                         use24hFormat: true,
                         onDateTimeChanged: (dateTime) {
-                          onTimeChanged(TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
+                          onTimeChanged(dateTime);
                         },
                       ),
                     ),

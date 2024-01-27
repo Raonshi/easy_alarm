@@ -1,7 +1,5 @@
-import 'package:easy_alarm/bloc/alarms/alarms_bloc.dart';
-import 'package:easy_alarm/bloc/alarms/alarms_state.dart';
-import 'package:easy_alarm/common/tools.dart';
-import 'package:easy_alarm/core/notification_manager.dart';
+import 'package:easy_alarm/core/bloc/alarms/alarms_bloc.dart';
+import 'package:easy_alarm/core/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/widget/ad_widget.dart';
@@ -34,13 +32,6 @@ class _HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This function called when user tap notification at terminated state
-    NotificationManager().notiPlugin.getNotificationAppLaunchDetails().then((detail) {
-      if (detail?.didNotificationLaunchApp ?? false) {
-        navKey.currentContext!.pushNamed(Path.alarm.path);
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -48,9 +39,6 @@ class _HomePageBody extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPage())).then((value) {
-              //   context.read<AlarmsBloc>().refreshAlarms();
-              // });
               navKey.currentContext!.pushNamed(Path.add.path).then((value) {
                 context.read<AlarmsBloc>().refreshAlarms();
               });
@@ -70,8 +58,7 @@ class _HomePageBody extends StatelessWidget {
                   loading: (_) => const Center(child: CircularProgressIndicator.adaptive()),
                   error: (state) => Center(child: Text(state.exception.toString())),
                   loaded: (state) {
-                    lgr.d(state.alarmModels.map((e) => e.toJson().toString()).toString());
-                    if (state.alarmModels.isEmpty) {
+                    if (state.alarms.isEmpty) {
                       return Expanded(
                         child: Center(
                           child: Text(
@@ -89,11 +76,11 @@ class _HomePageBody extends StatelessWidget {
                           },
                           child: ListView.separated(
                             padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 12.0, bottom: 48.0),
-                            itemCount: state.alarmModels.length,
+                            itemCount: state.alarms.length,
                             itemBuilder: (context, index) {
                               return AlarmItemWidget(
-                                key: ValueKey(state.alarmModels[index].id),
-                                item: state.alarmModels[index],
+                                key: ValueKey(state.alarms[index].id),
+                                item: state.alarms[index],
                                 onTapDelete: context.read<AlarmsBloc>().deleteAlarm,
                                 onTapSwitch: context.read<AlarmsBloc>().toggleAlarm,
                               );
