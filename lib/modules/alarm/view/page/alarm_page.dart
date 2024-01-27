@@ -88,8 +88,20 @@ class _AlarmPageBody extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       GestureDetector(
-                        onTap: () => context.read<RingingBloc>().waitForNextAlarm().then((value) {
-                          showSnackBar("alarm.nextAlarmSnackbar".tr(args: [value.toString()]));
+                        onTap: () => context.read<RingingBloc>().waitForNextAlarm().then((totalMinute) {
+                          if (totalMinute > 60) {
+                            final int hour = totalMinute ~/ 60;
+                            final int minute = totalMinute % 60;
+                            if (minute == 0) {
+                              showSnackBar("alarm.nextAlarmSnackbarHour".tr(args: [hour.toString()]));
+                            } else {
+                              showSnackBar(
+                                "alarm.nextAlarmSnackbarHourMinute".tr(args: [hour.toString(), minute.toString()]),
+                              );
+                            }
+                          } else {
+                            showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
+                          }
                           navKey.currentContext!.goNamed(Path.home.path);
                         }),
                         child: Container(
@@ -106,7 +118,7 @@ class _AlarmPageBody extends StatelessWidget {
                         child: Container(
                           decoration: _closeButtonDecoration,
                           padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 18.0),
-                          child: Text("alarm.waitForNext".tr(), style: _closeAlarmTextStyle),
+                          child: Text("alarm.closeAlarm".tr(), style: _closeAlarmTextStyle),
                         ),
                       ),
                     ],

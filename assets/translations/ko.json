@@ -34,7 +34,12 @@
         "snoozeNone": "반복 없음",
         "contentLabel": "알람 내용",
         "title": "알람 제목",
-        "content": "알람 내용"
+        "content": "알람 내용",
+        "waitForNext" : "다음 알람까지 대기",
+        "closeAlarm" : "알람 종료",
+        "nextAlarmSnackbarHourMinute": "다음 알람은{}시간 {}분 뒤에 울립니다.",
+        "nextAlarmSnackbarHour": "다음 알람은 {}시간 뒤에 울립니다.",
+        "nextAlarmSnackbarMinute": "다음 알람은 {}분 뒤에 울립니다."
     },
     "weekday": {
         "monday": "월",
