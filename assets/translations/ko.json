@@ -57,6 +57,7 @@
     "exception": {
         "emptyAlarm": "알람이 생성되지 않았습니다.",
         "canNotMakeAlarmAtCurrentDateTime": "현재 시간 이후로만 알람을 생성할 수 있습니다.",
+        "invalidSnoozeDuration": "반복 시간은 0으로 설정할 수 없습니다.",
         "unknown": "알 수 없는 오류가 발생했습니다."
     }
 }

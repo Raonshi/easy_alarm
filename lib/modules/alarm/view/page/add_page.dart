@@ -49,11 +49,15 @@ class _AddPageBody extends StatelessWidget {
                 context.loaderOverlay.show();
                 context.read<AddBloc>().validate().then((value) {
                   context.loaderOverlay.hide();
-                  if (value == null) {
-                    context.read<AddBloc>().save().then((value) => Navigator.pop(context));
-                  } else {
-                    showSnackBar(value);
-                  }
+                  context
+                      .read<AddBloc>()
+                      .state
+                      .mapOrNull(loaded: (state) => lgr.d(state.alarmGroup.alarms.map((e) => e.dateTime)));
+                  // if (value == null) {
+                  //   context.read<AddBloc>().save().then((value) => Navigator.pop(context));
+                  // } else {
+                  //   showSnackBar(value);
+                  // }
                 });
               },
               child: Text("common.complete".tr(), style: _topButtonTextStyle),

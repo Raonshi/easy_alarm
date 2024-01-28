@@ -40,7 +40,9 @@ class AddBloc extends Cubit<AddState> {
 
   void updateWeekdays(bool isRoutine, List<int> newWeekdays) {
     state.mapOrNull(loaded: (state) {
-      final List<AlarmEntity> updatedAlarms = _updateWeekdays(state.alarmGroup, newWeekdays);
+      final List<AlarmEntity> updatedAlarms = _updateWeekdays(isRoutine, state.alarmGroup, newWeekdays);
+
+      lgr.d(updatedAlarms.map((e) => e.dateTime));
 
       emit(state.copyWith(
         alarmGroup: state.alarmGroup.copyWith(alarms: updatedAlarms, routine: isRoutine),
@@ -90,7 +92,7 @@ class AddBloc extends Cubit<AddState> {
     }).toList();
   }
 
-  List<AlarmEntity> _updateWeekdays(AlarmGroup alarmGroup, List<int> weekdays) {
+  List<AlarmEntity> _updateWeekdays(bool isRoutine, AlarmGroup alarmGroup, List<int> weekdays) {
     final List<AlarmEntity> currentAlarms = alarmGroup.alarms.toList();
     currentAlarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
@@ -100,33 +102,55 @@ class AddBloc extends Cubit<AddState> {
     final int? snoozeDuration = currentAlarms.first.snoozeDuration;
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
 
-    return weekdays.map((e) {
-      final DateTime now = DateTime.now();
-      late final DateTime newDateTime;
-      if (e == now.weekday) {
-        if (dateTime.isBefore(now)) {
-          newDateTime = DateTime(now.year, now.month, now.day + 7, dateTime.hour, dateTime.minute, 0);
-        } else {
-          newDateTime = DateTime(now.year, now.month, now.day, dateTime.hour, dateTime.minute, 0);
-        }
-      } else {
+    // If it is a routine, it is a weekly alarm.
+    if (isRoutine) {
+      return weekdays.map((e) {
+        final DateTime now = DateTime.now();
+        late final DateTime newDateTime;
+
         if (e > dateTime.weekday) {
-          newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
+          if (e == now.weekday) {
+            newDateTime = DateTime(now.year, now.month, now.day, dateTime.hour, dateTime.minute, 0);
+            if (dateTime.isBefore(now)) newDateTime.add(const Duration(days: 7));
+          } else {
+            newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
+          }
         } else if (e < dateTime.weekday) {
           newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
         } else {
+          newDateTime = DateTime(now.year, now.month, now.day, dateTime.hour, dateTime.minute, 0);
+          if (dateTime.isBefore(now)) newDateTime.add(const Duration(days: 7));
+        }
+
+        return AlarmEntity(
+          id: newDateTime.millisecondsSinceEpoch,
+          timestamp: newDateTime.millisecondsSinceEpoch,
+          sound: sound,
+          vibration: vibration,
+          snoozeDuration: snoozeDuration,
+        );
+      }).toList();
+    }
+    // If it is not a routine, it is a one-time alarm.
+    else {
+      return weekdays.map((e) {
+        final DateTime now = DateTime.now();
+        late final DateTime newDateTime;
+        if (dateTime.isBefore(now)) {
+          newDateTime = DateTime(now.year, now.month, now.day + 1, dateTime.hour, dateTime.minute, 0);
+        } else {
           newDateTime = dateTime;
         }
-      }
 
-      return AlarmEntity(
-        id: newDateTime.millisecondsSinceEpoch,
-        timestamp: newDateTime.millisecondsSinceEpoch,
-        sound: sound,
-        vibration: vibration,
-        snoozeDuration: snoozeDuration,
-      );
-    }).toList();
+        return AlarmEntity(
+          id: newDateTime.millisecondsSinceEpoch,
+          timestamp: newDateTime.millisecondsSinceEpoch,
+          sound: sound,
+          vibration: vibration,
+          snoozeDuration: snoozeDuration,
+        );
+      }).toList();
+    }
   }
 
   void updateSnoozeTime([Duration? duration]) {
@@ -177,9 +201,8 @@ class AddBloc extends Cubit<AddState> {
         if (value.alarmGroup.alarms.isEmpty) return "exception.emptyAlarm".tr();
 
         for (AlarmEntity alarm in value.alarmGroup.alarms) {
-          lgr.d(alarm.dateTime);
-          lgr.d(DateTime.now());
           if (alarm.dateTime.isBefore(DateTime.now())) return "exception.canNotMakeAlarmAtCurrentDateTime".tr();
+          if (alarm.snoozeDuration != null && alarm.snoozeDuration! < 1) return "exception.invalidSnoozeDuration".tr();
         }
 
         return null;
