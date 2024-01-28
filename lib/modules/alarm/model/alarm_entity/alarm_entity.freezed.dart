@@ -25,6 +25,7 @@ mixin _$AlarmEntity {
   bool get vibration => throw _privateConstructorUsedError;
   SoundAssetPath get sound => throw _privateConstructorUsedError;
   int? get snoozeDuration => throw _privateConstructorUsedError;
+  int? get nextTimstamp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $AlarmEntityCopyWith<$Res> {
       int timestamp,
       bool vibration,
       SoundAssetPath sound,
-      int? snoozeDuration});
+      int? snoozeDuration,
+      int? nextTimstamp});
 }
 
 /// @nodoc
@@ -64,6 +66,7 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
     Object? vibration = null,
     Object? sound = null,
     Object? snoozeDuration = freezed,
+    Object? nextTimstamp = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -86,6 +89,10 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
           ? _value.snoozeDuration
           : snoozeDuration // ignore: cast_nullable_to_non_nullable
               as int?,
+      nextTimstamp: freezed == nextTimstamp
+          ? _value.nextTimstamp
+          : nextTimstamp // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -103,7 +110,8 @@ abstract class _$$AlarmEntityImplCopyWith<$Res>
       int timestamp,
       bool vibration,
       SoundAssetPath sound,
-      int? snoozeDuration});
+      int? snoozeDuration,
+      int? nextTimstamp});
 }
 
 /// @nodoc
@@ -122,6 +130,7 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
     Object? vibration = null,
     Object? sound = null,
     Object? snoozeDuration = freezed,
+    Object? nextTimstamp = freezed,
   }) {
     return _then(_$AlarmEntityImpl(
       id: null == id
@@ -144,6 +153,10 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
           ? _value.snoozeDuration
           : snoozeDuration // ignore: cast_nullable_to_non_nullable
               as int?,
+      nextTimstamp: freezed == nextTimstamp
+          ? _value.nextTimstamp
+          : nextTimstamp // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -157,7 +170,8 @@ class _$AlarmEntityImpl extends _AlarmEntity {
       required this.timestamp,
       this.vibration = false,
       required this.sound,
-      this.snoozeDuration})
+      this.snoozeDuration,
+      this.nextTimstamp})
       : super._();
 
   factory _$AlarmEntityImpl.fromJson(Map<String, dynamic> json) =>
@@ -174,10 +188,12 @@ class _$AlarmEntityImpl extends _AlarmEntity {
   final SoundAssetPath sound;
   @override
   final int? snoozeDuration;
+  @override
+  final int? nextTimstamp;
 
   @override
   String toString() {
-    return 'AlarmEntity(id: $id, timestamp: $timestamp, vibration: $vibration, sound: $sound, snoozeDuration: $snoozeDuration)';
+    return 'AlarmEntity(id: $id, timestamp: $timestamp, vibration: $vibration, sound: $sound, snoozeDuration: $snoozeDuration, nextTimstamp: $nextTimstamp)';
   }
 
   @override
@@ -192,13 +208,15 @@ class _$AlarmEntityImpl extends _AlarmEntity {
                 other.vibration == vibration) &&
             (identical(other.sound, sound) || other.sound == sound) &&
             (identical(other.snoozeDuration, snoozeDuration) ||
-                other.snoozeDuration == snoozeDuration));
+                other.snoozeDuration == snoozeDuration) &&
+            (identical(other.nextTimstamp, nextTimstamp) ||
+                other.nextTimstamp == nextTimstamp));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, timestamp, vibration, sound, snoozeDuration);
+  int get hashCode => Object.hash(runtimeType, id, timestamp, vibration, sound,
+      snoozeDuration, nextTimstamp);
 
   @JsonKey(ignore: true)
   @override
@@ -220,7 +238,8 @@ abstract class _AlarmEntity extends AlarmEntity {
       required final int timestamp,
       final bool vibration,
       required final SoundAssetPath sound,
-      final int? snoozeDuration}) = _$AlarmEntityImpl;
+      final int? snoozeDuration,
+      final int? nextTimstamp}) = _$AlarmEntityImpl;
   const _AlarmEntity._() : super._();
 
   factory _AlarmEntity.fromJson(Map<String, dynamic> json) =
@@ -236,6 +255,8 @@ abstract class _AlarmEntity extends AlarmEntity {
   SoundAssetPath get sound;
   @override
   int? get snoozeDuration;
+  @override
+  int? get nextTimstamp;
   @override
   @JsonKey(ignore: true)
   _$$AlarmEntityImplCopyWith<_$AlarmEntityImpl> get copyWith =>

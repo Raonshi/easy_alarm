@@ -13,6 +13,7 @@ _$AlarmEntityImpl _$$AlarmEntityImplFromJson(Map<String, dynamic> json) =>
       vibration: json['vibration'] as bool? ?? false,
       sound: $enumDecode(_$SoundAssetPathEnumMap, json['sound']),
       snoozeDuration: json['snoozeDuration'] as int?,
+      nextTimstamp: json['nextTimstamp'] as int?,
     );
 
 Map<String, dynamic> _$$AlarmEntityImplToJson(_$AlarmEntityImpl instance) =>
@@ -22,6 +23,7 @@ Map<String, dynamic> _$$AlarmEntityImplToJson(_$AlarmEntityImpl instance) =>
       'vibration': instance.vibration,
       'sound': _$SoundAssetPathEnumMap[instance.sound]!,
       'snoozeDuration': instance.snoozeDuration,
+      'nextTimstamp': instance.nextTimstamp,
     };
 
 const _$SoundAssetPathEnumMap = {

@@ -1,8 +1,11 @@
+import 'package:alarm/alarm.dart';
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/common/asset_path.dart';
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'add_state.dart';
 
@@ -63,13 +66,25 @@ class AddBloc extends Cubit<AddState> {
           dateTime.minute,
         );
       } else {
-        newDate = DateTime(
-          oldDate.year,
-          oldDate.month,
-          oldDate.day,
-          dateTime.hour,
-          dateTime.minute,
-        );
+        if (oldDate.isBefore(now)) {
+          newDate = DateTime(
+            oldDate.year,
+            oldDate.month,
+            oldDate.day + 1,
+            dateTime.hour,
+            dateTime.minute,
+            0,
+          );
+        } else {
+          newDate = DateTime(
+            oldDate.year,
+            oldDate.month,
+            oldDate.day,
+            dateTime.hour,
+            dateTime.minute,
+            0,
+          );
+        }
       }
 
       return e.copyWith(timestamp: newDate.millisecondsSinceEpoch);
@@ -90,7 +105,11 @@ class AddBloc extends Cubit<AddState> {
       final DateTime now = DateTime.now();
       late final DateTime newDateTime;
       if (e == now.weekday) {
-        newDateTime = DateTime(now.year, now.month, now.day, dateTime.hour, dateTime.minute, 0);
+        if (dateTime.isBefore(now)) {
+          newDateTime = DateTime(now.year, now.month, now.day + 7, dateTime.hour, dateTime.minute, 0);
+        } else {
+          newDateTime = DateTime(now.year, now.month, now.day, dateTime.hour, dateTime.minute, 0);
+        }
       } else {
         if (e > dateTime.weekday) {
           newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
@@ -114,7 +133,10 @@ class AddBloc extends Cubit<AddState> {
   void updateSnoozeTime([Duration? duration]) {
     state.mapOrNull(loaded: (state) {
       final List<AlarmEntity> newAlarms = state.alarmGroup.alarms.toList().map((e) {
-        return e.copyWith(snoozeDuration: duration?.inMinutes);
+        return e.copyWith(
+          snoozeDuration: duration?.inMinutes,
+          nextTimstamp: duration == null ? null : e.timestamp + duration.inMilliseconds,
+        );
       }).toList();
 
       final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
@@ -148,5 +170,22 @@ class AddBloc extends Cubit<AddState> {
     await state.mapOrNull(loaded: (state) async {
       await _alarmManager.saveAlarm(state.alarmGroup);
     });
+  }
+
+  Future<String?> validate() async {
+    return state.maybeMap(
+      loaded: (value) {
+        if (value.alarmGroup.alarms.isEmpty) return "exception.emptyAlarm".tr();
+
+        for (AlarmEntity alarm in value.alarmGroup.alarms) {
+          lgr.d(alarm.dateTime);
+          lgr.d(DateTime.now());
+          if (alarm.dateTime.isBefore(DateTime.now())) return "exception.canNotMakeAlarmAtCurrentDateTime".tr();
+        }
+
+        return null;
+      },
+      orElse: () => "exception.unknown".tr(),
+    );
   }
 }
