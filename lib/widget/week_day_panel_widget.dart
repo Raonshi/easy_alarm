@@ -36,9 +36,18 @@ class _WeekdayPanelWidgetState extends State<WeekdayPanelWidget> {
           inactiveBackgroundColor: CustomColors.grey30,
           inactiveForegroundColor: CustomColors.grey70,
           onTap: (isSelected) {
-            if (weekday == DateTime.now().weekday) return;
+            final int currentWeekday = DateTime.now().weekday;
+            if (currentWeekday == weekday) {
+              final List<bool> tmp = _selectedDays.toList();
+              tmp.removeAt(weekday - 1);
+              if (tmp.every((element) => element == false)) return;
+            }
+
             setState(() {
               _selectedDays[weekday - 1] = isSelected;
+              if (_selectedDays.every((element) => element == false)) {
+                _selectedDays[currentWeekday - 1] = true;
+              }
             });
 
             if (widget.onSelectedDaysChanged != null) {
