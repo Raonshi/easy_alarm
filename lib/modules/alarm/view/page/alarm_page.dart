@@ -8,6 +8,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 
 class AlarmPage extends StatelessWidget {
@@ -86,49 +87,51 @@ class _AlarmPageBody extends StatelessWidget {
                     child: LottieBuilder.asset("assets/lotties/alarm_ringing.json"),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Visibility(
-                        visible: state.alarm.snoozeDuration != null,
-                        child: GestureDetector(
-                          onTap: () => context.read<RingingBloc>().waitForSnooze().then((_) {
-                            final int? totalMinute = state.alarm.snoozeDuration;
-                            if (totalMinute! > 60) {
-                              final int hour = totalMinute ~/ 60;
-                              final int minute = totalMinute % 60;
-                              if (minute == 0) {
-                                showSnackBar("alarm.nextAlarmSnackbarHour".tr(args: [hour.toString()]));
+                      if (state.alarm.snoozeDuration != null) ...[
+                        GestureDetector(
+                          onTap: () {
+                            context.loaderOverlay.show();
+                            context.read<RingingBloc>().waitForSnooze().then((_) {
+                              context.loaderOverlay.hide();
+                              final int? totalMinute = state.alarm.snoozeDuration;
+                              if (totalMinute! > 60) {
+                                final int hour = totalMinute ~/ 60;
+                                final int minute = totalMinute % 60;
+                                if (minute == 0) {
+                                  showSnackBar("alarm.nextAlarmSnackbarHour".tr(args: [hour.toString()]));
+                                } else {
+                                  showSnackBar(
+                                    "alarm.nextAlarmSnackbarHourMinute".tr(args: [hour.toString(), minute.toString()]),
+                                  );
+                                }
                               } else {
-                                showSnackBar(
-                                  "alarm.nextAlarmSnackbarHourMinute".tr(args: [hour.toString(), minute.toString()]),
-                                );
+                                showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
                               }
-                            } else {
-                              showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
-                            }
-                            mainNavKey.currentContext!.replaceNamed(Path.home.path);
-                          }),
-                          child: Expanded(
-                            child: Container(
-                              decoration: _waitForNextAlarmDecoration,
-                              padding: const EdgeInsets.symmetric(vertical: 18.0),
-                              child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
-                            ),
+                              mainNavKey.currentContext!.replaceNamed(Path.home.path);
+                            });
+                          },
+                          child: Container(
+                            decoration: _waitForNextAlarmDecoration,
+                            padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 11.0),
+                            child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 53.0),
+                        const SizedBox(width: 53.0),
+                      ],
                       GestureDetector(
-                        onTap: () => context
-                            .read<RingingBloc>()
-                            .stopAlarm()
-                            .then((value) => mainNavKey.currentContext!.replaceNamed(Path.home.path)),
-                        child: Expanded(
-                          child: Container(
-                            decoration: _closeButtonDecoration,
-                            padding: const EdgeInsets.symmetric(vertical: 18.0),
-                            child: Text("alarm.closeAlarm".tr(), style: _closeAlarmTextStyle),
-                          ),
+                        onTap: () {
+                          context.loaderOverlay.show();
+                          context.read<RingingBloc>().stopAlarm().then((_) {
+                            context.loaderOverlay.hide();
+                            mainNavKey.currentContext!.replaceNamed(Path.home.path);
+                          });
+                        },
+                        child: Container(
+                          decoration: _closeButtonDecoration,
+                          padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 32.0),
+                          child: Text("alarm.closeAlarm".tr(), style: _closeAlarmTextStyle),
                         ),
                       ),
                     ],

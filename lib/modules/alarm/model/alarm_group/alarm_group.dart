@@ -10,7 +10,7 @@ class AlarmGroup with _$AlarmGroup {
   @JsonSerializable(explicitToJson: true)
   const factory AlarmGroup({
     required int id,
-    @Default(false) routine,
+    @Default(false) bool routine,
     @Default([]) List<AlarmEntity> alarms,
     @Default(true) bool isEnabled,
   }) = _AlarmGroup;

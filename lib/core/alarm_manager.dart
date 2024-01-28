@@ -150,77 +150,62 @@ class AlarmManager {
   }
 
   /// Add next routine alarm to the system if alarm has next routine.
-  void prepareNextRoutine(AlarmEntity entity) {
-    // Save Alarm Group
-    SharedPreferences.getInstance().then((prefs) async {
+  Future<void> prepareNextRoutine(AlarmEntity entity) async {
+    await SharedPreferences.getInstance().then((prefs) async {
       final List<Future> futures = [];
 
-//Find AlarmGroup using AlarmEntity
-      final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(entity.id));
-      if (groupIdx == -1) {
-        lgr.d("$_tag addNextRoutine : AlarmGroup not found");
-        return;
+      //Find AlarmGroup using AlarmEntity
+      final AlarmGroup? group = _getAlarmGroup(entity);
+      if (group != null) {
+        final List<AlarmEntity> groupAlarms = group.alarms.toList();
+
+        if (!group.routine) {
+          await Alarm.stop(entity.id);
+        } else {
+          // Check if alarm has next routine
+          groupAlarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+          final int timestamp = entity.timestamp;
+          final int nextRoutineIdx = groupAlarms.indexWhere((element) => element.timestamp > timestamp);
+
+          final DateTime nextWeekdayTime = entity.dateTime.add(const Duration(days: 7));
+          // Create next current weekday entity
+          final AlarmEntity nextWeekdayAlarmEntity = entity.copyWith(
+            id: nextWeekdayTime.millisecondsSinceEpoch,
+            timestamp: nextWeekdayTime.millisecondsSinceEpoch,
+          );
+
+          // If next routine exist
+          late final AlarmEntity nextAlarmEntity;
+          if (nextRoutineIdx != -1) {
+            // Add next rountine entity to system
+            nextAlarmEntity = groupAlarms[nextRoutineIdx];
+            groupAlarms.add(nextAlarmEntity);
+          } else {
+            nextAlarmEntity = nextWeekdayAlarmEntity;
+          }
+          final AlarmSettings nextSettings = AlarmSettings(
+            id: nextAlarmEntity.id,
+            dateTime: nextAlarmEntity.dateTime,
+            assetAudioPath: nextAlarmEntity.sound.path,
+            vibrate: nextAlarmEntity.vibration,
+            fadeDuration: 2.0,
+            notificationTitle: "이지 알람",
+            notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
+          );
+          futures.add(Alarm.set(alarmSettings: nextSettings));
+          groupAlarms.add(nextWeekdayAlarmEntity);
+        }
+        // Remove current routine AlarmEntity
+        groupAlarms.removeWhere((e) => e.id == entity.id);
+        _alarmGroups.removeAt(_alarmGroups.indexOf(group));
+
+        // Replace AlarmGroup
+        if (group.routine) _alarmGroups.add(group.copyWith(alarms: groupAlarms));
+
+        final List<String> alarmStrings = _alarmGroups.map((e) => jsonEncode(e.toJson())).toList();
+        futures.add(prefs.setStringList(_alarmKey, alarmStrings));
+        await Future.wait(futures);
       }
-      final AlarmGroup group = _alarmGroups[groupIdx];
-      final List<AlarmEntity> groupAlarms = group.alarms.toList();
-
-      // Check if alarm has next routine
-      groupAlarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-      final int timestamp = entity.timestamp;
-      final int nextRoutineIdx = groupAlarms.indexWhere((element) => element.timestamp > timestamp);
-      if (nextRoutineIdx != -1) {
-        // Add next rountine entity to system
-        final AlarmEntity nextRoutineEntity = groupAlarms[nextRoutineIdx];
-        final AlarmSettings nextRoutineSettings = AlarmSettings(
-          id: nextRoutineEntity.id,
-          dateTime: nextRoutineEntity.dateTime,
-          assetAudioPath: nextRoutineEntity.sound.path,
-          vibrate: nextRoutineEntity.vibration,
-          fadeDuration: 2.0,
-          notificationTitle: "이지 알람",
-          notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
-        );
-        futures.add(Alarm.set(alarmSettings: nextRoutineSettings));
-
-        // Create next current weekday entity
-        final DateTime nexRoutineTime = entity.dateTime.add(const Duration(days: 7));
-        final AlarmEntity replacingCurrentEntity = entity.copyWith(
-          id: nexRoutineTime.millisecondsSinceEpoch,
-          timestamp: nexRoutineTime.millisecondsSinceEpoch,
-        );
-
-        groupAlarms.add(nextRoutineEntity);
-        groupAlarms.add(replacingCurrentEntity);
-      } else {
-        // Create next current weekday entity
-        final DateTime nexRoutineTime = entity.dateTime.add(const Duration(days: 7));
-        final AlarmEntity replacingCurrentEntity = entity.copyWith(
-          id: nexRoutineTime.millisecondsSinceEpoch,
-          timestamp: nexRoutineTime.millisecondsSinceEpoch,
-        );
-        final AlarmSettings nextRoutineSettings = AlarmSettings(
-          id: replacingCurrentEntity.id,
-          dateTime: replacingCurrentEntity.dateTime,
-          assetAudioPath: replacingCurrentEntity.sound.path,
-          vibrate: replacingCurrentEntity.vibration,
-          fadeDuration: 2.0,
-          notificationTitle: "이지 알람",
-          notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
-        );
-        futures.add(Alarm.set(alarmSettings: nextRoutineSettings));
-        groupAlarms.add(replacingCurrentEntity);
-      }
-
-      // Remove current routine AlarmEntity
-      groupAlarms.removeAt(entity.id);
-
-      // Replace AlarmGroup
-      _alarmGroups.removeAt(groupIdx);
-      _alarmGroups.add(group.copyWith(alarms: groupAlarms));
-
-      final List<String> alarmStrings = _alarmGroups.map((e) => jsonEncode(e.toJson())).toList();
-      futures.add(prefs.setStringList(_alarmKey, alarmStrings));
-      await Future.wait(futures);
     });
   }
 
@@ -284,22 +269,30 @@ class AlarmManager {
 
   /// Add an alarm to the system.
   Future<void> _addAlarmGroup(AlarmGroup alarmGroup) async {
-    final List<Future<bool>> futures = [];
-    for (AlarmEntity alarm in alarmGroup.alarms) {
-      final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(alarm.timestamp);
-      final AlarmSettings setting = AlarmSettings(
-        id: alarm.id,
-        dateTime: dateTime,
-        assetAudioPath: alarm.sound.path,
-        vibrate: alarm.vibration,
-        fadeDuration: 2.0,
-        notificationTitle: "이지 알람",
-        notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
-      );
+    final List<AlarmEntity> alarms = alarmGroup.alarms.toList();
+    alarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
-      futures.add(Alarm.set(alarmSettings: setting));
+    final AlarmEntity firstAlarm = alarms.first;
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(firstAlarm.timestamp);
+    final AlarmSettings setting = AlarmSettings(
+      id: firstAlarm.id,
+      dateTime: dateTime,
+      assetAudioPath: firstAlarm.sound.path,
+      vibrate: firstAlarm.vibration,
+      fadeDuration: 2.0,
+      notificationTitle: "이지 알람",
+      notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
+    );
+
+    await Alarm.set(alarmSettings: setting);
+  }
+
+  AlarmGroup? _getAlarmGroup(AlarmEntity entity) {
+    final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(entity.id));
+    if (groupIdx == -1) {
+      lgr.d("$_tag addNextRoutine : AlarmGroup not found");
+      return null;
     }
-
-    await Future.wait(futures);
+    return _alarmGroups[groupIdx];
   }
 }

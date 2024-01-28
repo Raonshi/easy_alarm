@@ -9,7 +9,7 @@ part of 'alarm_group.dart';
 _$AlarmGroupImpl _$$AlarmGroupImplFromJson(Map<String, dynamic> json) =>
     _$AlarmGroupImpl(
       id: json['id'] as int,
-      routine: json['routine'] ?? false,
+      routine: json['routine'] as bool? ?? false,
       alarms: (json['alarms'] as List<dynamic>?)
               ?.map((e) => AlarmEntity.fromJson(e as Map<String, dynamic>))
               .toList() ??

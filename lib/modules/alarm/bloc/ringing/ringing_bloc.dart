@@ -34,8 +34,8 @@ class RingingBloc extends Cubit<RingingState> {
   }
 
   Future<void> stopAlarm() async {
-    state.mapOrNull(loaded: (state) {
-      _alarmManager.prepareNextRoutine(state.alarm);
+    await state.mapOrNull(loaded: (state) async {
+      await _alarmManager.prepareNextRoutine(state.alarm);
     });
   }
 }
