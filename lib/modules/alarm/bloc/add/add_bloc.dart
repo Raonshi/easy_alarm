@@ -1,4 +1,3 @@
-import 'package:alarm/alarm.dart';
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/common/asset_path.dart';
 import 'package:easy_alarm/common/tools.dart';
