@@ -21,7 +21,11 @@ mixin _$AddState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmEntity alarm) loaded,
+    required TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)
+        loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,7 +33,11 @@ mixin _$AddState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmEntity alarm)? loaded,
+    TResult? Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -37,7 +45,11 @@ mixin _$AddState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmEntity alarm)? loaded,
+    TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -126,7 +138,11 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmEntity alarm) loaded,
+    required TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)
+        loaded,
   }) {
     return initial();
   }
@@ -137,7 +153,11 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmEntity alarm)? loaded,
+    TResult? Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
   }) {
     return initial?.call();
   }
@@ -148,7 +168,11 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmEntity alarm)? loaded,
+    TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -240,7 +264,11 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmEntity alarm) loaded,
+    required TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)
+        loaded,
   }) {
     return loading();
   }
@@ -251,7 +279,11 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmEntity alarm)? loaded,
+    TResult? Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
   }) {
     return loading?.call();
   }
@@ -262,7 +294,11 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmEntity alarm)? loaded,
+    TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -381,7 +417,11 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmEntity alarm) loaded,
+    required TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)
+        loaded,
   }) {
     return error(exception);
   }
@@ -392,7 +432,11 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmEntity alarm)? loaded,
+    TResult? Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
   }) {
     return error?.call(exception);
   }
@@ -403,7 +447,11 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmEntity alarm)? loaded,
+    TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -465,9 +513,12 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({AlarmEntity alarm});
+  $Res call(
+      {AlarmGroup alarmGroup,
+      @Deprecated("This value will be removed next time") AlarmEntity? alarm});
 
-  $AlarmEntityCopyWith<$Res> get alarm;
+  $AlarmGroupCopyWith<$Res> get alarmGroup;
+  $AlarmEntityCopyWith<$Res>? get alarm;
 }
 
 /// @nodoc
@@ -481,20 +532,37 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? alarm = null,
+    Object? alarmGroup = null,
+    Object? alarm = freezed,
   }) {
     return _then(_$LoadedImpl(
-      alarm: null == alarm
+      alarmGroup: null == alarmGroup
+          ? _value.alarmGroup
+          : alarmGroup // ignore: cast_nullable_to_non_nullable
+              as AlarmGroup,
+      alarm: freezed == alarm
           ? _value.alarm
           : alarm // ignore: cast_nullable_to_non_nullable
-              as AlarmEntity,
+              as AlarmEntity?,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $AlarmEntityCopyWith<$Res> get alarm {
-    return $AlarmEntityCopyWith<$Res>(_value.alarm, (value) {
+  $AlarmGroupCopyWith<$Res> get alarmGroup {
+    return $AlarmGroupCopyWith<$Res>(_value.alarmGroup, (value) {
+      return _then(_value.copyWith(alarmGroup: value));
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AlarmEntityCopyWith<$Res>? get alarm {
+    if (_value.alarm == null) {
+      return null;
+    }
+
+    return $AlarmEntityCopyWith<$Res>(_value.alarm!, (value) {
       return _then(_value.copyWith(alarm: value));
     });
   }
@@ -503,14 +571,19 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required this.alarm});
+  const _$LoadedImpl(
+      {required this.alarmGroup,
+      @Deprecated("This value will be removed next time") this.alarm});
 
   @override
-  final AlarmEntity alarm;
+  final AlarmGroup alarmGroup;
+  @override
+  @Deprecated("This value will be removed next time")
+  final AlarmEntity? alarm;
 
   @override
   String toString() {
-    return 'AddState.loaded(alarm: $alarm)';
+    return 'AddState.loaded(alarmGroup: $alarmGroup, alarm: $alarm)';
   }
 
   @override
@@ -518,11 +591,13 @@ class _$LoadedImpl implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$LoadedImpl &&
+            (identical(other.alarmGroup, alarmGroup) ||
+                other.alarmGroup == alarmGroup) &&
             (identical(other.alarm, alarm) || other.alarm == alarm));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, alarm);
+  int get hashCode => Object.hash(runtimeType, alarmGroup, alarm);
 
   @JsonKey(ignore: true)
   @override
@@ -536,9 +611,13 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(AlarmEntity alarm) loaded,
+    required TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)
+        loaded,
   }) {
-    return loaded(alarm);
+    return loaded(alarmGroup, alarm);
   }
 
   @override
@@ -547,9 +626,13 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(AlarmEntity alarm)? loaded,
+    TResult? Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
   }) {
-    return loaded?.call(alarm);
+    return loaded?.call(alarmGroup, alarm);
   }
 
   @override
@@ -558,11 +641,15 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(AlarmEntity alarm)? loaded,
+    TResult Function(
+            AlarmGroup alarmGroup,
+            @Deprecated("This value will be removed next time")
+            AlarmEntity? alarm)?
+        loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(alarm);
+      return loaded(alarmGroup, alarm);
     }
     return orElse();
   }
@@ -606,9 +693,14 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements AddState {
-  const factory _Loaded({required final AlarmEntity alarm}) = _$LoadedImpl;
+  const factory _Loaded(
+      {required final AlarmGroup alarmGroup,
+      @Deprecated("This value will be removed next time")
+      final AlarmEntity? alarm}) = _$LoadedImpl;
 
-  AlarmEntity get alarm;
+  AlarmGroup get alarmGroup;
+  @Deprecated("This value will be removed next time")
+  AlarmEntity? get alarm;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;

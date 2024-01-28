@@ -64,7 +64,7 @@ class _AddPageBody extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: TimerPanelWidget(
-                          time: state.alarm.dateTime,
+                          time: state.alarmGroup.dateTime,
                           onTimeChanged: context.read<AddBloc>().updateTime,
                         ),
                       ),
@@ -72,7 +72,7 @@ class _AddPageBody extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: RoutinePanelWidget(
-                          selectedWeekdays: state.alarm.weekdays,
+                          selectedWeekdays: state.alarmGroup.weekdays,
                           onTapSwitch: (bool value) {
                             if (!value) context.read<AddBloc>().updateWeekdays([]);
                           },
@@ -86,8 +86,8 @@ class _AddPageBody extends StatelessWidget {
                         padding: const EdgeInsets.all(20.0),
                         child: SnoozePanelWidget(
                           snoozeTime: TimeOfDay(
-                            hour: state.alarm.snoozeDuration != null ? state.alarm.snoozeDuration! ~/ 60 : 0,
-                            minute: state.alarm.snoozeDuration != null ? state.alarm.snoozeDuration! % 60 : 0,
+                            hour: state.alarmGroup.snoozeMinute != null ? state.alarmGroup.snoozeMinute! ~/ 60 : 0,
+                            minute: state.alarmGroup.snoozeMinute != null ? state.alarmGroup.snoozeMinute! % 60 : 0,
                           ),
                           onTapSwitch: (bool value) {
                             if (!value) context.read<AddBloc>().updateSnoozeTime();

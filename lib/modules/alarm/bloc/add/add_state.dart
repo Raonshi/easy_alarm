@@ -1,4 +1,5 @@
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
+import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'add_state.freezed.dart';
@@ -14,6 +15,7 @@ class AddState with _$AddState {
   }) = _Error;
 
   const factory AddState.loaded({
-    required AlarmEntity alarm,
+    required AlarmGroup alarmGroup,
+    @Deprecated("This value will be removed next time") AlarmEntity? alarm,
   }) = _Loaded;
 }

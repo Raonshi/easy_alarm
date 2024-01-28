@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/common/asset_path.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
+import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 
 import 'add_state.dart';
 
@@ -15,65 +16,107 @@ class AddBloc extends Cubit<AddState> {
   void _init() async {
     state.mapOrNull(initial: (state) {
       final int id = _alarmManager.firstEmptyId;
-      final int timestamp = DateTime.now().millisecondsSinceEpoch;
+      final DateTime now = DateTime.now();
+      final int timestamp = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0).millisecondsSinceEpoch;
 
-      emit(
-        AddState.loaded(
-          alarm: AlarmEntity(
-            id: id,
-            timestamp: timestamp,
-            weekdays: [],
-            sound: SoundAssetPath.defaultSound,
-          ),
-        ),
+      final AlarmEntity newAlarmEntity = AlarmEntity(
+        id: timestamp,
+        timestamp: timestamp,
+        sound: SoundAssetPath.defaultSound,
       );
+
+      emit(AddState.loaded(alarmGroup: AlarmGroup(id: id, alarms: [newAlarmEntity])));
     });
   }
 
-  void updateTime(DateTime newDate) {
+  void updateTime(DateTime updatedDate) {
     state.mapOrNull(loaded: (state) {
-      final AlarmEntity newAlarm = state.alarm.copyWith(timestamp: newDate.millisecondsSinceEpoch);
-      emit(state.copyWith(alarm: newAlarm));
+      final DateTime now = DateTime.now();
+      final DateTime currentDateTime = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
+
+      final List<AlarmEntity> newAlarms = state.alarmGroup.alarms.toList().map((e) {
+        final DateTime oldDate = DateTime.fromMillisecondsSinceEpoch(e.timestamp);
+
+        late final DateTime newDate;
+        if (currentDateTime.difference(oldDate).inDays > 0) {
+          newDate = DateTime(
+              currentDateTime.year, currentDateTime.month, currentDateTime.day, updatedDate.hour, updatedDate.minute);
+        } else {
+          newDate = DateTime(oldDate.year, oldDate.month, oldDate.day, updatedDate.hour, updatedDate.minute);
+        }
+
+        return e.copyWith(timestamp: newDate.millisecondsSinceEpoch);
+      }).toList();
+
+      final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
+      emit(state.copyWith(alarmGroup: newAlarmGroup));
     });
   }
 
   void updateWeekdays(List<int> newWeekdays) {
     state.mapOrNull(loaded: (state) {
-      final AlarmEntity newAlarm = state.alarm.copyWith(weekdays: newWeekdays);
-      emit(state.copyWith(alarm: newAlarm));
+      final List<AlarmEntity> newAlarms = newWeekdays.map((e) {
+        final int timestamp = state.alarmGroup.alarms.first.timestamp;
+        final SoundAssetPath sound = state.alarmGroup.alarms.first.sound;
+        final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+        late final DateTime newDateTime;
+        if (e > dateTime.weekday) {
+          newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
+        } else if (e < dateTime.weekday) {
+          newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
+        } else {
+          newDateTime = dateTime;
+        }
+
+        return AlarmEntity(
+          id: newDateTime.millisecondsSinceEpoch,
+          timestamp: newDateTime.millisecondsSinceEpoch,
+          sound: sound,
+        );
+      }).toList();
+
+      final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
+      emit(state.copyWith(alarmGroup: newAlarmGroup));
     });
   }
 
   void updateSnoozeTime([Duration? duration]) {
     state.mapOrNull(loaded: (state) {
-      late final AlarmEntity newAlarm;
-      if (duration != null) {
-        newAlarm = state.alarm.copyWith(snoozeDuration: duration.inMinutes);
-      } else {
-        newAlarm = state.alarm.copyWith(snoozeDuration: null);
-      }
+      final List<AlarmEntity> newAlarms = state.alarmGroup.alarms.toList().map((e) {
+        return e.copyWith(snoozeDuration: duration?.inMinutes);
+      }).toList();
 
-      emit(state.copyWith(alarm: newAlarm));
-    });
-  }
-
-  void updateVibration(bool newVibration) {
-    state.mapOrNull(loaded: (state) {
-      final AlarmEntity newAlarm = state.alarm.copyWith(vibration: newVibration);
-      emit(state.copyWith(alarm: newAlarm));
+      final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
+      emit(state.copyWith(alarmGroup: newAlarmGroup));
     });
   }
 
   void updateSound(SoundAssetPath newSound) {
     state.mapOrNull(loaded: (state) {
-      final AlarmEntity newAlarm = state.alarm.copyWith(sound: newSound);
-      emit(state.copyWith(alarm: newAlarm));
+      final List<AlarmEntity> newAlarms = state.alarmGroup.alarms.toList().map((e) {
+        return e.copyWith(sound: newSound);
+      }).toList();
+
+      final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
+      emit(state.copyWith(alarmGroup: newAlarmGroup));
+    });
+  }
+
+  void updateVibration(bool newVibration) {
+    state.mapOrNull(loaded: (state) {
+      final List<AlarmEntity> newAlarms = state.alarmGroup.alarms.toList().map((e) {
+        return e.copyWith(vibration: newVibration);
+      }).toList();
+
+      final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
+      emit(state.copyWith(alarmGroup: newAlarmGroup));
     });
   }
 
   Future<void> save() async {
     await state.mapOrNull(loaded: (state) async {
-      await _alarmManager.saveAlarm(state.alarm);
+      await _alarmManager.saveAlarm(state.alarmGroup);
     });
   }
 }
