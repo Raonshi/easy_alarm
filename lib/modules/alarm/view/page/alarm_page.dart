@@ -89,7 +89,7 @@ class _AlarmPageBody extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       GestureDetector(
-                        onTap: () => context.read<RingingBloc>().waitForNextAlarm().then((totalMinute) {
+                        onTap: () => context.read<RingingBloc>().waitForSnooze().then((totalMinute) {
                           if (totalMinute > 60) {
                             final int hour = totalMinute ~/ 60;
                             final int minute = totalMinute % 60;

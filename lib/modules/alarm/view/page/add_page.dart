@@ -9,6 +9,7 @@ import 'package:easy_alarm/modules/alarm/view/widget/timer_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class AddPage extends StatelessWidget {
   const AddPage({super.key});
@@ -44,7 +45,11 @@ class _AddPageBody extends StatelessWidget {
           actions: [
             GestureDetector(
               onTap: () {
-                context.read<AddBloc>().save().then((value) => Navigator.pop(context));
+                context.loaderOverlay.show();
+                context.read<AddBloc>().save().then((value) {
+                  context.loaderOverlay.hide();
+                  Navigator.pop(context);
+                });
               },
               child: Text("common.complete".tr(), style: _topButtonTextStyle),
             ),

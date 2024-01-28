@@ -1,6 +1,7 @@
 import 'package:easy_alarm/modules/main/view/widget/bottom_ad_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class ShellPage extends StatelessWidget {
   const ShellPage({super.key, required this.state, required this.child});
@@ -10,13 +11,15 @@ class ShellPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Column(
-        children: [
-          Expanded(child: child),
-          const BottomAdWidget(),
-          const SizedBox(height: 24.0),
-        ],
+    return LoaderOverlay(
+      child: Material(
+        child: Column(
+          children: [
+            Expanded(child: child),
+            const BottomAdWidget(),
+            const SizedBox(height: 24.0),
+          ],
+        ),
       ),
     );
   }

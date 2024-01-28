@@ -106,19 +106,104 @@ class AlarmManager {
   }
 
   /// Wait for the next alarm to ring.
-  Future<void> waitForNextAlarm(AlarmEntity alarmEntity) async {
+  Future<void> waitForSnooze(AlarmEntity alarmEntity) async {
     await Alarm.stop(alarmEntity.id);
-    final AlarmSettings setting = AlarmSettings(
-      id: alarmEntity.id,
-      dateTime: alarmEntity.dateTime,
-      assetAudioPath: alarmEntity.sound.path,
-      vibrate: alarmEntity.vibration,
+    if (alarmEntity.snoozeDuration != null) {
+      //Find AlarmGroup using AlarmEntity
+      final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(alarmEntity.id));
+      if (groupIdx == -1) {
+        lgr.d("$_tag addNextRoutine : AlarmGroup not found");
+        return;
+      }
+      final AlarmGroup group = _alarmGroups[groupIdx];
+
+      // Find AlarmEntity from AlarmGroup
+      final List<AlarmEntity> groupAlarms = group.alarms.toList();
+      final int entityIdx = groupAlarms.indexWhere((element) => element.id == alarmEntity.id);
+      if (entityIdx == -1) {
+        lgr.d("$_tag addNextRoutine : AlarmEntity not found");
+        return;
+      }
+
+      // Create next snooze AlarmEntity
+      final DateTime nexRoutineTime = alarmEntity.dateTime.add( Duration(minutes: alarmEntity.snoozeDuration!));
+      final AlarmEntity nextRoutineEntity = alarmEntity.copyWith(
+        id: nexRoutineTime.millisecondsSinceEpoch,
+        timestamp: nexRoutineTime.millisecondsSinceEpoch,
+      );
+
+      final AlarmSettings setting = AlarmSettings(
+        id: nextRoutineEntity.id,
+        dateTime: nextRoutineEntity.dateTime,
+        assetAudioPath: nextRoutineEntity.sound.path,
+        vibrate: nextRoutineEntity.vibration,
+        fadeDuration: 2.0,
+        notificationTitle: "이지 알람",
+        notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
+      );
+
+      // Prepare next routine AlarmEntity
+      groupAlarms.removeAt(entityIdx);
+      groupAlarms.add(nextRoutineEntity);
+
+      // Replace AlarmGroup
+      _alarmGroups.removeAt(groupIdx);
+      _alarmGroups.add(group.copyWith(alarms: groupAlarms));
+
+      await Alarm.set(alarmSettings: setting);
+    }
+  }
+
+  void addNextRoutine(AlarmEntity entity) {
+    //Find AlarmGroup using AlarmEntity
+    final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(entity.id));
+    if (groupIdx == -1) {
+      lgr.d("$_tag addNextRoutine : AlarmGroup not found");
+      return;
+    }
+    final AlarmGroup group = _alarmGroups[groupIdx];
+
+    // Find AlarmEntity from AlarmGroup
+    final List<AlarmEntity> groupAlarms = group.alarms.toList();
+    final int entityIdx = groupAlarms.indexWhere((element) => element.id == entity.id);
+    if (entityIdx == -1) {
+      lgr.d("$_tag addNextRoutine : AlarmEntity not found");
+      return;
+    }
+
+    // Create next routine AlarmEntity
+    final DateTime nexRoutineTime = entity.dateTime.add(const Duration(days: 7));
+    final AlarmEntity nextRoutineEntity = entity.copyWith(
+      id: nexRoutineTime.millisecondsSinceEpoch,
+      timestamp: nexRoutineTime.millisecondsSinceEpoch,
+    );
+    final AlarmSettings newSettings = AlarmSettings(
+      id: nextRoutineEntity.id,
+      dateTime: nextRoutineEntity.dateTime,
+      assetAudioPath: nextRoutineEntity.sound.path,
+      vibrate: nextRoutineEntity.vibration,
       fadeDuration: 2.0,
       notificationTitle: "이지 알람",
       notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
     );
 
-    await Alarm.set(alarmSettings: setting);
+    // Prepare next routine AlarmEntity
+    groupAlarms.removeAt(entityIdx);
+    groupAlarms.add(nextRoutineEntity);
+
+    // Replace AlarmGroup
+    _alarmGroups.removeAt(groupIdx);
+    _alarmGroups.add(group.copyWith(alarms: groupAlarms));
+
+    // Save Alarm Group
+    SharedPreferences.getInstance().then((prefs) async {
+      final List<String> alarmStrings = _alarmGroups.map((e) => jsonEncode(e.toJson())).toList();
+      final List<Future> futures = [];
+
+      futures.add(Alarm.set(alarmSettings: newSettings));
+      futures.add(prefs.setStringList(_alarmKey, alarmStrings));
+      await Future.wait(futures);
+    });
   }
 
   /// Delete an alarm group from the storage and the system.
