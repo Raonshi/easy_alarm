@@ -1,6 +1,7 @@
-import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
+import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/widget/week_day_panel_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class AlarmItemWidget extends StatelessWidget {
@@ -11,11 +12,51 @@ class AlarmItemWidget extends StatelessWidget {
     required this.onTapSwitch,
   });
 
-  final AlarmEntity item;
+  final AlarmGroup item;
   final ValueChanged<int> onTapDelete;
   final ValueChanged<int> onTapSwitch;
 
-  TextStyle get _timeTextStyle => const TextStyle(fontSize: 32, fontWeight: FontWeight.w700);
+  TextStyle get _timeTextStyle => TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        color: item.isEnabled ? CustomColors.grey90 : CustomColors.grey60,
+      );
+
+  TextStyle get _snoozeTextStyle => TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        color: item.isEnabled ? CustomColors.grey90 : CustomColors.grey60,
+      );
+
+  String get dateTimeText {
+    final DateTime dateTime = item.dateTime;
+    final String hour = dateTime.hour.toString().padLeft(2, '0');
+    final String minute = dateTime.minute.toString().padLeft(2, '0');
+    return '$hour:$minute ${dateTime.hour > 12 ? "PM" : "AM"}';
+  }
+
+  String get snoozeText {
+    final int? snoozeMinute = item.snoozeMinute;
+
+    if (snoozeMinute == null) {
+      return 'alarm.snoozeNone'.tr();
+    } else {
+      if (snoozeMinute == 0) {
+        return 'alarm.snoozeNone'.tr();
+      } else if (snoozeMinute < 60) {
+        return 'alarm.snoozeMinute'.tr(args: [snoozeMinute.toString()]);
+      } else {
+        if (snoozeMinute % 60 == 0) {
+          return 'alarm.snoozeHour'.tr(args: [(snoozeMinute ~/ 60).toString()]);
+        } else {
+          return 'alarm.snoozeHourAndMinute'.tr(args: [
+            (snoozeMinute ~/ 60).toString(),
+            (snoozeMinute % 60).toString(),
+          ]);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +85,13 @@ class AlarmItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(item.timeString, style: _timeTextStyle),
+              Expanded(
+                child: Text(
+                  dateTimeText,
+                  style: _timeTextStyle,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               InkWell(
                 onTap: () => onTapDelete(item.id),
                 child: const Icon(Icons.close),
@@ -55,7 +102,13 @@ class AlarmItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(item.snoozeString, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+              Expanded(
+                child: Text(
+                  snoozeText,
+                  style: _snoozeTextStyle,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               Switch(
                 value: item.isEnabled,
                 activeColor: CustomColors.grey10,

@@ -1,8 +1,9 @@
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/ui/widget/alarm_item_widget.dart';
+import 'package:easy_alarm/modules/home/view/widget/alarm_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,7 +83,12 @@ class _HomePageBody extends StatelessWidget {
                           key: ValueKey(state.alarms[index].id),
                           item: state.alarms[index],
                           onTapDelete: context.read<AlarmsBloc>().deleteAlarm,
-                          onTapSwitch: context.read<AlarmsBloc>().toggleAlarm,
+                          onTapSwitch: (int groupId) {
+                            context.read<AlarmsBloc>().toggleAlarm(groupId);
+                            final String msg =
+                                state.alarms[index].isEnabled ? "home.alarmEnabled".tr() : "home.alarmDisabled".tr();
+                            showSnackBar(msg);
+                          },
                         );
                       },
                       separatorBuilder: (context, index) => const SizedBox(height: 16.0),

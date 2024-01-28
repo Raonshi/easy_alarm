@@ -11,11 +11,9 @@ class AlarmEntity with _$AlarmEntity {
   const factory AlarmEntity({
     required int id,
     required int timestamp,
-    required List<int> weekdays,
     @Default(false) bool vibration,
     required SoundAssetPath sound,
     int? snoozeDuration,
-    @Default(true) bool isEnabled,
   }) = _AlarmEntity;
 
   factory AlarmEntity.fromJson(Map<String, Object?> json) => _$AlarmEntityFromJson(json);

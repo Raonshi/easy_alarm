@@ -20,7 +20,9 @@
         "header": "알람 추가"
     },
     "home": {
-        "noAlarm": "등록된 알람이 없습니다.\n알람을 추가해주세요."
+        "noAlarm": "등록된 알람이 없습니다.\n알람을 추가해주세요.",
+        "alarmDisabled": "알람이 비활성화 되었습니다.",
+        "alarmEnabled": "알람이 활성화 되었습니다."
     },
     "alarm": {
         "setTimeLabel" : "시간 설정",

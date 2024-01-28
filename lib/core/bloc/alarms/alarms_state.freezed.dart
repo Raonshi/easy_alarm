@@ -21,7 +21,7 @@ mixin _$AlarmsState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(List<AlarmEntity> alarms) loaded,
+    required TResult Function(List<AlarmGroup> alarms) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,7 +29,7 @@ mixin _$AlarmsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(List<AlarmEntity> alarms)? loaded,
+    TResult? Function(List<AlarmGroup> alarms)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -37,7 +37,7 @@ mixin _$AlarmsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(List<AlarmEntity> alarms)? loaded,
+    TResult Function(List<AlarmGroup> alarms)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -127,7 +127,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(List<AlarmEntity> alarms) loaded,
+    required TResult Function(List<AlarmGroup> alarms) loaded,
   }) {
     return initial();
   }
@@ -138,7 +138,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(List<AlarmEntity> alarms)? loaded,
+    TResult? Function(List<AlarmGroup> alarms)? loaded,
   }) {
     return initial?.call();
   }
@@ -149,7 +149,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(List<AlarmEntity> alarms)? loaded,
+    TResult Function(List<AlarmGroup> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -241,7 +241,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(List<AlarmEntity> alarms) loaded,
+    required TResult Function(List<AlarmGroup> alarms) loaded,
   }) {
     return loading();
   }
@@ -252,7 +252,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(List<AlarmEntity> alarms)? loaded,
+    TResult? Function(List<AlarmGroup> alarms)? loaded,
   }) {
     return loading?.call();
   }
@@ -263,7 +263,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(List<AlarmEntity> alarms)? loaded,
+    TResult Function(List<AlarmGroup> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -382,7 +382,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(List<AlarmEntity> alarms) loaded,
+    required TResult Function(List<AlarmGroup> alarms) loaded,
   }) {
     return error(exception);
   }
@@ -393,7 +393,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(List<AlarmEntity> alarms)? loaded,
+    TResult? Function(List<AlarmGroup> alarms)? loaded,
   }) {
     return error?.call(exception);
   }
@@ -404,7 +404,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(List<AlarmEntity> alarms)? loaded,
+    TResult Function(List<AlarmGroup> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -466,7 +466,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<AlarmEntity> alarms});
+  $Res call({List<AlarmGroup> alarms});
 }
 
 /// @nodoc
@@ -486,7 +486,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
       alarms: null == alarms
           ? _value._alarms
           : alarms // ignore: cast_nullable_to_non_nullable
-              as List<AlarmEntity>,
+              as List<AlarmGroup>,
     ));
   }
 }
@@ -494,12 +494,12 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl({required final List<AlarmEntity> alarms})
+  const _$LoadedImpl({required final List<AlarmGroup> alarms})
       : _alarms = alarms;
 
-  final List<AlarmEntity> _alarms;
+  final List<AlarmGroup> _alarms;
   @override
-  List<AlarmEntity> get alarms {
+  List<AlarmGroup> get alarms {
     if (_alarms is EqualUnmodifiableListView) return _alarms;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_alarms);
@@ -534,7 +534,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(List<AlarmEntity> alarms) loaded,
+    required TResult Function(List<AlarmGroup> alarms) loaded,
   }) {
     return loaded(alarms);
   }
@@ -545,7 +545,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(List<AlarmEntity> alarms)? loaded,
+    TResult? Function(List<AlarmGroup> alarms)? loaded,
   }) {
     return loaded?.call(alarms);
   }
@@ -556,7 +556,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(List<AlarmEntity> alarms)? loaded,
+    TResult Function(List<AlarmGroup> alarms)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -604,10 +604,10 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements AlarmsState {
-  const factory _Loaded({required final List<AlarmEntity> alarms}) =
+  const factory _Loaded({required final List<AlarmGroup> alarms}) =
       _$LoadedImpl;
 
-  List<AlarmEntity> get alarms;
+  List<AlarmGroup> get alarms;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;

@@ -1,4 +1,3 @@
-import 'package:alarm/alarm.dart';
 import 'package:easy_alarm/common/asset_path.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_localization/easy_localization.dart';

@@ -22,11 +22,9 @@ AlarmEntity _$AlarmEntityFromJson(Map<String, dynamic> json) {
 mixin _$AlarmEntity {
   int get id => throw _privateConstructorUsedError;
   int get timestamp => throw _privateConstructorUsedError;
-  List<int> get weekdays => throw _privateConstructorUsedError;
   bool get vibration => throw _privateConstructorUsedError;
   SoundAssetPath get sound => throw _privateConstructorUsedError;
   int? get snoozeDuration => throw _privateConstructorUsedError;
-  bool get isEnabled => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,11 +41,9 @@ abstract class $AlarmEntityCopyWith<$Res> {
   $Res call(
       {int id,
       int timestamp,
-      List<int> weekdays,
       bool vibration,
       SoundAssetPath sound,
-      int? snoozeDuration,
-      bool isEnabled});
+      int? snoozeDuration});
 }
 
 /// @nodoc
@@ -65,11 +61,9 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
   $Res call({
     Object? id = null,
     Object? timestamp = null,
-    Object? weekdays = null,
     Object? vibration = null,
     Object? sound = null,
     Object? snoozeDuration = freezed,
-    Object? isEnabled = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -80,10 +74,6 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as int,
-      weekdays: null == weekdays
-          ? _value.weekdays
-          : weekdays // ignore: cast_nullable_to_non_nullable
-              as List<int>,
       vibration: null == vibration
           ? _value.vibration
           : vibration // ignore: cast_nullable_to_non_nullable
@@ -96,10 +86,6 @@ class _$AlarmEntityCopyWithImpl<$Res, $Val extends AlarmEntity>
           ? _value.snoozeDuration
           : snoozeDuration // ignore: cast_nullable_to_non_nullable
               as int?,
-      isEnabled: null == isEnabled
-          ? _value.isEnabled
-          : isEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
     ) as $Val);
   }
 }
@@ -115,11 +101,9 @@ abstract class _$$AlarmEntityImplCopyWith<$Res>
   $Res call(
       {int id,
       int timestamp,
-      List<int> weekdays,
       bool vibration,
       SoundAssetPath sound,
-      int? snoozeDuration,
-      bool isEnabled});
+      int? snoozeDuration});
 }
 
 /// @nodoc
@@ -135,11 +119,9 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? timestamp = null,
-    Object? weekdays = null,
     Object? vibration = null,
     Object? sound = null,
     Object? snoozeDuration = freezed,
-    Object? isEnabled = null,
   }) {
     return _then(_$AlarmEntityImpl(
       id: null == id
@@ -150,10 +132,6 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as int,
-      weekdays: null == weekdays
-          ? _value._weekdays
-          : weekdays // ignore: cast_nullable_to_non_nullable
-              as List<int>,
       vibration: null == vibration
           ? _value.vibration
           : vibration // ignore: cast_nullable_to_non_nullable
@@ -166,10 +144,6 @@ class __$$AlarmEntityImplCopyWithImpl<$Res>
           ? _value.snoozeDuration
           : snoozeDuration // ignore: cast_nullable_to_non_nullable
               as int?,
-      isEnabled: null == isEnabled
-          ? _value.isEnabled
-          : isEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -181,13 +155,10 @@ class _$AlarmEntityImpl extends _AlarmEntity {
   const _$AlarmEntityImpl(
       {required this.id,
       required this.timestamp,
-      required final List<int> weekdays,
       this.vibration = false,
       required this.sound,
-      this.snoozeDuration,
-      this.isEnabled = true})
-      : _weekdays = weekdays,
-        super._();
+      this.snoozeDuration})
+      : super._();
 
   factory _$AlarmEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$AlarmEntityImplFromJson(json);
@@ -196,14 +167,6 @@ class _$AlarmEntityImpl extends _AlarmEntity {
   final int id;
   @override
   final int timestamp;
-  final List<int> _weekdays;
-  @override
-  List<int> get weekdays {
-    if (_weekdays is EqualUnmodifiableListView) return _weekdays;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_weekdays);
-  }
-
   @override
   @JsonKey()
   final bool vibration;
@@ -211,13 +174,10 @@ class _$AlarmEntityImpl extends _AlarmEntity {
   final SoundAssetPath sound;
   @override
   final int? snoozeDuration;
-  @override
-  @JsonKey()
-  final bool isEnabled;
 
   @override
   String toString() {
-    return 'AlarmEntity(id: $id, timestamp: $timestamp, weekdays: $weekdays, vibration: $vibration, sound: $sound, snoozeDuration: $snoozeDuration, isEnabled: $isEnabled)';
+    return 'AlarmEntity(id: $id, timestamp: $timestamp, vibration: $vibration, sound: $sound, snoozeDuration: $snoozeDuration)';
   }
 
   @override
@@ -228,27 +188,17 @@ class _$AlarmEntityImpl extends _AlarmEntity {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
-            const DeepCollectionEquality().equals(other._weekdays, _weekdays) &&
             (identical(other.vibration, vibration) ||
                 other.vibration == vibration) &&
             (identical(other.sound, sound) || other.sound == sound) &&
             (identical(other.snoozeDuration, snoozeDuration) ||
-                other.snoozeDuration == snoozeDuration) &&
-            (identical(other.isEnabled, isEnabled) ||
-                other.isEnabled == isEnabled));
+                other.snoozeDuration == snoozeDuration));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      timestamp,
-      const DeepCollectionEquality().hash(_weekdays),
-      vibration,
-      sound,
-      snoozeDuration,
-      isEnabled);
+  int get hashCode =>
+      Object.hash(runtimeType, id, timestamp, vibration, sound, snoozeDuration);
 
   @JsonKey(ignore: true)
   @override
@@ -268,11 +218,9 @@ abstract class _AlarmEntity extends AlarmEntity {
   const factory _AlarmEntity(
       {required final int id,
       required final int timestamp,
-      required final List<int> weekdays,
       final bool vibration,
       required final SoundAssetPath sound,
-      final int? snoozeDuration,
-      final bool isEnabled}) = _$AlarmEntityImpl;
+      final int? snoozeDuration}) = _$AlarmEntityImpl;
   const _AlarmEntity._() : super._();
 
   factory _AlarmEntity.fromJson(Map<String, dynamic> json) =
@@ -283,15 +231,11 @@ abstract class _AlarmEntity extends AlarmEntity {
   @override
   int get timestamp;
   @override
-  List<int> get weekdays;
-  @override
   bool get vibration;
   @override
   SoundAssetPath get sound;
   @override
   int? get snoozeDuration;
-  @override
-  bool get isEnabled;
   @override
   @JsonKey(ignore: true)
   _$$AlarmEntityImplCopyWith<_$AlarmEntityImpl> get copyWith =>
