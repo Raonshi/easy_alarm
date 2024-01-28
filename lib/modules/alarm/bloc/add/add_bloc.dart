@@ -31,76 +31,79 @@ class AddBloc extends Cubit<AddState> {
 
   void updateTime(DateTime updatedDate) {
     state.mapOrNull(loaded: (state) {
-      final DateTime now = DateTime.now();
-      final DateTime currentDateTime = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
-
-      final List<AlarmEntity> newAlarms = state.alarmGroup.alarms.toList().map((e) {
-        final DateTime oldDate = DateTime.fromMillisecondsSinceEpoch(e.timestamp);
-
-        late final DateTime newDate;
-        if (currentDateTime.difference(oldDate).inDays > 0) {
-          newDate = DateTime(
-              currentDateTime.year, currentDateTime.month, currentDateTime.day, updatedDate.hour, updatedDate.minute);
-        } else {
-          newDate = DateTime(oldDate.year, oldDate.month, oldDate.day, updatedDate.hour, updatedDate.minute);
-        }
-
-        return e.copyWith(timestamp: newDate.millisecondsSinceEpoch);
-      }).toList();
-
-      final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
-      emit(state.copyWith(alarmGroup: newAlarmGroup));
+      final List<AlarmEntity> newAlarms = _updateTime(state.alarmGroup, updatedDate);
+      emit(state.copyWith(alarmGroup: state.alarmGroup.copyWith(alarms: newAlarms)));
     });
   }
 
-  void updateWeekdays(List<int> newWeekdays) {
+  void updateWeekdays(bool isRoutine, List<int> newWeekdays) {
     state.mapOrNull(loaded: (state) {
-      late final AlarmGroup newAlarmGroup;
-      late final List<AlarmEntity> newAlarms;
+      final List<AlarmEntity> updatedAlarms = _updateWeekdays(state.alarmGroup, newWeekdays);
 
-      final int timestamp = state.alarmGroup.alarms.first.timestamp;
-      final SoundAssetPath sound = state.alarmGroup.alarms.first.sound;
-      final bool vibration = state.alarmGroup.alarms.first.vibration;
-      final int? snoozeDuration = state.alarmGroup.alarms.first.snoozeDuration;
+      emit(state.copyWith(
+        alarmGroup: state.alarmGroup.copyWith(alarms: updatedAlarms, routine: isRoutine),
+      ));
+    });
+  }
 
-      if (newWeekdays.isEmpty) {
-        newAlarmGroup = state.alarmGroup.copyWith(
-          routine: false,
-          alarms: [
-            AlarmEntity(
-              id: timestamp,
-              timestamp: timestamp,
-              sound: sound,
-              vibration: vibration,
-              snoozeDuration: snoozeDuration,
-            ),
-          ],
+  List<AlarmEntity> _updateTime(AlarmGroup alarmGroup, DateTime dateTime) {
+    final DateTime now = DateTime.now();
+    final DateTime currentDateTime = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
+
+    return alarmGroup.alarms.toList().map((e) {
+      final DateTime oldDate = DateTime.fromMillisecondsSinceEpoch(e.timestamp);
+
+      late final DateTime newDate;
+      if (currentDateTime.difference(oldDate).inDays > 0) {
+        newDate = DateTime(
+          currentDateTime.year,
+          currentDateTime.month,
+          currentDateTime.day,
+          dateTime.hour,
+          dateTime.minute,
         );
       } else {
-        final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-        newAlarms = newWeekdays.map((e) {
-          late final DateTime newDateTime;
-          if (e > dateTime.weekday) {
-            newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
-          } else if (e < dateTime.weekday) {
-            newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
-          } else {
-            newDateTime = dateTime;
-          }
-
-          return AlarmEntity(
-            id: newDateTime.millisecondsSinceEpoch,
-            timestamp: newDateTime.millisecondsSinceEpoch,
-            sound: sound,
-            vibration: vibration,
-            snoozeDuration: snoozeDuration,
-          );
-        }).toList();
-
-        newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms, routine: true,);
+        newDate = DateTime(
+          oldDate.year,
+          oldDate.month,
+          oldDate.day,
+          dateTime.hour,
+          dateTime.minute,
+        );
       }
-      emit(state.copyWith(alarmGroup: newAlarmGroup));
-    });
+
+      return e.copyWith(timestamp: newDate.millisecondsSinceEpoch);
+    }).toList();
+  }
+
+  List<AlarmEntity> _updateWeekdays(AlarmGroup alarmGroup, List<int> weekdays) {
+    final List<AlarmEntity> currentAlarms = alarmGroup.alarms.toList();
+    currentAlarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+    final int timestamp = currentAlarms.first.timestamp;
+    final SoundAssetPath sound = currentAlarms.first.sound;
+    final bool vibration = currentAlarms.first.vibration;
+    final int? snoozeDuration = currentAlarms.first.snoozeDuration;
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+    return weekdays.map((e) {
+      late final DateTime newDateTime;
+      if (e > dateTime.weekday) {
+        newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
+      } else if (e < dateTime.weekday) {
+        newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
+      } else {
+        newDateTime = dateTime;
+      }
+
+      return AlarmEntity(
+        id: newDateTime.millisecondsSinceEpoch,
+        timestamp: newDateTime.millisecondsSinceEpoch,
+        sound: sound,
+        vibration: vibration,
+        snoozeDuration: snoozeDuration,
+      );
+    }).toList();
   }
 
   void updateSnoozeTime([Duration? duration]) {

@@ -273,10 +273,9 @@ class AlarmManager {
     alarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
     final AlarmEntity firstAlarm = alarms.first;
-    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(firstAlarm.timestamp);
     final AlarmSettings setting = AlarmSettings(
       id: firstAlarm.id,
-      dateTime: dateTime,
+      dateTime: firstAlarm.dateTime,
       assetAudioPath: firstAlarm.sound.path,
       vibrate: firstAlarm.vibration,
       fadeDuration: 2.0,
