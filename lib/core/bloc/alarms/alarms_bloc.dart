@@ -32,8 +32,8 @@ class AlarmsBloc extends Cubit<AlarmsState> {
     emit(AlarmsState.loaded(alarms: _alarmManager.cachedAlarmGroups));
   }
 
-  void toggleAlarm(int id) {
-    state.mapOrNull(
+  Future<void> toggleAlarm(int id) async {
+    await state.mapOrNull(
       loaded: (state) async {
         final List<AlarmGroup> alarms = state.alarms.toList();
         final int idx = alarms.indexWhere((element) => element.id == id);
