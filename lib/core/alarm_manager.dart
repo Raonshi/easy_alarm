@@ -151,6 +151,7 @@ class AlarmManager {
 
   /// Add next routine alarm to the system if alarm has next routine.
   Future<void> prepareNextRoutine(AlarmEntity entity) async {
+    await Alarm.stop(entity.id);
     await SharedPreferences.getInstance().then((prefs) async {
       final List<Future> futures = [];
 
@@ -159,9 +160,7 @@ class AlarmManager {
       if (group != null) {
         final List<AlarmEntity> groupAlarms = group.alarms.toList();
 
-        if (!group.routine) {
-          await Alarm.stop(entity.id);
-        } else {
+        if (group.routine) {
           // Check if alarm has next routine
           groupAlarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
           final int timestamp = entity.timestamp;
