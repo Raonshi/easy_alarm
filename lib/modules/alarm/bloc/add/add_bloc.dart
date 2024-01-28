@@ -87,13 +87,18 @@ class AddBloc extends Cubit<AddState> {
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
 
     return weekdays.map((e) {
+      final DateTime now = DateTime.now();
       late final DateTime newDateTime;
-      if (e > dateTime.weekday) {
-        newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
-      } else if (e < dateTime.weekday) {
-        newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
+      if (e == now.weekday) {
+        newDateTime = DateTime(now.year, now.month, now.day, dateTime.hour, dateTime.minute, 0);
       } else {
-        newDateTime = dateTime;
+        if (e > dateTime.weekday) {
+          newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
+        } else if (e < dateTime.weekday) {
+          newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
+        } else {
+          newDateTime = dateTime;
+        }
       }
 
       return AlarmEntity(

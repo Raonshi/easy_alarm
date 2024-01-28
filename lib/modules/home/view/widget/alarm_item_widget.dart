@@ -1,7 +1,7 @@
 import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 import 'package:easy_alarm/style/colors.dart';
-import 'package:easy_alarm/ui/widget/week_day_panel_widget.dart';
+import 'package:easy_alarm/widget/week_day_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
