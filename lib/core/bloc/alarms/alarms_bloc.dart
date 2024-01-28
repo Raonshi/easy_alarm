@@ -18,10 +18,10 @@ class AlarmsBloc extends Cubit<AlarmsState> {
     );
   }
 
-  void refreshAlarms() {
-    state.mapOrNull(
+  Future<void> refreshAlarms() async {
+    await state.mapOrNull(
       loaded: (state) async {
-        _fetchAlarms();
+        await _fetchAlarms();
       },
     );
   }

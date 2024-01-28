@@ -1,3 +1,4 @@
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/ui/widget/week_day_panel_widget.dart';
@@ -60,6 +61,7 @@ class AlarmItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    lgr.d(item.toJson());
     return Container(
       decoration: ShapeDecoration(
         color: item.isEnabled ? CustomColors.blue10 : CustomColors.grey10,

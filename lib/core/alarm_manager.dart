@@ -14,122 +14,10 @@ class AlarmManager {
   factory AlarmManager() => _instance;
   AlarmManager._internal();
 
-  @Deprecated("This value will be removed next time")
-  final List<AlarmEntity> _alarms = [];
-  @Deprecated("This value will be removed next time")
-  List<AlarmEntity> get cachedAlarms => _alarms;
-
   final List<AlarmGroup> _alarmGroups = [];
   List<AlarmGroup> get cachedAlarmGroups => _alarmGroups;
 
   final String _alarmKey = "ALARMS";
-
-  // get firstEmptyId {
-  //   if (_alarms.isEmpty) return 0;
-
-  //   final List<int> ids = _alarms.map((e) => e.id).toList();
-  //   ids.sort();
-  //   for (int i = 0; i < ids.length; i++) {
-  //     if (ids[i] != i) return i;
-  //   }
-
-  //   return ids.length;
-  // }
-
-  // Future<void> init() async {
-  //   await Future.wait([loadAlarms(), initAlarm()]);
-  //   lgr.d("$_tag initialized\n - Stored Alarm List : $_alarms\n - System Alarm List : ${Alarm.getAlarms()}");
-  // }
-
-  // Future<void> loadAlarms() async {
-  //   await SharedPreferences.getInstance().then((prefs) {
-  //     _alarms.clear();
-  //     final List<String> alarmStrings = prefs.getStringList(_alarmKey) ?? [];
-  //     if (alarmStrings.isNotEmpty) {
-  //       _alarms.addAll(alarmStrings.map((e) => AlarmEntity.fromJson(jsonDecode(e))));
-  //     }
-  //   });
-  // }
-
-  // Future<void> initAlarm() async {
-  //   await Alarm.init(showDebugLogs: true);
-  //   await Alarm.setNotificationOnAppKillContent("이지 알람", "앱이 종료되면 알람이 울리지 않을 수 있습니다.");
-
-  //   Alarm.ringStream.stream.listen(_handleAlarmRinging);
-  // }
-
-  // Future<void> _handleAlarmRinging(AlarmSettings settings) async {
-  //   mainNavKey.currentContext!.replaceNamed(Path.alarm.path, extra: settings);
-  // }
-
-  // /// Remove every alarms from the system and the storage.
-  // Future<void> resetAlarms() async {
-  //   await SharedPreferences.getInstance().then((prefs) async {
-  //     _alarms.clear();
-  //     await Future.wait([
-  //       prefs.remove(_alarmKey),
-  //       Alarm.stopAll(),
-  //     ]);
-  //   });
-  //   lgr.d("$_tag resetAlarms\n - Stored Alarm List : $_alarms\n - System Alarm List : ${Alarm.getAlarms()}");
-  // }
-
-  // /// Save an alarm to the storage and the system.
-  // Future<void> saveAlarm(AlarmEntity alarm) async {
-  //   await SharedPreferences.getInstance().then((prefs) async {
-  //     _alarms.add(alarm);
-  //     final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
-  //     await Future.wait([
-  //       prefs.setStringList(alarms, alarmStrings),
-  //       _addAlarm(alarm),
-  //     ]);
-  //   });
-  //   lgr.d("$_tag saveAlarm\n - Stored Alarm List : $_alarms\n - System Alarm List : ${Alarm.getAlarms()}");
-  // }
-
-  // /// Replace an alarm to the storage and the system.
-  // Future<void> replaceAlarm(AlarmEntity alarm) async {
-  //   await SharedPreferences.getInstance().then((prefs) async {
-  //     final int idx = _alarms.indexWhere((element) => element.id == alarm.id);
-  //     if (idx == -1) return;
-
-  //     await Alarm.stop(alarm.id);
-  //     _alarms.replaceRange(idx, idx + 1, [alarm]);
-  //     final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
-  //     await Future.wait([
-  //       prefs.setStringList(alarms, alarmStrings),
-  //       _addAlarm(alarm),
-  //     ]);
-  //   });
-  //   lgr.d("$_tag replaceAlarm\n - Stored Alarm List : $_alarms\n - System Alarm List : ${Alarm.getAlarms()}");
-  // }
-
-  //   /// Delete an alarm from the storage and the system.
-  // Future<void> deleteAlarm(int id) async {
-  //   await SharedPreferences.getInstance().then((prefs) async {
-  //     _alarms.removeWhere((element) => element.id == id);
-  //     final List<String> alarmStrings = _alarms.map((e) => jsonEncode(e.toJson())).toList();
-  //     await Future.wait([prefs.setStringList(_alarmKey, alarmStrings), Alarm.stop(id)]);
-  //   });
-  //   lgr.d("$_tag deleteAlarm\n - Stored Alarm List : $_alarms\n - System Alarm List : ${Alarm.getAlarms()}");
-  // }
-
-  // /// Add an alarm to the system.
-  // Future<void> _addAlarm(AlarmEntity alarm) async {
-  //   final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(alarm.timestamp);
-
-  //   final AlarmSettings setting = AlarmSettings(
-  //     id: alarm.id,
-  //     dateTime: dateTime,
-  //     assetAudioPath: alarm.sound.path,
-  //     vibrate: alarm.vibration,
-  //     fadeDuration: 2.0,
-  //     notificationTitle: "이지 알람",
-  //     notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
-  //   );
-  //   await Alarm.set(alarmSettings: setting);
-  //   lgr.d("$_tag _addAlarm\n - Stored Alarm List : $_alarms\n - System Alarm List : ${Alarm.getAlarms()}");
-  // }
 
   get firstEmptyId {
     if (_alarmGroups.isEmpty) return 0;
@@ -145,7 +33,6 @@ class AlarmManager {
 
   Future<void> init() async {
     await Future.wait([loadAlarms(), initAlarm()]);
-    lgr.d("$_tag initialized\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
   }
 
   Future<void> loadAlarms() async {
@@ -178,7 +65,6 @@ class AlarmManager {
         Alarm.stopAll(),
       ]);
     });
-    lgr.d("$_tag resetAlarms\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
   }
 
   /// Save an alarm to the storage and the system.
@@ -191,7 +77,6 @@ class AlarmManager {
         _addAlarmGroup(alarmGroup),
       ]);
     });
-    lgr.d("$_tag saveAlarm\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
   }
 
   /// Replace an alarm to the storage and the system.
@@ -213,24 +98,115 @@ class AlarmManager {
         _addAlarmGroup(newAlarmGroup),
       ]);
     });
-    lgr.d("$_tag replaceAlarm\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
   }
 
   /// Wait for the next alarm to ring.
-  Future<void> waitForNextAlarm(AlarmEntity alarmEntity) async {
+  Future<void> waitForSnooze(AlarmEntity alarmEntity) async {
     await Alarm.stop(alarmEntity.id);
-    final AlarmSettings setting = AlarmSettings(
-      id: alarmEntity.id,
-      dateTime: alarmEntity.dateTime,
-      assetAudioPath: alarmEntity.sound.path,
-      vibrate: alarmEntity.vibration,
-      fadeDuration: 2.0,
-      notificationTitle: "이지 알람",
-      notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
-    );
+    if (alarmEntity.snoozeDuration != null) {
+      //Find AlarmGroup using AlarmEntity
+      final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(alarmEntity.id));
+      if (groupIdx == -1) {
+        lgr.d("$_tag addNextRoutine : AlarmGroup not found");
+        return;
+      }
+      final AlarmGroup group = _alarmGroups[groupIdx];
 
-    await Alarm.set(alarmSettings: setting);
-    lgr.d("$_tag _addAlarm\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
+      // Find AlarmEntity from AlarmGroup
+      final List<AlarmEntity> groupAlarms = group.alarms.toList();
+      final int entityIdx = groupAlarms.indexWhere((element) => element.id == alarmEntity.id);
+      if (entityIdx == -1) {
+        lgr.d("$_tag addNextRoutine : AlarmEntity not found");
+        return;
+      }
+
+      // Create next snooze AlarmEntity
+      final DateTime nexRoutineTime = alarmEntity.dateTime.add(Duration(minutes: alarmEntity.snoozeDuration!));
+      final AlarmEntity nextRoutineEntity = alarmEntity.copyWith(
+        id: nexRoutineTime.millisecondsSinceEpoch,
+        timestamp: nexRoutineTime.millisecondsSinceEpoch,
+      );
+
+      final AlarmSettings setting = AlarmSettings(
+        id: nextRoutineEntity.id,
+        dateTime: nextRoutineEntity.dateTime,
+        assetAudioPath: nextRoutineEntity.sound.path,
+        vibrate: nextRoutineEntity.vibration,
+        fadeDuration: 2.0,
+        notificationTitle: "이지 알람",
+        notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
+      );
+
+      // Prepare next routine AlarmEntity
+      groupAlarms.removeAt(entityIdx);
+      groupAlarms.add(nextRoutineEntity);
+
+      // Replace AlarmGroup
+      _alarmGroups.removeAt(groupIdx);
+      _alarmGroups.add(group.copyWith(alarms: groupAlarms));
+
+      await Alarm.set(alarmSettings: setting);
+    }
+  }
+
+  /// Add next routine alarm to the system if alarm has next routine.
+  Future<void> prepareNextRoutine(AlarmEntity entity) async {
+    await SharedPreferences.getInstance().then((prefs) async {
+      final List<Future> futures = [];
+
+      //Find AlarmGroup using AlarmEntity
+      final AlarmGroup? group = _getAlarmGroup(entity);
+      if (group != null) {
+        final List<AlarmEntity> groupAlarms = group.alarms.toList();
+
+        if (!group.routine) {
+          await Alarm.stop(entity.id);
+        } else {
+          // Check if alarm has next routine
+          groupAlarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+          final int timestamp = entity.timestamp;
+          final int nextRoutineIdx = groupAlarms.indexWhere((element) => element.timestamp > timestamp);
+
+          final DateTime nextWeekdayTime = entity.dateTime.add(const Duration(days: 7));
+          // Create next current weekday entity
+          final AlarmEntity nextWeekdayAlarmEntity = entity.copyWith(
+            id: nextWeekdayTime.millisecondsSinceEpoch,
+            timestamp: nextWeekdayTime.millisecondsSinceEpoch,
+          );
+
+          // If next routine exist
+          late final AlarmEntity nextAlarmEntity;
+          if (nextRoutineIdx != -1) {
+            // Add next rountine entity to system
+            nextAlarmEntity = groupAlarms[nextRoutineIdx];
+            groupAlarms.add(nextAlarmEntity);
+          } else {
+            nextAlarmEntity = nextWeekdayAlarmEntity;
+          }
+          final AlarmSettings nextSettings = AlarmSettings(
+            id: nextAlarmEntity.id,
+            dateTime: nextAlarmEntity.dateTime,
+            assetAudioPath: nextAlarmEntity.sound.path,
+            vibrate: nextAlarmEntity.vibration,
+            fadeDuration: 2.0,
+            notificationTitle: "이지 알람",
+            notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
+          );
+          futures.add(Alarm.set(alarmSettings: nextSettings));
+          groupAlarms.add(nextWeekdayAlarmEntity);
+        }
+        // Remove current routine AlarmEntity
+        groupAlarms.removeWhere((e) => e.id == entity.id);
+        _alarmGroups.removeAt(_alarmGroups.indexOf(group));
+
+        // Replace AlarmGroup
+        if (group.routine) _alarmGroups.add(group.copyWith(alarms: groupAlarms));
+
+        final List<String> alarmStrings = _alarmGroups.map((e) => jsonEncode(e.toJson())).toList();
+        futures.add(prefs.setStringList(_alarmKey, alarmStrings));
+        await Future.wait(futures);
+      }
+    });
   }
 
   /// Delete an alarm group from the storage and the system.
@@ -255,8 +231,6 @@ class AlarmManager {
       futures.add(prefs.setStringList(_alarmKey, alarmStrings));
       await Future.wait(futures);
     });
-
-    lgr.d("$_tag deleteAlarm\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
   }
 
   /// Delete alarm entity from the storage and the system.
@@ -291,29 +265,34 @@ class AlarmManager {
       futures.add(prefs.setStringList(_alarmKey, alarmStrings));
       await Future.wait(futures);
     });
-
-    lgr.d("$_tag deleteAlarm\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
   }
 
   /// Add an alarm to the system.
   Future<void> _addAlarmGroup(AlarmGroup alarmGroup) async {
-    final List<Future<bool>> futures = [];
-    for (AlarmEntity alarm in alarmGroup.alarms) {
-      final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(alarm.timestamp);
-      final AlarmSettings setting = AlarmSettings(
-        id: alarm.id,
-        dateTime: dateTime,
-        assetAudioPath: alarm.sound.path,
-        vibrate: alarm.vibration,
-        fadeDuration: 2.0,
-        notificationTitle: "이지 알람",
-        notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
-      );
+    final List<AlarmEntity> alarms = alarmGroup.alarms.toList();
+    alarms.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
-      futures.add(Alarm.set(alarmSettings: setting));
+    final AlarmEntity firstAlarm = alarms.first;
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(firstAlarm.timestamp);
+    final AlarmSettings setting = AlarmSettings(
+      id: firstAlarm.id,
+      dateTime: dateTime,
+      assetAudioPath: firstAlarm.sound.path,
+      vibrate: firstAlarm.vibration,
+      fadeDuration: 2.0,
+      notificationTitle: "이지 알람",
+      notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
+    );
+
+    await Alarm.set(alarmSettings: setting);
+  }
+
+  AlarmGroup? _getAlarmGroup(AlarmEntity entity) {
+    final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(entity.id));
+    if (groupIdx == -1) {
+      lgr.d("$_tag addNextRoutine : AlarmGroup not found");
+      return null;
     }
-
-    await Future.wait(futures);
-    lgr.d("$_tag _addAlarm\n - Stored Alarm List : $_alarmGroups\n - System Alarm List : ${Alarm.getAlarms()}");
+    return _alarmGroups[groupIdx];
   }
 }

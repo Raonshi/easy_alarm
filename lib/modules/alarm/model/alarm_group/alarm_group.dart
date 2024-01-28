@@ -10,6 +10,7 @@ class AlarmGroup with _$AlarmGroup {
   @JsonSerializable(explicitToJson: true)
   const factory AlarmGroup({
     required int id,
+    @Default(false) bool routine,
     @Default([]) List<AlarmEntity> alarms,
     @Default(true) bool isEnabled,
   }) = _AlarmGroup;
@@ -19,8 +20,7 @@ class AlarmGroup with _$AlarmGroup {
   const AlarmGroup._();
 
   DateTime get dateTime => alarms.first.dateTime;
-  List<int> get weekdays =>
-      alarms.where((e) => e.snoozeDuration != null).map((p) => p.dateTime.weekday).toSet().toList();
+  List<int> get weekdays => routine ? alarms.map((p) => p.dateTime.weekday).toSet().toList() : [];
 
   int? get snoozeMinute => alarms.first.snoozeDuration;
 }

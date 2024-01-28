@@ -52,6 +52,7 @@ dependencies:
   logger: ^2.0.2+1
   lottie: ^3.0.0
   just_audio: ^0.9.36
+  loader_overlay: ^4.0.0
 
 dev_dependencies:
   flutter_test:

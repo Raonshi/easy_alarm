@@ -55,28 +55,50 @@ class AddBloc extends Cubit<AddState> {
 
   void updateWeekdays(List<int> newWeekdays) {
     state.mapOrNull(loaded: (state) {
-      final List<AlarmEntity> newAlarms = newWeekdays.map((e) {
-        final int timestamp = state.alarmGroup.alarms.first.timestamp;
-        final SoundAssetPath sound = state.alarmGroup.alarms.first.sound;
-        final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      late final AlarmGroup newAlarmGroup;
+      late final List<AlarmEntity> newAlarms;
 
-        late final DateTime newDateTime;
-        if (e > dateTime.weekday) {
-          newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
-        } else if (e < dateTime.weekday) {
-          newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
-        } else {
-          newDateTime = dateTime;
-        }
+      final int timestamp = state.alarmGroup.alarms.first.timestamp;
+      final SoundAssetPath sound = state.alarmGroup.alarms.first.sound;
+      final bool vibration = state.alarmGroup.alarms.first.vibration;
+      final int? snoozeDuration = state.alarmGroup.alarms.first.snoozeDuration;
 
-        return AlarmEntity(
-          id: newDateTime.millisecondsSinceEpoch,
-          timestamp: newDateTime.millisecondsSinceEpoch,
-          sound: sound,
+      if (newWeekdays.isEmpty) {
+        newAlarmGroup = state.alarmGroup.copyWith(
+          routine: false,
+          alarms: [
+            AlarmEntity(
+              id: timestamp,
+              timestamp: timestamp,
+              sound: sound,
+              vibration: vibration,
+              snoozeDuration: snoozeDuration,
+            ),
+          ],
         );
-      }).toList();
+      } else {
+        final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+        newAlarms = newWeekdays.map((e) {
+          late final DateTime newDateTime;
+          if (e > dateTime.weekday) {
+            newDateTime = dateTime.add(Duration(days: e - dateTime.weekday));
+          } else if (e < dateTime.weekday) {
+            newDateTime = dateTime.add(Duration(days: 7 - dateTime.weekday + e));
+          } else {
+            newDateTime = dateTime;
+          }
 
-      final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
+          return AlarmEntity(
+            id: newDateTime.millisecondsSinceEpoch,
+            timestamp: newDateTime.millisecondsSinceEpoch,
+            sound: sound,
+            vibration: vibration,
+            snoozeDuration: snoozeDuration,
+          );
+        }).toList();
+
+        newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms, routine: true,);
+      }
       emit(state.copyWith(alarmGroup: newAlarmGroup));
     });
   }
