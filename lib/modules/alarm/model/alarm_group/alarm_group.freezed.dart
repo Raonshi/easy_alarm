@@ -21,6 +21,7 @@ AlarmGroup _$AlarmGroupFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AlarmGroup {
   int get id => throw _privateConstructorUsedError;
+  dynamic get routine => throw _privateConstructorUsedError;
   List<AlarmEntity> get alarms => throw _privateConstructorUsedError;
   bool get isEnabled => throw _privateConstructorUsedError;
 
@@ -36,7 +37,8 @@ abstract class $AlarmGroupCopyWith<$Res> {
           AlarmGroup value, $Res Function(AlarmGroup) then) =
       _$AlarmGroupCopyWithImpl<$Res, AlarmGroup>;
   @useResult
-  $Res call({int id, List<AlarmEntity> alarms, bool isEnabled});
+  $Res call(
+      {int id, dynamic routine, List<AlarmEntity> alarms, bool isEnabled});
 }
 
 /// @nodoc
@@ -53,6 +55,7 @@ class _$AlarmGroupCopyWithImpl<$Res, $Val extends AlarmGroup>
   @override
   $Res call({
     Object? id = null,
+    Object? routine = freezed,
     Object? alarms = null,
     Object? isEnabled = null,
   }) {
@@ -61,6 +64,10 @@ class _$AlarmGroupCopyWithImpl<$Res, $Val extends AlarmGroup>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      routine: freezed == routine
+          ? _value.routine
+          : routine // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       alarms: null == alarms
           ? _value.alarms
           : alarms // ignore: cast_nullable_to_non_nullable
@@ -81,7 +88,8 @@ abstract class _$$AlarmGroupImplCopyWith<$Res>
       __$$AlarmGroupImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, List<AlarmEntity> alarms, bool isEnabled});
+  $Res call(
+      {int id, dynamic routine, List<AlarmEntity> alarms, bool isEnabled});
 }
 
 /// @nodoc
@@ -96,6 +104,7 @@ class __$$AlarmGroupImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? routine = freezed,
     Object? alarms = null,
     Object? isEnabled = null,
   }) {
@@ -104,6 +113,7 @@ class __$$AlarmGroupImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      routine: freezed == routine ? _value.routine! : routine,
       alarms: null == alarms
           ? _value._alarms
           : alarms // ignore: cast_nullable_to_non_nullable
@@ -122,6 +132,7 @@ class __$$AlarmGroupImplCopyWithImpl<$Res>
 class _$AlarmGroupImpl extends _AlarmGroup {
   const _$AlarmGroupImpl(
       {required this.id,
+      this.routine = false,
       final List<AlarmEntity> alarms = const [],
       this.isEnabled = true})
       : _alarms = alarms,
@@ -132,6 +143,9 @@ class _$AlarmGroupImpl extends _AlarmGroup {
 
   @override
   final int id;
+  @override
+  @JsonKey()
+  final dynamic routine;
   final List<AlarmEntity> _alarms;
   @override
   @JsonKey()
@@ -147,7 +161,7 @@ class _$AlarmGroupImpl extends _AlarmGroup {
 
   @override
   String toString() {
-    return 'AlarmGroup(id: $id, alarms: $alarms, isEnabled: $isEnabled)';
+    return 'AlarmGroup(id: $id, routine: $routine, alarms: $alarms, isEnabled: $isEnabled)';
   }
 
   @override
@@ -156,6 +170,7 @@ class _$AlarmGroupImpl extends _AlarmGroup {
         (other.runtimeType == runtimeType &&
             other is _$AlarmGroupImpl &&
             (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other.routine, routine) &&
             const DeepCollectionEquality().equals(other._alarms, _alarms) &&
             (identical(other.isEnabled, isEnabled) ||
                 other.isEnabled == isEnabled));
@@ -164,7 +179,11 @@ class _$AlarmGroupImpl extends _AlarmGroup {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, const DeepCollectionEquality().hash(_alarms), isEnabled);
+      runtimeType,
+      id,
+      const DeepCollectionEquality().hash(routine),
+      const DeepCollectionEquality().hash(_alarms),
+      isEnabled);
 
   @JsonKey(ignore: true)
   @override
@@ -183,6 +202,7 @@ class _$AlarmGroupImpl extends _AlarmGroup {
 abstract class _AlarmGroup extends AlarmGroup {
   const factory _AlarmGroup(
       {required final int id,
+      final dynamic routine,
       final List<AlarmEntity> alarms,
       final bool isEnabled}) = _$AlarmGroupImpl;
   const _AlarmGroup._() : super._();
@@ -192,6 +212,8 @@ abstract class _AlarmGroup extends AlarmGroup {
 
   @override
   int get id;
+  @override
+  dynamic get routine;
   @override
   List<AlarmEntity> get alarms;
   @override
