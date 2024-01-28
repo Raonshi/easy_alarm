@@ -19,7 +19,8 @@ class AlarmGroup with _$AlarmGroup {
   const AlarmGroup._();
 
   DateTime get dateTime => alarms.first.dateTime;
-  List<int> get weekdays => alarms.map((e) => e.dateTime.weekday).toSet().toList();
+  List<int> get weekdays =>
+      alarms.where((e) => e.snoozeDuration != null).map((p) => p.dateTime.weekday).toSet().toList();
 
   int? get snoozeMinute => alarms.first.snoozeDuration;
 }

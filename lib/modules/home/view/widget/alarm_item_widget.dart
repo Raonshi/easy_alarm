@@ -16,9 +16,17 @@ class AlarmItemWidget extends StatelessWidget {
   final ValueChanged<int> onTapDelete;
   final ValueChanged<int> onTapSwitch;
 
-  TextStyle get _timeTextStyle => const TextStyle(fontSize: 32, fontWeight: FontWeight.w700);
+  TextStyle get _timeTextStyle => TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        color: item.isEnabled ? CustomColors.grey90 : CustomColors.grey60,
+      );
 
-  TextStyle get _snoozeTextStyle => const TextStyle(fontSize: 22, fontWeight: FontWeight.w700);
+  TextStyle get _snoozeTextStyle => TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        color: item.isEnabled ? CustomColors.grey90 : CustomColors.grey60,
+      );
 
   String get dateTimeText {
     final DateTime dateTime = item.dateTime;
