@@ -79,10 +79,10 @@ class _AddPageBody extends StatelessWidget {
                         child: RoutinePanelWidget(
                           selectedWeekdays: state.alarmGroup.weekdays,
                           onTapSwitch: (bool value) {
-                            if (!value) context.read<AddBloc>().updateWeekdays([]);
+                            context.read<AddBloc>().updateWeekdays(value, [DateTime.now().weekday]);
                           },
                           onSelectedDaysChanged: (List<int> weekdays) {
-                            context.read<AddBloc>().updateWeekdays(weekdays);
+                              context.read<AddBloc>().updateWeekdays(true, weekdays);
                           },
                         ),
                       ),
