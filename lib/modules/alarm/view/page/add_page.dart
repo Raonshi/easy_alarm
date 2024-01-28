@@ -1,3 +1,4 @@
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/modules/alarm/bloc/add/add_bloc.dart';
 import 'package:easy_alarm/modules/alarm/bloc/add/add_state.dart';
 import 'package:easy_alarm/modules/alarm/view/widget/sound_panel_widget.dart';
@@ -46,9 +47,13 @@ class _AddPageBody extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 context.loaderOverlay.show();
-                context.read<AddBloc>().save().then((value) {
+                context.read<AddBloc>().validate().then((value) {
                   context.loaderOverlay.hide();
-                  Navigator.pop(context);
+                  if (value == null) {
+                    context.read<AddBloc>().save().then((value) => Navigator.pop(context));
+                  } else {
+                    showSnackBar(value);
+                  }
                 });
               },
               child: Text("common.complete".tr(), style: _topButtonTextStyle),
@@ -82,7 +87,7 @@ class _AddPageBody extends StatelessWidget {
                             context.read<AddBloc>().updateWeekdays(value, [DateTime.now().weekday]);
                           },
                           onSelectedDaysChanged: (List<int> weekdays) {
-                              context.read<AddBloc>().updateWeekdays(true, weekdays);
+                            context.read<AddBloc>().updateWeekdays(true, weekdays);
                           },
                         ),
                       ),

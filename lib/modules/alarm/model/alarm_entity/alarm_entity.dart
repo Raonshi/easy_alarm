@@ -14,6 +14,7 @@ class AlarmEntity with _$AlarmEntity {
     @Default(false) bool vibration,
     required SoundAssetPath sound,
     int? snoozeDuration,
+    int? nextTimstamp,
   }) = _AlarmEntity;
 
   factory AlarmEntity.fromJson(Map<String, Object?> json) => _$AlarmEntityFromJson(json);
@@ -21,6 +22,8 @@ class AlarmEntity with _$AlarmEntity {
   const AlarmEntity._();
 
   DateTime get dateTime => DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+  DateTime? get nextDateTime => nextTimstamp == null ? null : DateTime.fromMillisecondsSinceEpoch(nextTimstamp!);
 
   String get timeString {
     final String hour = dateTime.hour.toString().padLeft(2, "0");

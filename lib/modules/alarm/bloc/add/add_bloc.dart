@@ -1,8 +1,11 @@
+import 'package:alarm/alarm.dart';
 import 'package:bloc/bloc.dart';
 import 'package:easy_alarm/common/asset_path.dart';
+import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/alarm_manager.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'add_state.dart';
 
@@ -69,6 +72,7 @@ class AddBloc extends Cubit<AddState> {
           oldDate.day,
           dateTime.hour,
           dateTime.minute,
+          0,
         );
       }
 
@@ -114,7 +118,10 @@ class AddBloc extends Cubit<AddState> {
   void updateSnoozeTime([Duration? duration]) {
     state.mapOrNull(loaded: (state) {
       final List<AlarmEntity> newAlarms = state.alarmGroup.alarms.toList().map((e) {
-        return e.copyWith(snoozeDuration: duration?.inMinutes);
+        return e.copyWith(
+          snoozeDuration: duration?.inMinutes,
+          nextTimstamp: duration == null ? null : e.timestamp + duration.inMilliseconds,
+        );
       }).toList();
 
       final AlarmGroup newAlarmGroup = state.alarmGroup.copyWith(alarms: newAlarms);
@@ -148,5 +155,20 @@ class AddBloc extends Cubit<AddState> {
     await state.mapOrNull(loaded: (state) async {
       await _alarmManager.saveAlarm(state.alarmGroup);
     });
+  }
+
+  Future<String?> validate() async {
+    return state.maybeMap(
+      loaded: (value) {
+        if (value.alarmGroup.alarms.isEmpty) return "exception.emptyAlarm".tr();
+
+        for (AlarmEntity alarm in value.alarmGroup.alarms) {
+          if (alarm.dateTime.isBefore(DateTime.now())) return "exception.canNotMakeAlarmAtCurrentDateTime".tr();
+        }
+
+        return null;
+      },
+      orElse: () => "exception.unknown".tr(),
+    );
   }
 }

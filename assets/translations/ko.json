@@ -39,7 +39,7 @@
         "content": "알람 내용",
         "soundLabel": "알람음",
         "vibrateLabel": "진동",
-        "waitForNext" : "다음 알람까지 대기",
+        "waitForNext" : "다음에 깨워줘",
         "closeAlarm" : "알람 종료",
         "nextAlarmSnackbarHourMinute": "다음 알람은{}시간 {}분 뒤에 울립니다.",
         "nextAlarmSnackbarHour": "다음 알람은 {}시간 뒤에 울립니다.",
@@ -53,5 +53,10 @@
         "friday": "금",
         "saturday": "토",
         "sunday": "일"
+    },
+    "exception": {
+        "emptyAlarm": "알람이 생성되지 않았습니다.",
+        "canNotMakeAlarmAtCurrentDateTime": "현재 시간 이후로만 알람을 생성할 수 있습니다.",
+        "unknown": "알 수 없는 오류가 발생했습니다."
     }
 }

@@ -101,51 +101,54 @@ class AlarmManager {
   }
 
   /// Wait for the next alarm to ring.
-  Future<void> waitForSnooze(AlarmEntity alarmEntity) async {
-    await Alarm.stop(alarmEntity.id);
-    if (alarmEntity.snoozeDuration != null) {
-      //Find AlarmGroup using AlarmEntity
-      final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(alarmEntity.id));
-      if (groupIdx == -1) {
-        lgr.d("$_tag addNextRoutine : AlarmGroup not found");
-        return;
-      }
-      final AlarmGroup group = _alarmGroups[groupIdx];
+  Future<void> waitForSnooze(AlarmEntity entity) async {
+    await Alarm.stop(entity.id);
 
-      // Find AlarmEntity from AlarmGroup
-      final List<AlarmEntity> groupAlarms = group.alarms.toList();
-      final int entityIdx = groupAlarms.indexWhere((element) => element.id == alarmEntity.id);
-      if (entityIdx == -1) {
-        lgr.d("$_tag addNextRoutine : AlarmEntity not found");
-        return;
-      }
+    final AlarmGroup? group = _getAlarmGroup(entity);
 
-      // Create next snooze AlarmEntity
-      final DateTime nexRoutineTime = alarmEntity.dateTime.add(Duration(minutes: alarmEntity.snoozeDuration!));
-      final AlarmEntity nextRoutineEntity = alarmEntity.copyWith(
-        id: nexRoutineTime.millisecondsSinceEpoch,
-        timestamp: nexRoutineTime.millisecondsSinceEpoch,
-      );
+    if (group != null && entity.snoozeDuration != null && entity.nextDateTime != null) {
+      await SharedPreferences.getInstance().then((prefs) async {
+        final List<Future> futures = [];
 
-      final AlarmSettings setting = AlarmSettings(
-        id: nextRoutineEntity.id,
-        dateTime: nextRoutineEntity.dateTime,
-        assetAudioPath: nextRoutineEntity.sound.path,
-        vibrate: nextRoutineEntity.vibration,
-        fadeDuration: 2.0,
-        notificationTitle: "이지 알람",
-        notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
-      );
+        // Create next snooze settings
+        final AlarmSettings setting = AlarmSettings(
+          id: entity.id,
+          dateTime: entity.nextDateTime!.add(Duration(minutes: entity.snoozeDuration!)),
+          assetAudioPath: entity.sound.path,
+          vibrate: entity.vibration,
+          fadeDuration: 2.0,
+          notificationTitle: "이지 알람",
+          notificationBody: "알람이 울리고 있습니다. 앱을 실행해 알람을 종료해주세요.",
+        );
 
-      // Prepare next routine AlarmEntity
-      groupAlarms.removeAt(entityIdx);
-      groupAlarms.add(nextRoutineEntity);
+        futures.add(Alarm.set(alarmSettings: setting));
 
-      // Replace AlarmGroup
-      _alarmGroups.removeAt(groupIdx);
-      _alarmGroups.add(group.copyWith(alarms: groupAlarms));
+        List<AlarmEntity> entities = group.alarms.toList();
+        final int idx = entities.indexWhere((element) => element.id == entity.id);
+        if (idx == -1) {
+          lgr.e("$_tag waitForSnooze\n - AlarmEntity not found");
+          return;
+        }
+        final AlarmEntity newEntity = entity.copyWith(
+          snoozeDuration: entity.snoozeDuration,
+          nextTimstamp: entity.nextDateTime!.millisecondsSinceEpoch + entity.snoozeDuration! * 1000 * 60,
+        );
 
-      await Alarm.set(alarmSettings: setting);
+        lgr.d(newEntity.nextDateTime);
+
+        entities.add(newEntity);
+        entities.removeAt(idx);
+
+        _alarmGroups.removeAt(_alarmGroups.indexOf(group));
+
+        // Replace AlarmGroup
+        _alarmGroups.add(group.copyWith(alarms: entities));
+
+        final List<String> alarmStrings = _alarmGroups.map((e) => jsonEncode(e.toJson())).toList();
+        futures.add(prefs.setStringList(_alarmKey, alarmStrings));
+
+        await Future.wait(futures);
+      });
     }
   }
 

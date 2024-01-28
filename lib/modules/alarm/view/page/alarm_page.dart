@@ -118,7 +118,7 @@ class _AlarmPageBody extends StatelessWidget {
                             child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
                           ),
                         ),
-                        const SizedBox(width: 53.0),
+                        const SizedBox(width: 33.0),
                       ],
                       GestureDetector(
                         onTap: () {
