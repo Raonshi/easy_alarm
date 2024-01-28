@@ -27,23 +27,15 @@ class RingingBloc extends Cubit<RingingState> {
     });
   }
 
-  Future<int> waitForSnooze() async {
-    return await state.mapOrNull(loaded: (state) async {
-          final Duration duration = Duration(minutes: state.alarm.snoozeDuration ?? 10);
-          final DateTime nextDateTime = DateTime.fromMillisecondsSinceEpoch(state.alarm.timestamp).add(duration);
-          final AlarmEntity newAlarm = state.alarm.copyWith(
-            id: nextDateTime.millisecondsSinceEpoch,
-            timestamp: nextDateTime.millisecondsSinceEpoch,
-          );
-          await _alarmManager.waitForSnooze(newAlarm);
-          return duration.inMinutes;
-        }) ??
-        -1;
+  Future<void> waitForSnooze() async {
+    await state.mapOrNull(loaded: (state) async {
+      await _alarmManager.waitForSnooze(state.alarm);
+    });
   }
 
   Future<void> stopAlarm() async {
     state.mapOrNull(loaded: (state) {
-      _alarmManager.addNextRoutine(state.alarm);
+      _alarmManager.prepareNextRoutine(state.alarm);
     });
   }
 }

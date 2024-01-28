@@ -88,28 +88,32 @@ class _AlarmPageBody extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      GestureDetector(
-                        onTap: () => context.read<RingingBloc>().waitForSnooze().then((totalMinute) {
-                          if (totalMinute > 60) {
-                            final int hour = totalMinute ~/ 60;
-                            final int minute = totalMinute % 60;
-                            if (minute == 0) {
-                              showSnackBar("alarm.nextAlarmSnackbarHour".tr(args: [hour.toString()]));
+                      Visibility(
+                        visible: state.alarm.snoozeDuration != null,
+                        child: GestureDetector(
+                          onTap: () => context.read<RingingBloc>().waitForSnooze().then((_) {
+                            final int? totalMinute = state.alarm.snoozeDuration;
+                            if (totalMinute! > 60) {
+                              final int hour = totalMinute ~/ 60;
+                              final int minute = totalMinute % 60;
+                              if (minute == 0) {
+                                showSnackBar("alarm.nextAlarmSnackbarHour".tr(args: [hour.toString()]));
+                              } else {
+                                showSnackBar(
+                                  "alarm.nextAlarmSnackbarHourMinute".tr(args: [hour.toString(), minute.toString()]),
+                                );
+                              }
                             } else {
-                              showSnackBar(
-                                "alarm.nextAlarmSnackbarHourMinute".tr(args: [hour.toString(), minute.toString()]),
-                              );
+                              showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
                             }
-                          } else {
-                            showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
-                          }
-                          mainNavKey.currentContext!.replaceNamed(Path.home.path);
-                        }),
-                        child: Expanded(
-                          child: Container(
-                            decoration: _waitForNextAlarmDecoration,
-                            padding: const EdgeInsets.symmetric(vertical: 18.0),
-                            child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
+                            mainNavKey.currentContext!.replaceNamed(Path.home.path);
+                          }),
+                          child: Expanded(
+                            child: Container(
+                              decoration: _waitForNextAlarmDecoration,
+                              padding: const EdgeInsets.symmetric(vertical: 18.0),
+                              child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
+                            ),
                           ),
                         ),
                       ),
