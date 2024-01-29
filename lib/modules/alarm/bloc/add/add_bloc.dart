@@ -34,6 +34,7 @@ class AddBloc extends Cubit<AddState> {
   void updateTime(DateTime updatedDate) {
     state.mapOrNull(loaded: (state) {
       final List<AlarmEntity> newAlarms = _updateTime(state.alarmGroup, updatedDate);
+      lgr.d(newAlarms.map((e) => e.dateTime));
       emit(state.copyWith(alarmGroup: state.alarmGroup.copyWith(alarms: newAlarms)));
     });
   }
@@ -42,8 +43,6 @@ class AddBloc extends Cubit<AddState> {
     state.mapOrNull(loaded: (state) {
       final List<AlarmEntity> updatedAlarms = _updateWeekdays(isRoutine, state.alarmGroup, newWeekdays);
 
-      lgr.d(updatedAlarms.map((e) => e.dateTime));
-
       emit(state.copyWith(
         alarmGroup: state.alarmGroup.copyWith(alarms: updatedAlarms, routine: isRoutine),
       ));
@@ -51,45 +50,41 @@ class AddBloc extends Cubit<AddState> {
   }
 
   List<AlarmEntity> _updateTime(AlarmGroup alarmGroup, DateTime dateTime) {
-    final DateTime now = DateTime.now();
-    final DateTime currentDateTime = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
+    if (alarmGroup.routine) {
+      return alarmGroup.alarms.map((e) {
+        final DateTime alarmDate = e.dateTime;
 
-    return alarmGroup.alarms.toList().map((e) {
-      final DateTime oldDate = DateTime.fromMillisecondsSinceEpoch(e.timestamp);
-
-      late final DateTime newDate;
-      if (currentDateTime.difference(oldDate).inDays > 0) {
-        newDate = DateTime(
-          currentDateTime.year,
-          currentDateTime.month,
-          currentDateTime.day,
-          dateTime.hour,
-          dateTime.minute,
-        );
-      } else {
-        if (oldDate.isBefore(now)) {
-          newDate = DateTime(
-            oldDate.year,
-            oldDate.month,
-            oldDate.day + 1,
-            dateTime.hour,
-            dateTime.minute,
-            0,
-          );
-        } else {
-          newDate = DateTime(
-            oldDate.year,
-            oldDate.month,
-            oldDate.day,
-            dateTime.hour,
-            dateTime.minute,
-            0,
-          );
+        DateTime newDate = DateTime(alarmDate.year, alarmDate.month, alarmDate.day, dateTime.hour, dateTime.minute, 0);
+        if (alarmDate.millisecondsSinceEpoch > dateTime.millisecondsSinceEpoch) {
+          newDate = newDate.add(const Duration(days: 1));
         }
-      }
 
-      return e.copyWith(timestamp: newDate.millisecondsSinceEpoch);
-    }).toList();
+        return e.copyWith(
+          id: newDate.millisecondsSinceEpoch,
+          timestamp: newDate.millisecondsSinceEpoch,
+          nextTimstamp:
+              e.snoozeDuration == null ? null : newDate.millisecondsSinceEpoch + (e.snoozeDuration! * 60 * 1000),
+        );
+      }).toList();
+    } else {
+      // TODO : Fix this code.
+      final DateTime now = DateTime.now();
+      final DateTime currentDateTime = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
+
+      return alarmGroup.alarms.map((e) {
+        DateTime newDate = DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, 0);
+        if (currentDateTime.millisecondsSinceEpoch > dateTime.millisecondsSinceEpoch) {
+          newDate = newDate.add(const Duration(days: 1));
+        }
+
+        return e.copyWith(
+          id: newDate.millisecondsSinceEpoch,
+          timestamp: newDate.millisecondsSinceEpoch,
+          nextTimstamp:
+              e.snoozeDuration == null ? null : newDate.millisecondsSinceEpoch + (e.snoozeDuration! * 60 * 1000),
+        );
+      }).toList();
+    }
   }
 
   List<AlarmEntity> _updateWeekdays(bool isRoutine, AlarmGroup alarmGroup, List<int> weekdays) {
