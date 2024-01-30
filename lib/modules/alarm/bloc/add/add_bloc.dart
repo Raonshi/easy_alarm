@@ -5,6 +5,7 @@ import 'package:easy_alarm/core/alarm_manager.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 
 import 'add_state.dart';
 
@@ -34,56 +35,153 @@ class AddBloc extends Cubit<AddState> {
   void updateTime(DateTime updatedDate) {
     state.mapOrNull(loaded: (state) {
       final List<AlarmEntity> newAlarms = _updateTime(state.alarmGroup, updatedDate);
-      lgr.d(newAlarms.map((e) => e.dateTime));
+      lgr.d("INPUT:$updatedDate\nOUTPUT:${newAlarms.map((e) => e.dateTime)}");
       emit(state.copyWith(alarmGroup: state.alarmGroup.copyWith(alarms: newAlarms)));
     });
   }
 
   void updateWeekdays(bool isRoutine, List<int> newWeekdays) {
     state.mapOrNull(loaded: (state) {
-      final List<AlarmEntity> updatedAlarms = _updateWeekdays(isRoutine, state.alarmGroup, newWeekdays);
-
+      final List<AlarmEntity> newAlarms = _updateWeekdays(isRoutine, state.alarmGroup, newWeekdays);
+      lgr.d("INPUT:$newWeekdays\nOUTPUT:${newAlarms.map((e) => e.dateTime)}");
       emit(state.copyWith(
-        alarmGroup: state.alarmGroup.copyWith(alarms: updatedAlarms, routine: isRoutine),
+        alarmGroup: state.alarmGroup.copyWith(alarms: newAlarms, routine: isRoutine),
       ));
     });
   }
 
-  List<AlarmEntity> _updateTime(AlarmGroup alarmGroup, DateTime dateTime) {
+  List<AlarmEntity> _updateTime(AlarmGroup alarmGroup, DateTime inputDate) {
+    final DateTime now = DateTime.now();
+    final DateTime currentDate = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
+    // 루틴이 있는 알람 -> 알람이 여러개 있을 때
     if (alarmGroup.routine) {
-      return alarmGroup.alarms.map((e) {
-        final DateTime alarmDate = e.dateTime;
+      inputDate = DateTime(now.year, now.month, now.day, inputDate.hour, inputDate.minute, 0);
+      return alarmGroup.alarms.map((alarm) {
+        final DateTime alarmDate = alarm.dateTime;
 
-        DateTime newDate = DateTime(alarmDate.year, alarmDate.month, alarmDate.day, dateTime.hour, dateTime.minute, 0);
-        if (alarmDate.millisecondsSinceEpoch > dateTime.millisecondsSinceEpoch) {
+        DateTime newDate = DateTime(
+          alarmDate.year,
+          alarmDate.month,
+          alarmDate.day,
+          inputDate.hour,
+          inputDate.minute,
+        );
+
+        // 알람 요일이 현재 요일보다 이전인 경우
+        if (alarmDate.weekday < currentDate.weekday) {
+          // 알람 날짜가 현재 날짜보다 이후인 경우 : 알람 날짜 유지
+          if (alarmDate.isAfter(currentDate)) {
+            newDate = newDate;
+          }
+          // 알람 날짜가 현재 날짜보다 이전 혹은 같은 경우 : 다음 주로 설정
+          else {
+            newDate = newDate.add(const Duration(days: 7));
+          }
+        }
+        // 알람 요일이 현재 요일보다 이후인 경우
+        else if (alarmDate.weekday < currentDate.weekday) {
+          newDate = newDate.add(Duration(days: alarmDate.weekday - currentDate.weekday + 1));
+        }
+        // 알람 요일이 현재 요일과 동일한 경우
+        else {
+          // 알람 날짜가 현재 날짜보다 이후인 경우 : 입력 날짜로 설정
+          if (alarmDate.isAfter(currentDate)) {
+            newDate = inputDate;
+          }
+          // 알람 날짜가 현재 날짜보다 이전 혹은 같은 경우 : 다음 주로 설정
+          else {
+            newDate = newDate.add(const Duration(days: 7));
+          }
+        }
+
+        // // 알람 날짜가 현재 날짜보다 이전인 경우 : 다음 주로 설정
+        // if (alarmDate.isBefore(inputDate)) {
+        //   newDate = newDate.add(const Duration(days: 7));
+        // }
+        // // 알람 날짜가 현재 날짜보다 이후인 경우
+        // else if (alarmDate.isAfter(inputDate)) {
+        //   final int alarmDateInMinutes = alarmDate.hour * 60 + alarmDate.minute;
+        //   final int inputDateInMinutes = inputDate.hour * 60 + inputDate.minute;
+
+        //   lgr.d("alarmDateInMinutes: $alarmDateInMinutes\n"
+        //       "inputDateInMinutes: $inputDateInMinutes");
+        //   // 알람 시간이 현재 시간보다 이전인 경우: 오늘로 설정
+        //   if (alarmDateInMinutes < inputDateInMinutes) {
+        //     if (alarmDate.weekday == inputDate.weekday) {
+        //       newDate = newDate.subtract(const Duration(days: 7));
+        //     } else {
+        //       newDate = newDate;
+        //     }
+        //   }
+        //   // 알람 시간이 현재 시간보다 이후인 경우: 알람 날짜 유지
+        //   else if (alarmDateInMinutes > inputDateInMinutes) {
+        //     newDate = newDate;
+        //   }
+        //   // 알람 시간이 현재 시간과 같은 경우: 알람 날짜 유지
+        //   else {
+        //     newDate = newDate;
+        //   }
+        // }
+        // // 알람 날짜가 현재 날짜인 경우 : 다음 주로 설정
+        // else {
+        //   newDate = newDate.add(const Duration(days: 7));
+        // }
+
+        final DateTime nextAlarmDate = newDate.add(
+          Duration(minutes: alarm.snoozeDuration == null ? 0 : alarm.snoozeDuration!),
+        );
+
+        return alarm.copyWith(
+          id: newDate.millisecondsSinceEpoch,
+          timestamp: newDate.millisecondsSinceEpoch,
+          nextTimstamp: nextAlarmDate.millisecondsSinceEpoch,
+        );
+      }).toList();
+    }
+    // 루틴이 없는 알람 -> 알람이 하나만 있을 때
+    else {
+      return alarmGroup.alarms.map((alarm) {
+        final DateTime alarmDate = alarm.dateTime;
+        final int alarmDateInMinutes = alarmDate.hour * 60 + alarmDate.minute;
+        final int inputDateInMinutes = inputDate.hour * 60 + inputDate.minute;
+
+        DateTime newDate = DateTime(now.year, now.month, now.day, inputDate.hour, inputDate.minute);
+        // 알람 시간이 현재 입력 시간보다 이전인 경우 : 다음 날로 설정
+        if (alarmDateInMinutes >= inputDateInMinutes) {
           newDate = newDate.add(const Duration(days: 1));
         }
 
-        return e.copyWith(
+        final DateTime nextAlarmDate = newDate.add(
+          Duration(minutes: alarm.snoozeDuration == null ? 0 : alarm.snoozeDuration!),
+        );
+
+        return alarm.copyWith(
           id: newDate.millisecondsSinceEpoch,
           timestamp: newDate.millisecondsSinceEpoch,
-          nextTimstamp:
-              e.snoozeDuration == null ? null : newDate.millisecondsSinceEpoch + (e.snoozeDuration! * 60 * 1000),
+          nextTimstamp: nextAlarmDate.millisecondsSinceEpoch,
         );
       }).toList();
-    } else {
-      // TODO : Fix this code.
-      final DateTime now = DateTime.now();
-      final DateTime currentDateTime = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
+      // late final DateTime newDate;
+      // final DateTime currentDate = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0);
+      // if (inputDate.isAfter(currentDate)) {
+      //   newDate = DateTime(currentDate.year, currentDate.month, currentDate.day, inputDate.hour, inputDate.minute, 0);
+      // }
+      // // 오늘이 아니면 내일로 설정
+      // else {
+      //   final DateTime tomorrow = currentDate.add(const Duration(days: 1));
+      //   newDate = DateTime(tomorrow.year, tomorrow.month, tomorrow.day, inputDate.hour, inputDate.minute, 0);
+      // }
 
-      return alarmGroup.alarms.map((e) {
-        DateTime newDate = DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, 0);
-        if (currentDateTime.millisecondsSinceEpoch > dateTime.millisecondsSinceEpoch) {
-          newDate = newDate.add(const Duration(days: 1));
-        }
-
-        return e.copyWith(
-          id: newDate.millisecondsSinceEpoch,
-          timestamp: newDate.millisecondsSinceEpoch,
-          nextTimstamp:
-              e.snoozeDuration == null ? null : newDate.millisecondsSinceEpoch + (e.snoozeDuration! * 60 * 1000),
-        );
-      }).toList();
+      // return alarmGroup.alarms.map((e) {
+      //   final DateTime nextAlarmDate = newDate.add(
+      //     Duration(minutes: e.snoozeDuration == null ? 0 : e.snoozeDuration!),
+      //   );
+      //   return e.copyWith(
+      //     id: newDate.millisecondsSinceEpoch,
+      //     timestamp: newDate.millisecondsSinceEpoch,
+      //     nextTimstamp: nextAlarmDate.millisecondsSinceEpoch,
+      //   );
+      // }).toList();
     }
   }
 
