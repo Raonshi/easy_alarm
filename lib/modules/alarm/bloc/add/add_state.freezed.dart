@@ -21,10 +21,7 @@ mixin _$AddState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)
+    required TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)
         loaded,
   }) =>
       throw _privateConstructorUsedError;
@@ -33,10 +30,7 @@ mixin _$AddState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
+    TResult? Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)?
         loaded,
   }) =>
       throw _privateConstructorUsedError;
@@ -45,11 +39,7 @@ mixin _$AddState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
-        loaded,
+    TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -138,10 +128,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)
+    required TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)
         loaded,
   }) {
     return initial();
@@ -153,10 +140,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
+    TResult? Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)?
         loaded,
   }) {
     return initial?.call();
@@ -168,11 +152,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
-        loaded,
+    TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -264,10 +244,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)
+    required TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)
         loaded,
   }) {
     return loading();
@@ -279,10 +256,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
+    TResult? Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)?
         loaded,
   }) {
     return loading?.call();
@@ -294,11 +268,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
-        loaded,
+    TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)? loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -417,10 +387,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)
+    required TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)
         loaded,
   }) {
     return error(exception);
@@ -432,10 +399,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
+    TResult? Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)?
         loaded,
   }) {
     return error?.call(exception);
@@ -447,11 +411,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
-        loaded,
+    TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)? loaded,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -513,12 +473,9 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {AlarmGroup alarmGroup,
-      @Deprecated("This value will be removed next time") AlarmEntity? alarm});
+  $Res call({AlarmGroup alarmGroup, List<int> selectedWeekdays});
 
   $AlarmGroupCopyWith<$Res> get alarmGroup;
-  $AlarmEntityCopyWith<$Res>? get alarm;
 }
 
 /// @nodoc
@@ -533,17 +490,17 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? alarmGroup = null,
-    Object? alarm = freezed,
+    Object? selectedWeekdays = null,
   }) {
     return _then(_$LoadedImpl(
       alarmGroup: null == alarmGroup
           ? _value.alarmGroup
           : alarmGroup // ignore: cast_nullable_to_non_nullable
               as AlarmGroup,
-      alarm: freezed == alarm
-          ? _value.alarm
-          : alarm // ignore: cast_nullable_to_non_nullable
-              as AlarmEntity?,
+      selectedWeekdays: null == selectedWeekdays
+          ? _value._selectedWeekdays
+          : selectedWeekdays // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 
@@ -554,36 +511,30 @@ class __$$LoadedImplCopyWithImpl<$Res>
       return _then(_value.copyWith(alarmGroup: value));
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $AlarmEntityCopyWith<$Res>? get alarm {
-    if (_value.alarm == null) {
-      return null;
-    }
-
-    return $AlarmEntityCopyWith<$Res>(_value.alarm!, (value) {
-      return _then(_value.copyWith(alarm: value));
-    });
-  }
 }
 
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
   const _$LoadedImpl(
-      {required this.alarmGroup,
-      @Deprecated("This value will be removed next time") this.alarm});
+      {required this.alarmGroup, final List<int> selectedWeekdays = const []})
+      : _selectedWeekdays = selectedWeekdays;
 
   @override
   final AlarmGroup alarmGroup;
+  final List<int> _selectedWeekdays;
   @override
-  @Deprecated("This value will be removed next time")
-  final AlarmEntity? alarm;
+  @JsonKey()
+  List<int> get selectedWeekdays {
+    if (_selectedWeekdays is EqualUnmodifiableListView)
+      return _selectedWeekdays;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selectedWeekdays);
+  }
 
   @override
   String toString() {
-    return 'AddState.loaded(alarmGroup: $alarmGroup, alarm: $alarm)';
+    return 'AddState.loaded(alarmGroup: $alarmGroup, selectedWeekdays: $selectedWeekdays)';
   }
 
   @override
@@ -593,11 +544,13 @@ class _$LoadedImpl implements _Loaded {
             other is _$LoadedImpl &&
             (identical(other.alarmGroup, alarmGroup) ||
                 other.alarmGroup == alarmGroup) &&
-            (identical(other.alarm, alarm) || other.alarm == alarm));
+            const DeepCollectionEquality()
+                .equals(other._selectedWeekdays, _selectedWeekdays));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, alarmGroup, alarm);
+  int get hashCode => Object.hash(runtimeType, alarmGroup,
+      const DeepCollectionEquality().hash(_selectedWeekdays));
 
   @JsonKey(ignore: true)
   @override
@@ -611,13 +564,10 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(Exception exception) error,
-    required TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)
+    required TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)
         loaded,
   }) {
-    return loaded(alarmGroup, alarm);
+    return loaded(alarmGroup, selectedWeekdays);
   }
 
   @override
@@ -626,13 +576,10 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(Exception exception)? error,
-    TResult? Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
+    TResult? Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)?
         loaded,
   }) {
-    return loaded?.call(alarmGroup, alarm);
+    return loaded?.call(alarmGroup, selectedWeekdays);
   }
 
   @override
@@ -641,15 +588,11 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(Exception exception)? error,
-    TResult Function(
-            AlarmGroup alarmGroup,
-            @Deprecated("This value will be removed next time")
-            AlarmEntity? alarm)?
-        loaded,
+    TResult Function(AlarmGroup alarmGroup, List<int> selectedWeekdays)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(alarmGroup, alarm);
+      return loaded(alarmGroup, selectedWeekdays);
     }
     return orElse();
   }
@@ -695,12 +638,10 @@ class _$LoadedImpl implements _Loaded {
 abstract class _Loaded implements AddState {
   const factory _Loaded(
       {required final AlarmGroup alarmGroup,
-      @Deprecated("This value will be removed next time")
-      final AlarmEntity? alarm}) = _$LoadedImpl;
+      final List<int> selectedWeekdays}) = _$LoadedImpl;
 
   AlarmGroup get alarmGroup;
-  @Deprecated("This value will be removed next time")
-  AlarmEntity? get alarm;
+  List<int> get selectedWeekdays;
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;

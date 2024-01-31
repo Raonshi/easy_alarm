@@ -10,6 +10,7 @@ import 'package:easy_alarm/modules/alarm/view/widget/timer_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class AddPage extends StatelessWidget {
@@ -32,6 +33,7 @@ class _AddPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AudioPlayer player = AudioPlayer();
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -50,7 +52,13 @@ class _AddPageBody extends StatelessWidget {
                 context.read<AddBloc>().validate().then((value) {
                   context.loaderOverlay.hide();
                   if (value == null) {
-                    context.read<AddBloc>().save().then((value) => Navigator.pop(context));
+                    if (player.playing) {
+                      player.stop().then((_) {
+                        context.read<AddBloc>().save().then((value) => Navigator.pop(context));
+                      });
+                    } else {
+                      context.read<AddBloc>().save().then((value) => Navigator.pop(context));
+                    }
                   } else {
                     showSnackBar(value);
                   }
@@ -113,6 +121,7 @@ class _AddPageBody extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: SoundPanelWidget(
+                          player: player,
                           onSelectSound: context.read<AddBloc>().updateSound,
                         ),
                       ),

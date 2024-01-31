@@ -7,9 +7,10 @@ import 'package:just_audio/just_audio.dart';
 class SoundPanelWidget extends StatefulWidget {
   const SoundPanelWidget({
     super.key,
+    required this.player,
     required this.onSelectSound,
   });
-
+  final AudioPlayer player;
   final ValueChanged<SoundAssetPath> onSelectSound;
 
   @override
@@ -26,7 +27,7 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
 
   @override
   void initState() {
-    _player = AudioPlayer();
+    _player = widget.player;
     super.initState();
   }
 
