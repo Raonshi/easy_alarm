@@ -95,7 +95,7 @@ class AlarmManager {
       final List<String> alarmStrings = _alarmGroups.map((e) => jsonEncode(e.toJson())).toList();
       await Future.wait([
         prefs.setStringList(_alarmKey, alarmStrings),
-        _addAlarmGroup(newAlarmGroup),
+        if (newAlarmGroup.isEnabled) _addAlarmGroup(newAlarmGroup),
       ]);
     });
   }
@@ -133,8 +133,6 @@ class AlarmManager {
           snoozeDuration: entity.snoozeDuration,
           nextTimstamp: entity.nextDateTime!.millisecondsSinceEpoch + entity.snoozeDuration! * 1000 * 60,
         );
-
-        lgr.d(newEntity.nextDateTime);
 
         entities.add(newEntity);
         entities.removeAt(idx);
@@ -291,7 +289,6 @@ class AlarmManager {
   AlarmGroup? _getAlarmGroup(AlarmEntity entity) {
     final int groupIdx = _alarmGroups.indexWhere((group) => group.alarms.map((e) => e.id).contains(entity.id));
     if (groupIdx == -1) {
-      lgr.d("$_tag addNextRoutine : AlarmGroup not found");
       return null;
     }
     return _alarmGroups[groupIdx];
