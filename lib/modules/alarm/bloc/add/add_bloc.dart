@@ -21,7 +21,7 @@ class AddBloc extends Cubit<AddState> {
       final int timestamp = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0).millisecondsSinceEpoch;
 
       final AlarmEntity newAlarmEntity = AlarmEntity(
-        id: timestamp,
+        id: timestamp % 10000,
         timestamp: timestamp,
         sound: SoundAssetPath.defaultSound,
       );
@@ -42,7 +42,7 @@ class AddBloc extends Cubit<AddState> {
         );
 
         return alarm.copyWith(
-          id: newAlarmTime.millisecondsSinceEpoch,
+          id: newAlarmTime.millisecondsSinceEpoch % 10000,
           timestamp: newAlarmTime.millisecondsSinceEpoch,
         );
       }).toList();
@@ -57,7 +57,7 @@ class AddBloc extends Cubit<AddState> {
 
       final List<AlarmEntity> newAlarms = newWeekdays
           .map((e) => AlarmEntity(
-                id: timestamp,
+                id: timestamp % 10000,
                 timestamp: timestamp,
                 sound: sound,
               ))
@@ -138,7 +138,7 @@ class AddBloc extends Cubit<AddState> {
             : finalizedDate.add(Duration(minutes: currentAlarms[i].snoozeDuration!)).millisecondsSinceEpoch;
 
         finalAlarms.add(currentAlarms[i].copyWith(
-          id: finalizedDate.millisecondsSinceEpoch,
+          id: finalizedDate.millisecondsSinceEpoch % 10000,
           timestamp: finalizedDate.millisecondsSinceEpoch,
           nextTimstamp: nextTimestamp,
         ));
