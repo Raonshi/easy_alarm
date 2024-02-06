@@ -3,7 +3,6 @@ import 'package:easy_alarm/modules/alarm/bloc/add/add_bloc.dart';
 import 'package:easy_alarm/modules/alarm/bloc/add/add_state.dart';
 import 'package:easy_alarm/modules/alarm/view/widget/sound_panel_widget.dart';
 import 'package:easy_alarm/modules/alarm/view/widget/vibrate_panel_widget.dart';
-import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/modules/alarm/view/widget/routine_panel_widget.dart';
 import 'package:easy_alarm/modules/alarm/view/widget/snooze_panel_widget.dart';
 import 'package:easy_alarm/modules/alarm/view/widget/timer_panel_widget.dart';
@@ -28,22 +27,19 @@ class AddPage extends StatelessWidget {
 class _AddPageBody extends StatelessWidget {
   const _AddPageBody();
 
-  TextStyle get _topButtonTextStyle =>
-      const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: CustomColors.black);
+  TextStyle get _topButtonTextStyle => const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
     final AudioPlayer player = AudioPlayer();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: CustomColors.grey10,
+        backgroundColor: colors.background,
         appBar: AppBar(
-          centerTitle: false,
-          elevation: 0.0,
-          scrolledUnderElevation: 0.0,
-          backgroundColor: CustomColors.grey10,
           title: Text("addAlarm.header".tr(), style: _topButtonTextStyle),
           actions: [
             GestureDetector(
@@ -86,7 +82,7 @@ class _AddPageBody extends StatelessWidget {
                           onTimeChanged: context.read<AddBloc>().updateTime,
                         ),
                       ),
-                      const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
+                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: RoutinePanelWidget(
@@ -99,7 +95,7 @@ class _AddPageBody extends StatelessWidget {
                           },
                         ),
                       ),
-                      const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
+                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: SnoozePanelWidget(
@@ -117,7 +113,7 @@ class _AddPageBody extends StatelessWidget {
                           },
                         ),
                       ),
-                      const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
+                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: SoundPanelWidget(
@@ -125,7 +121,7 @@ class _AddPageBody extends StatelessWidget {
                           onSelectSound: context.read<AddBloc>().updateSound,
                         ),
                       ),
-                      const Divider(height: 2.0, thickness: 2.0, color: CustomColors.grey10),
+                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: VibratePanelWidget(

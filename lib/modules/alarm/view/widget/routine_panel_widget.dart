@@ -20,19 +20,23 @@ class RoutinePanelWidget extends StatefulWidget {
 }
 
 class _RoutinePanelWidgetState extends State<RoutinePanelWidget> {
-  final TextStyle _labelTextStyle =
-      const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: CustomColors.black);
+  final TextStyle _labelTextStyle = const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
 
   bool _isEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("alarm.routineLabel".tr(), style: _labelTextStyle),
+            Text(
+              "alarm.routineLabel".tr(),
+              style: _labelTextStyle.copyWith(color: colors.onBackground),
+            ),
             Switch(
               value: _isEnabled,
               inactiveTrackColor: CustomColors.grey10,

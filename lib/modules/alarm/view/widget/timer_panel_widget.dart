@@ -1,4 +1,4 @@
-import 'package:easy_alarm/style/colors.dart';
+import 'package:easy_alarm/style/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,19 +9,23 @@ class TimerPanelWidget extends StatelessWidget {
   final DateTime time;
   final ValueChanged<DateTime> onTimeChanged;
 
-  TextStyle get _labelTextStyle =>
-      const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: CustomColors.black);
+  TextStyle get _labelTextStyle => const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
 
-  TextStyle get _timeTextStyle =>
-      const TextStyle(fontSize: 57.0, height: 1.0, fontWeight: FontWeight.bold, color: CustomColors.black);
+  TextStyle get _timeTextStyle => const TextStyle(fontSize: 57.0, height: 1.0, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final TimePanelThemeData timerColors = Theme.of(context).extension<TimePanelThemeData>()!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Text("alarm.setTimeLabel".tr(), style: _labelTextStyle),
+        Text(
+          "alarm.setTimeLabel".tr(),
+          style: _labelTextStyle.copyWith(color: colors.onBackground),
+        ),
         const SizedBox(height: 10.0),
         GestureDetector(
           onTap: () async {
@@ -55,19 +59,32 @@ class TimerPanelWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                 decoration: BoxDecoration(
-                  color: CustomColors.blue30,
+                  color: timerColors.enabledBackgroundColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text(time.hour.toString().padLeft(2, "0"), style: _timeTextStyle),
+                child: Text(
+                  time.hour.toString().padLeft(2, "0"),
+                  style: _timeTextStyle.copyWith(color: timerColors.enabledForegroundColor),
+                ),
               ),
-              SizedBox(width: 24.0, child: Text(":", style: _timeTextStyle, textAlign: TextAlign.center)),
+              SizedBox(
+                width: 24.0,
+                child: Text(
+                  ":",
+                  style: _timeTextStyle.copyWith(color: timerColors.enabledForegroundColor),
+                  textAlign: TextAlign.center,
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                 decoration: BoxDecoration(
-                  color: CustomColors.blue30,
+                  color: timerColors.enabledBackgroundColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text(time.minute.toString().padLeft(2, "0"), style: _timeTextStyle),
+                child: Text(
+                  time.minute.toString().padLeft(2, "0"),
+                  style: _timeTextStyle.copyWith(color: timerColors.enabledForegroundColor),
+                ),
               ),
             ],
           ),

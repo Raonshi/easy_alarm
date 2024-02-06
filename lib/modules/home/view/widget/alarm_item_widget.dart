@@ -120,20 +120,6 @@ class AlarmItemWidget extends StatelessWidget {
               ),
               Switch(
                 value: item.isEnabled,
-                activeColor: CustomColors.grey10,
-                inactiveThumbColor: colors.outline,
-                trackOutlineColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return colors.secondary;
-                  }
-                  return disabledColor;
-                }),
-                trackColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return colors.secondary;
-                  }
-                  return colors.background;
-                }),
                 onChanged: (_) {
                   onTapSwitch(item.id);
                 },

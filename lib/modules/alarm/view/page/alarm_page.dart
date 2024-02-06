@@ -64,14 +64,11 @@ class _AlarmPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: CustomColors.grey10,
-      appBar: AppBar(
-        elevation: 0.0,
-        scrolledUnderElevation: 0.0,
-        backgroundColor: CustomColors.grey10,
-        automaticallyImplyLeading: false,
-      ),
+      backgroundColor: colors.background,
+      appBar: AppBar(),
       body: BlocBuilder<RingingBloc, RingingState>(
         builder: (context, state) {
           return state.map(

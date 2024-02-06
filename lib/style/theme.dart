@@ -1,6 +1,7 @@
 import 'package:easy_alarm/style/colors.dart';
 import 'package:flutter/material.dart';
 
+/// Light Theme
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme.light(
@@ -28,11 +29,65 @@ ThemeData lightTheme = ThemeData(
       color: CustomColors.black,
     ),
   ),
+  switchTheme: SwitchThemeData(
+    thumbColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return CustomColors.grey10;
+      }
+      return CustomColors.grey40;
+    }),
+    trackOutlineColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return CustomColors.blue40;
+      }
+      return CustomColors.grey40;
+    }),
+    trackColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return CustomColors.blue40;
+      }
+      return CustomColors.grey10;
+    }),
+  ),
+  dropdownMenuTheme: DropdownMenuThemeData(
+    textStyle: const TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w500,
+      height: 1.0,
+      letterSpacing: -0.5,
+      color: CustomColors.grey90,
+    ),
+    menuStyle: MenuStyle(
+      backgroundColor: MaterialStateColor.resolveWith((states) {
+        return CustomColors.white;
+      }),
+      elevation: MaterialStateProperty.resolveWith((states) => 5.0),
+      shape: MaterialStateProperty.resolveWith(
+        (states) => RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      isDense: true,
+      isCollapsed: true,
+      contentPadding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20.0),
+        borderSide: const BorderSide(color: CustomColors.grey40, width: 2.0),
+      ),
+      suffixIconColor: CustomColors.grey90,
+    ),
+  ),
+  extensions: [
+    TimePanelThemeData.light(),
+  ],
 );
 
+/// Dark Theme
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  colorScheme: const ColorScheme.light(
+  colorScheme: const ColorScheme.dark(
     brightness: Brightness.dark,
     primary: CustomColors.blueGrey90,
     onPrimary: CustomColors.grey10,
@@ -51,10 +106,124 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: CustomColors.blueGrey80,
     elevation: 0.0,
     centerTitle: false,
+    foregroundColor: CustomColors.blueGrey10,
     titleTextStyle: TextStyle(
       fontSize: 32.0,
       fontWeight: FontWeight.bold,
       color: CustomColors.blueGrey10,
     ),
   ),
+  switchTheme: SwitchThemeData(
+    thumbColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return CustomColors.grey10;
+      }
+      return CustomColors.grey40;
+    }),
+    trackOutlineColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return CustomColors.blue80;
+      }
+      return CustomColors.grey40;
+    }),
+    trackColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return CustomColors.blue80;
+      }
+      return CustomColors.grey10;
+    }),
+  ),
+  dropdownMenuTheme: DropdownMenuThemeData(
+    textStyle: const TextStyle(
+      fontSize: 14.0,
+      fontWeight: FontWeight.w500,
+      height: 1.0,
+      letterSpacing: -0.5,
+      color: CustomColors.blueGrey10,
+    ),
+    menuStyle: MenuStyle(
+      backgroundColor: MaterialStateColor.resolveWith((states) {
+        return CustomColors.blueGrey90;
+      }),
+      surfaceTintColor: MaterialStateColor.resolveWith((states) {
+        return CustomColors.blueGrey10;
+      }),
+      elevation: MaterialStateProperty.resolveWith((states) => 5.0),
+      shape: MaterialStateProperty.resolveWith(
+        (states) => RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      isDense: true,
+      isCollapsed: true,
+      contentPadding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20.0),
+        borderSide: const BorderSide(color: CustomColors.blueGrey70, width: 2.0),
+      ),
+      suffixIconColor: CustomColors.blueGrey10,
+    ),
+  ),
+  extensions: [
+    TimePanelThemeData.dark(),
+  ],
 );
+
+class TimePanelThemeData extends ThemeExtension<TimePanelThemeData> {
+  final Color enabledBackgroundColor;
+  final Color disabledBackgroundColor;
+  final Color enabledForegroundColor;
+  final Color disabledForegroundColor;
+
+  TimePanelThemeData({
+    required this.enabledBackgroundColor,
+    required this.disabledBackgroundColor,
+    required this.enabledForegroundColor,
+    required this.disabledForegroundColor,
+  });
+
+  factory TimePanelThemeData.light() {
+    return TimePanelThemeData(
+      enabledBackgroundColor: CustomColors.blue30,
+      disabledBackgroundColor: CustomColors.grey30,
+      enabledForegroundColor: CustomColors.grey90,
+      disabledForegroundColor: CustomColors.grey50,
+    );
+  }
+
+  factory TimePanelThemeData.dark() {
+    return TimePanelThemeData(
+      enabledBackgroundColor: CustomColors.blueGrey90,
+      disabledBackgroundColor: CustomColors.blueGrey70,
+      enabledForegroundColor: CustomColors.grey10,
+      disabledForegroundColor: CustomColors.grey50,
+    );
+  }
+
+  @override
+  ThemeExtension<TimePanelThemeData> copyWith({
+    Color? enabledBackgroundColor,
+    Color? disabledBackgroundColor,
+    Color? enabledForegroundColor,
+    Color? disabledForegroundColor,
+  }) {
+    return TimePanelThemeData(
+      enabledBackgroundColor: enabledBackgroundColor ?? this.enabledBackgroundColor,
+      disabledBackgroundColor: disabledBackgroundColor ?? this.disabledBackgroundColor,
+      enabledForegroundColor: enabledForegroundColor ?? this.enabledForegroundColor,
+      disabledForegroundColor: disabledForegroundColor ?? this.disabledForegroundColor,
+    );
+  }
+
+  @override
+  ThemeExtension<TimePanelThemeData> lerp(covariant TimePanelThemeData other, double t) {
+    return TimePanelThemeData(
+      enabledBackgroundColor: Color.lerp(enabledBackgroundColor, other.enabledBackgroundColor, t)!,
+      disabledBackgroundColor: Color.lerp(disabledBackgroundColor, other.disabledBackgroundColor, t)!,
+      enabledForegroundColor: Color.lerp(enabledForegroundColor, other.enabledForegroundColor, t)!,
+      disabledForegroundColor: Color.lerp(disabledForegroundColor, other.disabledForegroundColor, t)!,
+    );
+  }
+}

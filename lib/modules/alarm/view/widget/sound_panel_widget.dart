@@ -1,5 +1,4 @@
 import 'package:easy_alarm/common/asset_path.dart';
-import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -20,8 +19,7 @@ class SoundPanelWidget extends StatefulWidget {
 class _SoundPanelWidgetState extends State<SoundPanelWidget> {
   late final AudioPlayer _player;
 
-  final TextStyle _labelTextStyle =
-      const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: CustomColors.black);
+  final TextStyle _labelTextStyle = const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
 
   SoundAssetPath _selectedSound = SoundAssetPath.defaultSound;
 
@@ -33,12 +31,17 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("alarm.soundLabel".tr(), style: _labelTextStyle),
+            Text(
+              "alarm.soundLabel".tr(),
+              style: _labelTextStyle.copyWith(color: colors.onBackground),
+            ),
             Expanded(
               flex: 5,
               child: Row(
@@ -60,26 +63,6 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
                     requestFocusOnTap: false,
                     enableSearch: false,
                     enableFilter: false,
-                    menuStyle: MenuStyle(
-                      backgroundColor: MaterialStateColor.resolveWith((states) {
-                        return CustomColors.white;
-                      }),
-                      elevation: MaterialStateProperty.resolveWith((states) => 5.0),
-                      shape: MaterialStateProperty.resolveWith(
-                        (states) => RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                      ),
-                    ),
-                    inputDecorationTheme: InputDecorationTheme(
-                      isDense: true,
-                      isCollapsed: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: const BorderSide(color: CustomColors.grey40, width: 2.0),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    ),
                     onSelected: (value) async {
                       if (value == null) return;
                       if (_player.playing) await _player.stop();
@@ -93,17 +76,19 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
                       widget.onSelectSound(_selectedSound);
                     },
                     dropdownMenuEntries: SoundAssetPath.values
-                        .map(
-                          (e) => DropdownMenuEntry(
-                            value: e,
-                            label: e.name,
-                            style: ButtonStyle(
-                              textStyle: MaterialStateProperty.resolveWith(
-                                (states) => const TextStyle(fontSize: 16.0),
+                        .map((e) => DropdownMenuEntry(
+                              value: e,
+                              label: e.name,
+                              style: MenuItemButton.styleFrom(
+                                foregroundColor: colors.onBackground,
+                                textStyle: const TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.0,
+                                  letterSpacing: -0.5,
+                                ),
                               ),
-                            ),
-                          ),
-                        )
+                            ))
                         .toList(),
                   ),
                 ],
