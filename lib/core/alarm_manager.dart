@@ -184,7 +184,7 @@ class AlarmManager {
             nextAlarmEntity = nextWeekdayAlarmEntity;
           }
           final AlarmSettings nextSettings = AlarmSettings(
-            id: nextAlarmEntity.id % 10000,
+            id: nextAlarmEntity.id,
             dateTime: nextAlarmEntity.dateTime,
             assetAudioPath: nextAlarmEntity.sound.path,
             vibrate: nextAlarmEntity.vibration,
