@@ -1,8 +1,10 @@
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 import 'package:easy_alarm/style/colors.dart';
+import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_alarm/widget/week_day_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AlarmItemWidget extends StatelessWidget {
   const AlarmItemWidget({
@@ -16,17 +18,9 @@ class AlarmItemWidget extends StatelessWidget {
   final ValueChanged<int> onTapDelete;
   final ValueChanged<int> onTapSwitch;
 
-  TextStyle get _timeTextStyle => TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.w700,
-        color: item.isEnabled ? CustomColors.grey90 : CustomColors.grey60,
-      );
+  TextStyle get _timeTextStyle => const TextStyle(fontSize: 32, fontWeight: FontWeight.w700);
 
-  TextStyle get _snoozeTextStyle => TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        color: item.isEnabled ? CustomColors.grey90 : CustomColors.grey60,
-      );
+  TextStyle get _snoozeTextStyle => const TextStyle(fontSize: 22, fontWeight: FontWeight.w700);
 
   String get dateTimeText {
     final DateTime dateTime = item.dateTime;
@@ -60,11 +54,14 @@ class AlarmItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color disabledColor = Theme.of(context).disabledColor;
+
     return Container(
       decoration: ShapeDecoration(
-        color: item.isEnabled ? CustomColors.blue10 : CustomColors.grey10,
+        color: item.isEnabled ? colors.primary : colors.background,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(color: CustomColors.grey30),
+          side: BorderSide(color: colors.outline),
           borderRadius: BorderRadius.circular(16.0),
         ),
         shadows: [
@@ -72,7 +69,7 @@ class AlarmItemWidget extends StatelessWidget {
             offset: const Offset(0, 4),
             blurRadius: 4.0,
             spreadRadius: 0.0,
-            color: Colors.black.withOpacity(0.25),
+            color: CustomColors.black.withOpacity(0.25),
           ),
         ],
       ),
@@ -88,13 +85,23 @@ class AlarmItemWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   dateTimeText,
-                  style: _timeTextStyle,
+                  style: _timeTextStyle.copyWith(
+                    color: item.isEnabled ? colors.onPrimary : disabledColor,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               InkWell(
                 onTap: () => onTapDelete(item.id),
-                child: const Icon(Icons.close),
+                child: SvgPicture.asset(
+                  CustomIcons.close,
+                  width: 24.0,
+                  height: 24.0,
+                  colorFilter: ColorFilter.mode(
+                    item.isEnabled ? colors.onPrimary : disabledColor,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ],
           ),
@@ -105,26 +112,14 @@ class AlarmItemWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   snoozeText,
-                  style: _snoozeTextStyle,
+                  style: _snoozeTextStyle.copyWith(
+                    color: item.isEnabled ? colors.onPrimary : disabledColor,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               Switch(
                 value: item.isEnabled,
-                activeColor: CustomColors.grey10,
-                inactiveThumbColor: CustomColors.grey40,
-                trackOutlineColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return CustomColors.blue40;
-                  }
-                  return CustomColors.grey40;
-                }),
-                trackColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return CustomColors.blue40;
-                  }
-                  return CustomColors.grey10;
-                }),
                 onChanged: (_) {
                   onTapSwitch(item.id);
                 },

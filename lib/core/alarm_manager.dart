@@ -170,7 +170,7 @@ class AlarmManager {
           final DateTime nextWeekdayTime = entity.dateTime.add(const Duration(days: 7));
           // Create next current weekday entity
           final AlarmEntity nextWeekdayAlarmEntity = entity.copyWith(
-            id: nextWeekdayTime.millisecondsSinceEpoch,
+            id: nextWeekdayTime.millisecondsSinceEpoch % 10000,
             timestamp: nextWeekdayTime.millisecondsSinceEpoch,
           );
 

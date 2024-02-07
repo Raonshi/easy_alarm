@@ -29,30 +29,14 @@ class AlarmPage extends StatelessWidget {
 class _AlarmPageBody extends StatelessWidget {
   const _AlarmPageBody();
 
-  TextStyle get _waitForNextAlarmTextStyle => const TextStyle(
-        fontSize: 22.0,
-        fontWeight: FontWeight.bold,
-        height: 1.0,
-        color: CustomColors.grey50,
-      );
+  TextStyle get _waitForNextAlarmTextStyle => const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, height: 1.0);
 
-  TextStyle get _closeAlarmTextStyle => const TextStyle(
-        fontSize: 22.0,
-        fontWeight: FontWeight.bold,
-        height: 1.0,
-        color: CustomColors.black,
-      );
+  TextStyle get _closeAlarmTextStyle => const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, height: 1.0);
 
-  BoxDecoration get _waitForNextAlarmDecoration => BoxDecoration(
-        color: CustomColors.grey10,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: CustomColors.grey30),
-      );
+  BoxDecoration get _waitForNextAlarmDecoration => BoxDecoration(borderRadius: BorderRadius.circular(16.0));
 
   BoxDecoration get _closeButtonDecoration => BoxDecoration(
-        color: CustomColors.blue30,
         borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: CustomColors.grey30),
         boxShadow: [
           BoxShadow(
             offset: const Offset(0.0, 4.0),
@@ -64,14 +48,12 @@ class _AlarmPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color disabledColor = Theme.of(context).disabledColor;
+
     return Scaffold(
-      backgroundColor: CustomColors.grey10,
-      appBar: AppBar(
-        elevation: 0.0,
-        scrolledUnderElevation: 0.0,
-        backgroundColor: CustomColors.grey10,
-        automaticallyImplyLeading: false,
-      ),
+      backgroundColor: colors.background,
+      appBar: AppBar(),
       body: BlocBuilder<RingingBloc, RingingState>(
         builder: (context, state) {
           return state.map(
@@ -113,9 +95,17 @@ class _AlarmPageBody extends StatelessWidget {
                             });
                           },
                           child: Container(
-                            decoration: _waitForNextAlarmDecoration,
+                            decoration: _waitForNextAlarmDecoration.copyWith(
+                              color: colors.background,
+                              border: Border.all(color: colors.outline),
+                            ),
                             padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 11.0),
-                            child: Text("alarm.waitForNext".tr(), style: _waitForNextAlarmTextStyle),
+                            child: Text(
+                              "alarm.waitForNext".tr(),
+                              style: _waitForNextAlarmTextStyle.copyWith(
+                                color: disabledColor,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 33.0),
@@ -129,9 +119,17 @@ class _AlarmPageBody extends StatelessWidget {
                           });
                         },
                         child: Container(
-                          decoration: _closeButtonDecoration,
+                          decoration: _closeButtonDecoration.copyWith(
+                            color: colors.secondary,
+                            border: Border.all(color: colors.outline),
+                          ),
                           padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 32.0),
-                          child: Text("alarm.closeAlarm".tr(), style: _closeAlarmTextStyle),
+                          child: Text(
+                            "alarm.closeAlarm".tr(),
+                            style: _closeAlarmTextStyle.copyWith(
+                              color: colors.onBackground,
+                            ),
+                          ),
                         ),
                       ),
                     ],

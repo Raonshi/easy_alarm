@@ -2,12 +2,14 @@ import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/route.dart';
-import 'package:easy_alarm/style/colors.dart';
+import 'package:easy_alarm/modules/main/bloc/theme_bloc.dart';
 import 'package:easy_alarm/modules/home/view/widget/alarm_item_widget.dart';
+import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.state});
@@ -27,29 +29,47 @@ class HomePage extends StatelessWidget {
 class _HomePageBody extends StatelessWidget {
   const _HomePageBody();
 
-  TextStyle get _headerTextStyle => const TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black);
-  TextStyle get _addBtnTextStyle => const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black);
-  TextStyle get _emptyTextStyle =>
-      const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, color: CustomColors.grey50);
+  TextStyle get _emptyTextStyle => const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color disabledColor = Theme.of(context).disabledColor;
+    final themeBloc = context.read<ThemeBloc>();
+
     return Scaffold(
-      backgroundColor: CustomColors.grey10,
+      backgroundColor: colors.background,
       appBar: AppBar(
         centerTitle: false,
-        elevation: 0.0,
-        scrolledUnderElevation: 0.0,
-        backgroundColor: CustomColors.grey10,
-        title: Text('header.home'.tr(), style: _headerTextStyle),
+        title: Text('header.home'.tr()),
         actions: [
-          GestureDetector(
-            onTap: () {
+          IconButton(
+            onPressed: () {
+              if (themeBloc.state == ThemeMode.dark) {
+                context.read<ThemeBloc>().changeTheme(ThemeMode.light);
+              } else {
+                context.read<ThemeBloc>().changeTheme(ThemeMode.dark);
+              }
+            },
+            icon: SvgPicture.asset(
+              themeBloc.state == ThemeMode.dark ? CustomIcons.sun : CustomIcons.moon,
+              width: 24.0,
+              height: 24.0,
+              colorFilter: ColorFilter.mode(colors.onBackground, BlendMode.srcIn),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
               mainNavKey.currentContext!.pushNamed(Path.add.path).then((value) {
                 context.read<AlarmsBloc>().refreshAlarms();
               });
             },
-            child: Text("common.add".tr(), style: _addBtnTextStyle),
+            icon: SvgPicture.asset(
+              CustomIcons.add,
+              width: 24.0,
+              height: 24.0,
+              colorFilter: ColorFilter.mode(colors.onBackground, BlendMode.srcIn),
+            ),
           ),
           const SizedBox(width: 20.0),
         ],
@@ -67,7 +87,7 @@ class _HomePageBody extends StatelessWidget {
                     child: Text(
                       "home.noAlarm".tr(),
                       textAlign: TextAlign.center,
-                      style: _emptyTextStyle,
+                      style: _emptyTextStyle.copyWith(color: disabledColor),
                     ),
                   );
                 } else {
