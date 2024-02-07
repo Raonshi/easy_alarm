@@ -3,7 +3,6 @@ import 'package:easy_alarm/core/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/main/bloc/theme.dart';
-import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/modules/home/view/widget/alarm_item_widget.dart';
 import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -30,12 +29,12 @@ class HomePage extends StatelessWidget {
 class _HomePageBody extends StatelessWidget {
   const _HomePageBody();
 
-  TextStyle get _emptyTextStyle =>
-      const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, color: CustomColors.grey50);
+  TextStyle get _emptyTextStyle => const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
+    final Color disabledColor = Theme.of(context).disabledColor;
     final themeBloc = context.read<ThemeBloc>();
 
     return Scaffold(
@@ -88,7 +87,7 @@ class _HomePageBody extends StatelessWidget {
                     child: Text(
                       "home.noAlarm".tr(),
                       textAlign: TextAlign.center,
-                      style: _emptyTextStyle,
+                      style: _emptyTextStyle.copyWith(color: disabledColor),
                     ),
                   );
                 } else {

@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:easy_alarm/secret/keys.dart';
-import 'package:easy_alarm/style/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -59,7 +58,7 @@ class _BottomAdWidgetState extends State<BottomAdWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: CustomColors.white,
+      color: Colors.grey.shade50,
       height: 90.0,
       width: MediaQuery.of(context).size.width,
       child: _nativeAdIsLoaded ? AdWidget(ad: _nativeAd!) : const Center(child: Text('loading...')),
