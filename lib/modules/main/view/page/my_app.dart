@@ -1,5 +1,5 @@
 import 'package:easy_alarm/core/route.dart';
-import 'package:easy_alarm/modules/main/bloc/theme.dart';
+import 'package:easy_alarm/modules/main/bloc/theme_bloc.dart';
 import 'package:easy_alarm/style/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

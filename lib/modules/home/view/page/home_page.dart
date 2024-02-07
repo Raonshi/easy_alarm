@@ -2,7 +2,7 @@ import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_state.dart';
 import 'package:easy_alarm/core/route.dart';
-import 'package:easy_alarm/modules/main/bloc/theme.dart';
+import 'package:easy_alarm/modules/main/bloc/theme_bloc.dart';
 import 'package:easy_alarm/modules/home/view/widget/alarm_item_widget.dart';
 import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_localization/easy_localization.dart';
