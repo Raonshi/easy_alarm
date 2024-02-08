@@ -1,5 +1,5 @@
 import 'package:easy_alarm/core/ez_path.dart';
-import 'package:easy_alarm/modules/alarm/view/page/ez_add_page.dart';
+import 'package:easy_alarm/modules/alarm/view/page/ez_add_alarm_page.dart';
 import 'package:easy_alarm/modules/alarm/view/page/ez_alarm_page.dart';
 import 'package:easy_alarm/modules/alarm/view/page/ez_ring_page.dart';
 import 'package:easy_alarm/modules/calendar/view/page/ez_calendar_page.dart';
@@ -25,7 +25,7 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: EzPath.add,
               name: EzPath.add,
-              builder: (context, state) => const EzAddPage(),
+              builder: (context, state) => const EzAddAlarmPage(),
             ),
           ],
         ),

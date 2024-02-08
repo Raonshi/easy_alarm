@@ -12,8 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-class EzAddPage extends StatelessWidget {
-  const EzAddPage({super.key});
+class EzAddAlarmPage extends StatelessWidget {
+  const EzAddAlarmPage({super.key});
 
   @override
   Widget build(BuildContext context) {
