@@ -4,6 +4,7 @@ import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,6 +34,9 @@ class AlarmManager {
 
   Future<void> init() async {
     await Future.wait([loadAlarms(), initAlarm()]);
+
+    // If debug mode, clear all alarms
+    if (kDebugMode) await resetAlarms();
   }
 
   Future<void> loadAlarms() async {
@@ -129,6 +133,7 @@ class AlarmManager {
           lgr.e("$_tag waitForSnooze\n - AlarmEntity not found");
           return;
         }
+
         final AlarmEntity newEntity = entity.copyWith(
           snoozeDuration: entity.snoozeDuration,
           nextTimstamp: entity.nextDateTime!.millisecondsSinceEpoch + entity.snoozeDuration! * 1000 * 60,
@@ -170,7 +175,7 @@ class AlarmManager {
           final DateTime nextWeekdayTime = entity.dateTime.add(const Duration(days: 7));
           // Create next current weekday entity
           final AlarmEntity nextWeekdayAlarmEntity = entity.copyWith(
-            id: nextWeekdayTime.millisecondsSinceEpoch % 10000,
+            id: nextWeekdayTime.millisecondsSinceEpoch ~/ 10000,
             timestamp: nextWeekdayTime.millisecondsSinceEpoch,
           );
 
