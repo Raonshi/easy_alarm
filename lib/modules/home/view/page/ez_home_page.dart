@@ -1,6 +1,7 @@
 import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_bloc.dart';
 import 'package:easy_alarm/core/bloc/alarms/alarms_state.dart';
+import 'package:easy_alarm/core/ez_path.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/main/bloc/theme_bloc.dart';
 import 'package:easy_alarm/modules/home/view/widget/alarm_item_widget.dart';
@@ -11,8 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/svg.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.state});
+class EzHomePage extends StatelessWidget {
+  const EzHomePage({super.key, required this.state});
 
   final GoRouterState state;
 
@@ -21,13 +22,13 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       lazy: false,
       create: (context) => AlarmsBloc(),
-      child: const _HomePageBody(),
+      child: const _EzHomePageBody(),
     );
   }
 }
 
-class _HomePageBody extends StatelessWidget {
-  const _HomePageBody();
+class _EzHomePageBody extends StatelessWidget {
+  const _EzHomePageBody();
 
   TextStyle get _emptyTextStyle => const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
 
@@ -60,7 +61,7 @@ class _HomePageBody extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              mainNavKey.currentContext!.pushNamed(Path.add.path).then((value) {
+              mainNavKey.currentContext!.pushNamed(EzPath.add).then((value) {
                 context.read<AlarmsBloc>().refreshAlarms();
               });
             },

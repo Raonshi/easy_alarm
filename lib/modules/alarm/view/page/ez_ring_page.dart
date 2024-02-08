@@ -1,5 +1,6 @@
 import 'package:alarm/alarm.dart';
 import 'package:easy_alarm/common/tools.dart';
+import 'package:easy_alarm/core/ez_path.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_bloc.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_state.dart';
@@ -11,8 +12,8 @@ import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 
-class AlarmPage extends StatelessWidget {
-  const AlarmPage({super.key, required this.state});
+class EzRingPage extends StatelessWidget {
+  const EzRingPage({super.key, required this.state});
 
   final GoRouterState state;
 
@@ -91,7 +92,7 @@ class _AlarmPageBody extends StatelessWidget {
                               } else {
                                 showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
                               }
-                              mainNavKey.currentContext!.replaceNamed(Path.home.path);
+                              mainNavKey.currentContext!.replaceNamed(EzPath.alarm);
                             });
                           },
                           child: Container(
@@ -115,7 +116,7 @@ class _AlarmPageBody extends StatelessWidget {
                           context.loaderOverlay.show();
                           context.read<RingingBloc>().stopAlarm().then((_) {
                             context.loaderOverlay.hide();
-                            mainNavKey.currentContext!.replaceNamed(Path.home.path);
+                            mainNavKey.currentContext!.replaceNamed(EzPath.alarm);
                           });
                         },
                         child: Container(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:alarm/alarm.dart';
 import 'package:easy_alarm/common/tools.dart';
+import 'package:easy_alarm/core/ez_path.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
@@ -74,7 +75,7 @@ class AlarmManager {
   }
 
   Future<void> _handleAlarmRinging(AlarmSettings settings) async {
-    mainNavKey.currentContext!.replaceNamed(Path.alarm.path, extra: settings);
+    mainNavKey.currentContext!.replaceNamed(EzPath.ring, extra: settings);
   }
 
   /// Remove every alarms from the system and the storage.
