@@ -21,7 +21,7 @@ class AddBloc extends Cubit<AddState> {
       final int timestamp = DateTime(now.year, now.month, now.day, now.hour, now.minute, 0).millisecondsSinceEpoch;
 
       final AlarmEntity newAlarmEntity = AlarmEntity(
-        id: timestamp % 10000,
+        id: timestamp ~/ 10000,
         timestamp: timestamp,
         sound: SoundAssetPath.defaultSound,
       );
@@ -42,7 +42,6 @@ class AddBloc extends Cubit<AddState> {
         );
 
         return alarm.copyWith(
-          id: newAlarmTime.millisecondsSinceEpoch % 10000,
           timestamp: newAlarmTime.millisecondsSinceEpoch,
         );
       }).toList();
@@ -54,13 +53,10 @@ class AddBloc extends Cubit<AddState> {
     state.mapOrNull(loaded: (state) {
       final int timestamp = state.alarmGroup.alarms.first.timestamp;
       final SoundAssetPath sound = state.alarmGroup.alarms.first.sound;
+      final bool vibration = state.alarmGroup.alarms.first.vibration;
 
       final List<AlarmEntity> newAlarms = newWeekdays
-          .map((e) => AlarmEntity(
-                id: timestamp % 10000,
-                timestamp: timestamp,
-                sound: sound,
-              ))
+          .map((e) => AlarmEntity(id: timestamp ~/ 10000, timestamp: timestamp, sound: sound, vibration: vibration))
           .toList();
 
       emit(state.copyWith(
@@ -138,25 +134,13 @@ class AddBloc extends Cubit<AddState> {
             : finalizedDate.add(Duration(minutes: currentAlarms[i].snoozeDuration!)).millisecondsSinceEpoch;
 
         finalAlarms.add(currentAlarms[i].copyWith(
-          id: finalizedDate.millisecondsSinceEpoch % 10000,
+          id: finalizedDate.millisecondsSinceEpoch ~/ 10000,
           timestamp: finalizedDate.millisecondsSinceEpoch,
           nextTimstamp: nextTimestamp,
         ));
       }
 
       final AlarmGroup finalizedAlarmGroup = state.alarmGroup.copyWith(alarms: finalAlarms);
-      // log("==================== ALARMS ====================");
-      // log("ROUTINE : ${finalizedAlarmGroup.routine}");
-      // for (AlarmEntity alarm in finalizedAlarmGroup.alarms) {
-      //   log("ID               : ${alarm.id}");
-      //   log("ALARM DATE       : ${alarm.dateTime}");
-      //   log("NEXT ALARM TIME  : ${alarm.nextDateTime}");
-      //   log("SOUND            : ${alarm.sound}");
-      //   log("VIBRATION        : ${alarm.vibration}");
-      //   log("SNOOZE DURATION  : ${alarm.snoozeDuration}");
-      //   log("-----------------------------------------------");
-      // }
-      // log("================================================");
       await _alarmManager.saveAlarm(finalizedAlarmGroup);
     });
   }
