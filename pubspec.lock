@@ -21,10 +21,10 @@ packages:
     dependency: "direct main"
     description:
       name: alarm
-      sha256: e054c8dd7a34147fa7096acc6560562c64861d76fd97e4498a38450f2d336152
+      sha256: c2d7e64571e068e837d524701a4ffb00e414ff34d61c3578249aec068f13c53c
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.8"
+    version: "3.0.9"
   analyzer:
     dependency: transitive
     description:
@@ -395,6 +395,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.10"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      sha256: "19ed4813003a6ff4e9c6bcce37e792a2a358919d7603b2b31ff200229191e44c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   flutter_svg:
     dependency: "direct main"
     description:

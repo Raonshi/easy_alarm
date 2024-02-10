@@ -1,4 +1,5 @@
 import 'package:easy_alarm/common/tools.dart';
+import 'package:easy_alarm/modules/calendar/view/widget/ez_calendar.dart';
 import 'package:easy_alarm/modules/main/bloc/theme_bloc.dart';
 import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class EzCalendarPage extends StatelessWidget {
   const EzCalendarPage({super.key, required this.state});
@@ -52,10 +52,26 @@ class EzCalendarPage extends StatelessWidget {
           const SizedBox(width: 20.0),
         ],
       ),
-      body: TableCalendar(
-        focusedDay: DateTime.now(),
-        firstDay: DateTime(1900),
-        lastDay: DateTime(2099),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          const SliverToBoxAdapter(
+            child: EzCalendar(),
+          ),
+        ],
+        body: ListView.builder(
+            itemCount: 100,
+            itemBuilder: (context, index) => ListTile(
+                  title: Text('Item $index'),
+                  subtitle: const Text("task content"),
+                  leading: Checkbox(
+                    value: true,
+                    onChanged: (value) {},
+                  ),
+                  trailing: const Icon(Icons.archive),
+                  onTap: () {
+                    showSnackBar('Item $index');
+                  },
+                )),
       ),
     );
   }
