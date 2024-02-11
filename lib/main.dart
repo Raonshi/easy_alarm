@@ -1,4 +1,5 @@
 import 'package:easy_alarm/core/alarm_manager.dart';
+import 'package:easy_alarm/core/calendar_manager.dart';
 import 'package:easy_alarm/modules/main/view/page/my_app.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +23,7 @@ void main(List<String> args) async {
   await Future.wait([
     EasyLocalization.ensureInitialized(),
     AlarmManager().init(),
+    EzCalendarManager().init(),
     MobileAds.instance.initialize(),
   ]);
 

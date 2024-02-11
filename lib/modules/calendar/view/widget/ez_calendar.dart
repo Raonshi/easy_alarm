@@ -1,3 +1,5 @@
+import 'package:easy_alarm/core/calendar_manager.dart';
+import 'package:easy_alarm/modules/calendar/model/ez_calendar_model.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -45,7 +47,7 @@ class _EzCalendarState extends State<EzCalendar> {
         ),
       ),
       calendarStyle: CalendarStyle(
-        markerSize: 12.0,
+        markerSize: 8.0,
         todayDecoration: BoxDecoration(
           color: colors.secondary,
           shape: BoxShape.circle,
@@ -99,6 +101,12 @@ class _EzCalendarState extends State<EzCalendar> {
       onFormatChanged: (format) => setState(() {
         _calendarFormat = format;
       }),
+      eventLoader: (day) {
+        final List<MapEntry<DateTime, List<EzCalendarEvent>>> events = EzCalendarManager().events.entries.toList();
+        final int idx = events.indexWhere((element) => isSameDay(element.key, day));
+
+        return idx != -1 ? events[idx].value : [];
+      },
       onDaySelected: (selectedDay, focusedDay) => setState(() {
         _selectedDay = selectedDay;
       }),
@@ -112,15 +120,29 @@ class _EzCalendarState extends State<EzCalendar> {
                 borderRadius: BorderRadius.circular(12.0),
                 color: colors.background,
               ),
-              child: const Column(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Event add widget"),
-                  Text("Event add widget"),
-                  Text("Event add widget"),
-                  Text("Event add widget"),
-                  Text("Event add widget"),
-                  Text("Event add widget"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close),
+                      ),
+                      const Text("Event add widget"),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.check),
+                      ),
+                    ],
+                  ),
+                  const Text("Event add widget"),
+                  const Text("Event add widget"),
+                  const Text("Event add widget"),
+                  const Text("Event add widget"),
+                  const Text("Event add widget"),
+                  const Text("Event add widget"),
                 ],
               ),
             ),
