@@ -8,4 +8,9 @@ class EzCalendarBloc extends Cubit<EzCalendarState> {
   void updateEvents(List<EzCalendarEvent> events) {
     emit(EzCalendarState.loaded(events: events));
   }
+
+
+  void archive(int idx){
+    
+  }
 }

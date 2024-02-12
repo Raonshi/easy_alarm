@@ -95,18 +95,21 @@ class _EzCalendarPageBody extends StatelessWidget {
             loaded: (state) {
               return ListView.builder(
                 itemCount: state.events.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text('Item $index'),
-                  subtitle: const Text("task content"),
-                  leading: Checkbox(
-                    value: true,
-                    onChanged: (value) {},
-                  ),
-                  trailing: const Icon(Icons.archive),
-                  onTap: () {
-                    showSnackBar('Item $index');
-                  },
-                ),
+                itemBuilder: (context, index) {
+                  final EzCalendarEvent event = state.events[index];
+                  return ListTile(
+                    title: Text(event.title),
+                    subtitle: Text(event.subtitle),
+                    leading: Checkbox(
+                      value: true,
+                      onChanged: (value) {},
+                    ),
+                    trailing: const Icon(Icons.archive),
+                    onTap: () {
+                      showSnackBar('Item $index');
+                    },
+                  );
+                },
               );
             },
           );
