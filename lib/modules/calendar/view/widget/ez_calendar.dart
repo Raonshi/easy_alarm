@@ -1,10 +1,18 @@
-import 'package:easy_alarm/core/calendar_manager.dart';
 import 'package:easy_alarm/modules/calendar/model/ez_calendar_model.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EzCalendar extends StatefulWidget {
-  const EzCalendar({super.key});
+  const EzCalendar({
+    super.key,
+    this.events = const {},
+    required this.onAddEvent,
+    required this.onDaySelected,
+  });
+
+  final Map<DateTime, List<EzCalendarEvent>> events;
+  final ValueChanged<DateTime> onAddEvent;
+  final ValueChanged<List<EzCalendarEvent>> onDaySelected;
 
   @override
   State<EzCalendar> createState() => _EzCalendarState();
@@ -14,8 +22,33 @@ class _EzCalendarState extends State<EzCalendar> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime? _selectedDay;
 
+  final TextStyle _titleTextStyle =
+      const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700, height: 1.0, letterSpacing: -0.5);
+
+  final TextStyle _formatButtonTextStyle =
+      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w500);
+
+  final TextStyle _todayTextStyle =
+      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w500);
+
+  final TextStyle _weekendTextStyle =
+      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
+
+  final TextStyle _defaultTextStyle =
+      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
+
+  final TextStyle _weekdayStyle =
+      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
+
+  final TextStyle _weekendStyle =
+      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
+
   @override
   void initState() {
+    final DateTime today = DateTime.now();
+    final List<MapEntry<DateTime, List<EzCalendarEvent>>> events = widget.events.entries.toList();
+    final int idx = events.indexWhere((element) => isSameDay(element.key, today));
+    widget.onDaySelected(idx == -1 ? [] : events[idx].value);
     super.initState();
   }
 
@@ -28,72 +61,24 @@ class _EzCalendarState extends State<EzCalendar> {
       calendarFormat: _calendarFormat,
       headerStyle: HeaderStyle(
         titleCentered: false,
-        titleTextStyle: TextStyle(
-          fontSize: 22.0,
-          fontWeight: FontWeight.w700,
-          height: 1.0,
-          letterSpacing: -0.5,
-          color: colors.onBackground,
-        ),
+        titleTextStyle: _titleTextStyle.copyWith(color: colors.onBackground),
         leftChevronVisible: false,
         rightChevronVisible: false,
         headerPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-        formatButtonTextStyle: TextStyle(
-          fontSize: 14.0,
-          height: 1.0,
-          letterSpacing: -0.5,
-          fontWeight: FontWeight.w500,
-          color: colors.onBackground,
-        ),
+        formatButtonTextStyle: _formatButtonTextStyle.copyWith(color: colors.onBackground),
       ),
       calendarStyle: CalendarStyle(
         markerSize: 8.0,
-        todayDecoration: BoxDecoration(
-          color: colors.secondary,
-          shape: BoxShape.circle,
-        ),
-        todayTextStyle: TextStyle(
-          fontSize: 14.0,
-          height: 1.0,
-          letterSpacing: -0.5,
-          fontWeight: FontWeight.w500,
-          color: colors.onSecondary,
-        ),
-        weekendTextStyle: TextStyle(
-          fontSize: 14.0,
-          height: 1.0,
-          letterSpacing: -0.5,
-          fontWeight: FontWeight.w700,
-          color: colors.secondary,
-        ),
-        defaultTextStyle: TextStyle(
-          fontSize: 14.0,
-          height: 1.0,
-          letterSpacing: -0.5,
-          fontWeight: FontWeight.w700,
-          color: colors.onBackground,
-        ),
-        selectedDecoration: const BoxDecoration(
-          color: Colors.green,
-          shape: BoxShape.circle,
-        ),
+        todayDecoration: BoxDecoration(color: colors.secondary, shape: BoxShape.circle),
+        todayTextStyle: _todayTextStyle.copyWith(color: colors.onSecondary),
+        weekendTextStyle: _weekendTextStyle.copyWith(color: colors.secondary),
+        defaultTextStyle: _defaultTextStyle.copyWith(color: colors.onBackground),
+        selectedDecoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
         markerSizeScale: 8.0,
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekdayStyle: TextStyle(
-          fontSize: 14.0,
-          height: 1.0,
-          letterSpacing: -0.5,
-          fontWeight: FontWeight.w700,
-          color: colors.onBackground,
-        ),
-        weekendStyle: TextStyle(
-          fontSize: 14.0,
-          height: 1.0,
-          letterSpacing: -0.5,
-          fontWeight: FontWeight.w700,
-          color: colors.secondary,
-        ),
+        weekdayStyle: _weekdayStyle.copyWith(color: colors.onBackground),
+        weekendStyle: _weekendStyle.copyWith(color: colors.secondary),
       ),
       focusedDay: _selectedDay ?? DateTime.now(),
       firstDay: DateTime(1900),
@@ -101,55 +86,24 @@ class _EzCalendarState extends State<EzCalendar> {
       onFormatChanged: (format) => setState(() {
         _calendarFormat = format;
       }),
-      eventLoader: (day) {
-        final List<MapEntry<DateTime, List<EzCalendarEvent>>> events = EzCalendarManager().events.entries.toList();
-        final int idx = events.indexWhere((element) => isSameDay(element.key, day));
-
-        return idx != -1 ? events[idx].value : [];
+      eventLoader: _getEventsByDay,
+      onDaySelected: (selectedDay, focusedDay) {
+        widget.onDaySelected(_getEventsByDay(selectedDay));
+        setState(() => _selectedDay = selectedDay);
       },
-      onDaySelected: (selectedDay, focusedDay) => setState(() {
-        _selectedDay = selectedDay;
-      }),
       selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
       onDayLongPressed: (selectedDay, focusedDay) => {
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.0),
-                color: colors.background,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
-                      ),
-                      const Text("Event add widget"),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.check),
-                      ),
-                    ],
-                  ),
-                  const Text("Event add widget"),
-                  const Text("Event add widget"),
-                  const Text("Event add widget"),
-                  const Text("Event add widget"),
-                  const Text("Event add widget"),
-                  const Text("Event add widget"),
-                ],
-              ),
-            ),
-          ),
-        ),
+        widget.onAddEvent(selectedDay),
+        widget.onDaySelected(_getEventsByDay(selectedDay)),
         setState(() => _selectedDay = selectedDay),
       },
     );
+  }
+
+  List<EzCalendarEvent> _getEventsByDay(DateTime day) {
+    final List<MapEntry<DateTime, List<EzCalendarEvent>>> events = widget.events.entries.toList();
+    final int idx = events.indexWhere((element) => isSameDay(element.key, day));
+
+    return idx == -1 ? [] : events[idx].value;
   }
 }

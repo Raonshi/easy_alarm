@@ -1,5 +1,10 @@
 import 'package:easy_alarm/common/tools.dart';
+import 'package:easy_alarm/core/calendar_manager.dart';
+import 'package:easy_alarm/modules/calendar/bloc/ez_calendar_bloc.dart';
+import 'package:easy_alarm/modules/calendar/bloc/ez_calendar_state.dart';
+import 'package:easy_alarm/modules/calendar/model/ez_calendar_model.dart';
 import 'package:easy_alarm/modules/calendar/view/widget/ez_calendar.dart';
+import 'package:easy_alarm/modules/calendar/view/widget/ez_calendar_event_dialog.dart';
 import 'package:easy_alarm/modules/main/bloc/theme_bloc.dart';
 import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,6 +17,19 @@ class EzCalendarPage extends StatelessWidget {
   const EzCalendarPage({super.key, required this.state});
 
   final GoRouterState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      lazy: false,
+      create: (context) => EzCalendarBloc(),
+      child: const _EzCalendarPageBody(),
+    );
+  }
+}
+
+class _EzCalendarPageBody extends StatelessWidget {
+  const _EzCalendarPageBody();
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +72,30 @@ class EzCalendarPage extends StatelessWidget {
       ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          const SliverToBoxAdapter(
-            child: EzCalendar(),
+          SliverToBoxAdapter(
+            child: EzCalendar(
+              events: EzCalendarManager().events,
+              onAddEvent: (DateTime value) {
+                showDialog(
+                  context: context,
+                  builder: (context) => const EzCalendarEventDialog(),
+                );
+              },
+              onDaySelected: (List<EzCalendarEvent> value) {
+                context.read<EzCalendarBloc>().updateEvents(value);
+              },
+            ),
           ),
         ],
-        body: ListView.builder(
-            itemCount: 100,
-            itemBuilder: (context, index) => ListTile(
+        body: BlocBuilder<EzCalendarBloc, EzCalendarState>(builder: (context, state) {
+          return state.map(
+            initial: (_) => const Offstage(),
+            loading: (_) => const Center(child: CircularProgressIndicator()),
+            error: (state) => Center(child: Text(state.exception.toString())),
+            loaded: (state) {
+              return ListView.builder(
+                itemCount: state.events.length,
+                itemBuilder: (context, index) => ListTile(
                   title: Text('Item $index'),
                   subtitle: const Text("task content"),
                   leading: Checkbox(
@@ -71,7 +106,11 @@ class EzCalendarPage extends StatelessWidget {
                   onTap: () {
                     showSnackBar('Item $index');
                   },
-                )),
+                ),
+              );
+            },
+          );
+        }),
       ),
     );
   }
