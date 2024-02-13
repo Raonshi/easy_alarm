@@ -6,6 +6,7 @@ import 'package:easy_alarm/modules/alarm/model/alarm_entity/alarm_entity.dart';
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AlarmManager {
@@ -20,6 +21,9 @@ class AlarmManager {
 
   final String _alarmKey = "ALARMS";
 
+  late final bool _isAlarmPermissionGranted;
+  bool get isAlarmPermissionGranted => _isAlarmPermissionGranted;
+
   get firstEmptyId {
     if (_alarmGroups.isEmpty) return 0;
 
@@ -33,10 +37,23 @@ class AlarmManager {
   }
 
   Future<void> init() async {
-    await Future.wait([loadAlarms(), initAlarm()]);
+    await Future.wait([_initAlarmPermissions(), loadAlarms(), initAlarm()]);
 
     // If debug mode, clear all alarms
     if (kDebugMode) await resetAlarms();
+  }
+
+  Future<void> _initAlarmPermissions() async {
+    PermissionStatus notiStatus = await Permission.scheduleExactAlarm.status.then((value) async  {
+      if (value.isGranted) return PermissionStatus.granted;
+      return await Permission.scheduleExactAlarm.request();
+    });
+    PermissionStatus alarmStatus = await Permission.notification.status.then((value) async  {
+      if (value.isGranted) return PermissionStatus.granted;
+      return await Permission.notification.request();
+    });
+
+    _isAlarmPermissionGranted = (notiStatus == PermissionStatus.granted) && (alarmStatus == PermissionStatus.granted);
   }
 
   Future<void> loadAlarms() async {
