@@ -1,8 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-class EzCalendarEventDialog extends StatelessWidget {
+class EzCalendarEventDialog extends StatefulWidget {
   const EzCalendarEventDialog({super.key});
 
+  @override
+  State<EzCalendarEventDialog> createState() => _EzCalendarEventDialogState();
+}
+
+class _EzCalendarEventDialogState extends State<EzCalendarEventDialog> {
+  bool _isAllDay = false;
+  bool _isRange = false;
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
@@ -23,19 +31,56 @@ class EzCalendarEventDialog extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close),
                 ),
-                const Text("Event add widget"),
+                Text("calendar.dialog.header".tr()),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.check),
                 ),
               ],
             ),
-            const Text("Event add widget"),
-            const Text("Event add widget"),
-            const Text("Event add widget"),
-            const Text("Event add widget"),
-            const Text("Event add widget"),
-            const Text("Event add widget"),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("calendar.dialog.titleLabel".tr()),
+                  TextField(),
+                  Text("calendar.dialog.contentLabel".tr()),
+                  TextField(),
+                  Text("calendar.dialog.dateLabel".tr()),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("calendar.dialog.rangeLabel".tr()),
+                      Switch(
+                        value: _isRange,
+                        onChanged: (value) {
+                          setState(() => _isRange = value);
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("calendar.dialog.allDayLabel".tr()),
+                      Switch(
+                        value: _isAllDay,
+                        onChanged: (value) {
+                          setState(() => _isAllDay = value);
+                        },
+                      ),
+                    ],
+                  ),
+                  if (_isRange) ...[
+                    Text("calendar.dialog.startDateLabel".tr()),
+                    Text("calendar.dialog.endDateLabel".tr()),
+                  ] else
+                    Text("calendar.dialog.dateLabel".tr()),
+                ],
+              ),
+            )
           ],
         ),
       ),

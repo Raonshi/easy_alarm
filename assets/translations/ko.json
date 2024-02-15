@@ -46,6 +46,18 @@
         "nextAlarmSnackbarHour": "다음 알람은 {}시간 뒤에 울립니다.",
         "nextAlarmSnackbarMinute": "다음 알람은 {}분 뒤에 울립니다."
     },
+    "calendar": {
+        "dialog": {
+            "header": "일정 추가",
+            "titleLabel": "제목",
+            "contentLabel": "내용",
+            "dateLabel": "날짜",
+            "startDateLabel": "시작 날짜",
+            "endDateLabel": "종료 날짜",
+            "rangeLabel": "기간",
+            "allDayLabel": "하루 종일"
+        }
+    },
     "weekday": {
         "monday": "월",
         "tuesday": "화",
