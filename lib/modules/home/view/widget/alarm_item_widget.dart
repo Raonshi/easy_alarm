@@ -1,5 +1,4 @@
 import 'package:easy_alarm/modules/alarm/model/alarm_group/alarm_group.dart';
-import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_alarm/widget/week_day_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -64,12 +63,12 @@ class AlarmItemWidget extends StatelessWidget {
           side: BorderSide(color: colors.outline),
           borderRadius: BorderRadius.circular(16.0),
         ),
-        shadows: [
+        shadows: const [
           BoxShadow(
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
             blurRadius: 4.0,
             spreadRadius: 0.0,
-            color: CustomColors.black.withOpacity(0.25),
+            color: Colors.black26,
           ),
         ],
       ),

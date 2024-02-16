@@ -1,4 +1,3 @@
-import 'package:easy_alarm/style/colors.dart';
 import 'package:flutter/material.dart';
 
 class WeekdayPanelWidget extends StatefulWidget {
@@ -33,8 +32,8 @@ class _WeekdayPanelWidgetState extends State<WeekdayPanelWidget> {
           isSelected: _selectedDays[weekday - 1],
           activeBackgroundColor: getActiveBackgroundColor(weekday),
           activeForegroundColor: getActiveForegroundColor(weekday),
-          inactiveBackgroundColor: CustomColors.grey30,
-          inactiveForegroundColor: CustomColors.grey70,
+          inactiveBackgroundColor: Theme.of(context).colorScheme.outline,
+          inactiveForegroundColor: Theme.of(context).disabledColor,
           onTap: (isSelected) {
             final int currentWeekday = DateTime.now().weekday;
             if (currentWeekday == weekday) {
@@ -64,15 +63,15 @@ class _WeekdayPanelWidgetState extends State<WeekdayPanelWidget> {
   }
 
   Color getActiveBackgroundColor(int weekday) {
-    if (weekday == 6) return CustomColors.blue30;
-    if (weekday == 7) return CustomColors.red30;
-    return CustomColors.green30;
+    if (weekday == 6) return Colors.blue.shade300;
+    if (weekday == 7) return Colors.red.shade300;
+    return Colors.green.shade300;
   }
 
   Color getActiveForegroundColor(int weekday) {
-    if (weekday == 6) return CustomColors.blue70;
-    if (weekday == 7) return CustomColors.red70;
-    return CustomColors.green70;
+    if (weekday == 6) return Colors.blue.shade700;
+    if (weekday == 7) return Colors.red.shade700;
+    return Colors.green.shade700;
   }
 }
 

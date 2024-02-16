@@ -76,9 +76,13 @@ class _EzCalendarPageBody extends StatelessWidget {
             child: EzCalendar(
               events: EzCalendarManager().events,
               onAddEvent: (DateTime value) {
-                showDialog(
+                showModalBottomSheet(
                   context: context,
-                  builder: (context) => const EzCalendarEventDialog(),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12.0)),
+                  ),
+                  isScrollControlled: true,
+                  builder: (context) => EzCalendarEventDialog(initialDate: value),
                 );
               },
               onDaySelected: (List<EzCalendarEvent> value) {

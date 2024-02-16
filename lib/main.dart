@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main(List<String> args) async {
@@ -32,7 +33,12 @@ void main(List<String> args) async {
       supportedLocales: const [Locale('en'), Locale('ko')],
       path: "assets/translations",
       fallbackLocale: const Locale("ko"),
-      child: const MyApp(),
+      child: const ScreenUtilInit(
+        designSize: Size(393, 852),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        child: MyApp(),
+      ),
     ),
   );
 }

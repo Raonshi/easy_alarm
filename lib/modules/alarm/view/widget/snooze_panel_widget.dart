@@ -1,7 +1,7 @@
-import 'package:easy_alarm/style/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SnoozePanelWidget extends StatefulWidget {
   const SnoozePanelWidget({
@@ -31,8 +31,7 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
-    final TimePanelThemeData timerColors = Theme.of(context).extension<TimePanelThemeData>()!;
+    final ThemeData theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +42,7 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
           children: [
             Text(
               "alarm.snoozeLabel".tr(),
-              style: _labelTextStyle.copyWith(color: colors.onBackground),
+              style: _labelTextStyle.copyWith(color: theme.colorScheme.onBackground),
             ),
             Switch(
               value: _isEnabled,
@@ -54,7 +53,7 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
             ),
           ],
         ),
-        const SizedBox(height: 10.0),
+        SizedBox(height: 10.0.h),
         GestureDetector(
           onTap: () async {
             await showModalBottomSheet(
@@ -62,12 +61,12 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
               showDragHandle: true,
               isScrollControlled: true,
               builder: (subContext) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: (MediaQuery.of(context).size.height * 0.2).h,
                       child: CupertinoTimerPicker(
                         mode: CupertinoTimerPickerMode.hm,
                         onTimerDurationChanged: (duration) {
@@ -84,38 +83,38 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.0.h),
                 decoration: BoxDecoration(
-                  color: _isEnabled ? timerColors.enabledBackgroundColor : timerColors.disabledBackgroundColor,
-                  borderRadius: BorderRadius.circular(10.0),
+                  color: _isEnabled ? theme.colorScheme.primary : theme.disabledColor,
+                  borderRadius: BorderRadius.circular(10.0.r),
                 ),
                 child: Text(
                   _hourText,
                   style: _timeTextStyle.copyWith(
-                    color: _isEnabled ? timerColors.enabledForegroundColor : timerColors.disabledForegroundColor,
+                    color: _isEnabled ? theme.colorScheme.onPrimary : theme.disabledColor,
                   ),
                 ),
               ),
               SizedBox(
-                width: 24.0,
+                width: 24.0.w,
                 child: Text(
                   ":",
                   style: _timeTextStyle.copyWith(
-                    color: _isEnabled ? timerColors.enabledForegroundColor : timerColors.disabledForegroundColor,
+                    color: _isEnabled ? theme.colorScheme.primary : theme.disabledColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.0.h),
                 decoration: BoxDecoration(
-                  color: _isEnabled ? timerColors.enabledBackgroundColor : timerColors.disabledBackgroundColor,
-                  borderRadius: BorderRadius.circular(10.0),
+                  color: _isEnabled ? theme.colorScheme.primary : theme.disabledColor,
+                  borderRadius: BorderRadius.circular(10.0.r),
                 ),
                 child: Text(
                   _minuteText,
                   style: _timeTextStyle.copyWith(
-                    color: _isEnabled ? timerColors.enabledForegroundColor : timerColors.disabledForegroundColor,
+                    color: _isEnabled ? theme.colorScheme.onPrimary : theme.disabledColor,
                   ),
                 ),
               ),

@@ -38,11 +38,11 @@ class _AlarmPageBody extends StatelessWidget {
 
   BoxDecoration get _closeButtonDecoration => BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            offset: const Offset(0.0, 4.0),
+            offset: Offset(0.0, 4.0),
             blurRadius: 4.0,
-            color: CustomColors.black.withOpacity(0.25),
+            color: Colors.black26,
           ),
         ],
       );
