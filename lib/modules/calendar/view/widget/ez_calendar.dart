@@ -1,5 +1,6 @@
 import 'package:easy_alarm/modules/calendar/model/ez_calendar_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EzCalendar extends StatefulWidget {
@@ -22,27 +23,6 @@ class _EzCalendarState extends State<EzCalendar> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime? _selectedDay;
 
-  final TextStyle _titleTextStyle =
-      const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700, height: 1.0, letterSpacing: -0.5);
-
-  final TextStyle _formatButtonTextStyle =
-      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w500);
-
-  final TextStyle _todayTextStyle =
-      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w500);
-
-  final TextStyle _weekendTextStyle =
-      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
-
-  final TextStyle _defaultTextStyle =
-      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
-
-  final TextStyle _weekdayStyle =
-      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
-
-  final TextStyle _weekendStyle =
-      const TextStyle(fontSize: 14.0, height: 1.0, letterSpacing: -0.5, fontWeight: FontWeight.w700);
-
   @override
   void initState() {
     final DateTime today = DateTime.now();
@@ -54,31 +34,62 @@ class _EzCalendarState extends State<EzCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
-    // final ThemeBloc themeBloc = context.read<ThemeBloc>();
+    final ThemeData theme = Theme.of(context);
 
     return TableCalendar(
       calendarFormat: _calendarFormat,
+      // Header Style
       headerStyle: HeaderStyle(
         titleCentered: false,
-        titleTextStyle: _titleTextStyle.copyWith(color: colors.onBackground),
+        titleTextStyle:
+            theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.onBackground) ?? TextStyle(fontSize: 14.0.sp),
         leftChevronVisible: false,
         rightChevronVisible: false,
         headerPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-        formatButtonTextStyle: _formatButtonTextStyle.copyWith(color: colors.onBackground),
+        formatButtonTextStyle: theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onBackground) ??
+            TextStyle(fontSize: 14.0.sp),
       ),
+      // Calendar Style
       calendarStyle: CalendarStyle(
-        markerSize: 8.0,
-        todayDecoration: BoxDecoration(color: colors.secondary, shape: BoxShape.circle),
-        todayTextStyle: _todayTextStyle.copyWith(color: colors.onSecondary),
-        weekendTextStyle: _weekendTextStyle.copyWith(color: colors.secondary),
-        defaultTextStyle: _defaultTextStyle.copyWith(color: colors.onBackground),
-        selectedDecoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-        markerSizeScale: 8.0,
+        markerSize: 6.0.w,
+        markerSizeScale: 6.0.w,
+        markersAnchor: 0.1,
+        markersMaxCount: 4,
+        markerMargin: EdgeInsets.all(2.0.w),
+        markerDecoration: BoxDecoration(
+          color: theme.colorScheme.error,
+          shape: BoxShape.circle,
+        ),
+        todayDecoration: BoxDecoration(
+          color: theme.colorScheme.primary,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(12.0.r),
+        ),
+        todayTextStyle:
+            theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onPrimary) ?? TextStyle(fontSize: 14.0.sp),
+        selectedDecoration: BoxDecoration(
+          color: theme.colorScheme.tertiary,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(12.0.r),
+        ),
+        defaultDecoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(12.0.r)),
+        rowDecoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(12.0.r)),
+        weekendDecoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(12.0.r)),
+        outsideDecoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(12.0.r)),
+        disabledDecoration: BoxDecoration(shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(12.0.r)),
+        selectedTextStyle:
+            theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onTertiary) ?? TextStyle(fontSize: 14.0.sp),
+        weekendTextStyle:
+            theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.primary) ?? TextStyle(fontSize: 14.0.sp),
+        defaultTextStyle:
+            theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onBackground) ?? TextStyle(fontSize: 14.0.sp),
       ),
+      // DayOfWeek Style
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekdayStyle: _weekdayStyle.copyWith(color: colors.onBackground),
-        weekendStyle: _weekendStyle.copyWith(color: colors.secondary),
+        weekdayStyle: theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.onBackground) ??
+            TextStyle(fontSize: 14.0.sp),
+        weekendStyle:
+            theme.textTheme.labelMedium?.copyWith(color: theme.colorScheme.primary) ?? TextStyle(fontSize: 14.0.sp),
       ),
       focusedDay: _selectedDay ?? DateTime.now(),
       firstDay: DateTime(1900),

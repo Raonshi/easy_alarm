@@ -19,9 +19,6 @@ class SoundPanelWidget extends StatefulWidget {
 
 class _SoundPanelWidgetState extends State<SoundPanelWidget> {
   late final AudioPlayer _player;
-
-  final TextStyle _labelTextStyle = const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
-
   SoundAssetPath _selectedSound = SoundAssetPath.defaultSound;
 
   @override

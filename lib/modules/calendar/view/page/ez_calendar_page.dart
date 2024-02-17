@@ -1,5 +1,6 @@
 import 'package:easy_alarm/common/tools.dart';
 import 'package:easy_alarm/core/calendar_manager.dart';
+import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/calendar/bloc/ez_calendar_bloc.dart';
 import 'package:easy_alarm/modules/calendar/bloc/ez_calendar_state.dart';
 import 'package:easy_alarm/modules/calendar/model/ez_calendar_model.dart';
@@ -34,12 +35,13 @@ class _EzCalendarPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final ThemeData theme = Theme.of(context);
     final themeBloc = context.read<ThemeBloc>();
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
+        surfaceTintColor: theme.colorScheme.background,
         title: Text('header.calendar'.tr()),
         actions: [
           IconButton(
@@ -54,7 +56,7 @@ class _EzCalendarPageBody extends StatelessWidget {
               themeBloc.state == ThemeMode.dark ? CustomIcons.sun : CustomIcons.moon,
               width: 24.0.w,
               height: 24.0.h,
-              colorFilter: ColorFilter.mode(colors.onBackground, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(theme.colorScheme.onBackground, BlendMode.srcIn),
             ),
           ),
           IconButton(
@@ -63,12 +65,12 @@ class _EzCalendarPageBody extends StatelessWidget {
             },
             icon: SvgPicture.asset(
               CustomIcons.add,
-              width: 24.0,
-              height: 24.0,
-              colorFilter: ColorFilter.mode(colors.onBackground, BlendMode.srcIn),
+              width: 24.0.w,
+              height: 24.0.h,
+              colorFilter: ColorFilter.mode(theme.colorScheme.onBackground, BlendMode.srcIn),
             ),
           ),
-          const SizedBox(width: 20.0),
+          SizedBox(width: 20.0.w),
         ],
       ),
       body: NestedScrollView(
@@ -78,9 +80,9 @@ class _EzCalendarPageBody extends StatelessWidget {
               events: EzCalendarManager().events,
               onAddEvent: (DateTime value) {
                 showModalBottomSheet(
-                  context: context,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12.0)),
+                  context: mainNavKey.currentContext!,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12.0.r)),
                   ),
                   isScrollControlled: true,
                   builder: (context) => EzCalendarEventDialog(initialDate: value),
