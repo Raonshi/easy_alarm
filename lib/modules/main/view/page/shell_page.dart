@@ -1,6 +1,6 @@
 import 'package:easy_alarm/core/ez_path.dart';
-import 'package:easy_alarm/modules/main/view/widget/bottom_ad_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -24,8 +24,8 @@ class _ShellPageState extends State<ShellPage> {
         child: Column(
           children: [
             Expanded(child: widget.child),
-            const BottomAdWidget(),
-            const SizedBox(height: 24.0),
+            // const BottomAdWidget(),
+            SizedBox(height: 24.0.h),
             BottomNavigationBar(
               currentIndex: _currentIndex,
               onTap: (value) {

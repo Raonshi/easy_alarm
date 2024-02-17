@@ -56,6 +56,7 @@ class _SnoozePanelWidgetState extends State<SnoozePanelWidget> {
         SizedBox(height: 10.0.h),
         GestureDetector(
           onTap: () async {
+            if (!_isEnabled) return;
             await showModalBottomSheet(
               context: context,
               showDragHandle: true,

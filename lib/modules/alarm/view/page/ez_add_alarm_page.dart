@@ -9,6 +9,7 @@ import 'package:easy_alarm/modules/alarm/view/widget/timer_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -27,23 +28,23 @@ class EzAddAlarmPage extends StatelessWidget {
 class _AddPageBody extends StatelessWidget {
   const _AddPageBody();
 
-  TextStyle get _topButtonTextStyle => const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold);
-
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final ThemeData theme = Theme.of(context);
     final AudioPlayer player = AudioPlayer();
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: colors.background,
+        backgroundColor: theme.colorScheme.background,
         appBar: AppBar(
-          title: Text("addAlarm.header".tr(), style: _topButtonTextStyle),
+          centerTitle: false,
+          surfaceTintColor: theme.colorScheme.background,
+          title: Text("addAlarm.header".tr(), style: theme.textTheme.titleMedium),
           actions: [
-            GestureDetector(
-              onTap: () {
+            TextButton(
+              onPressed: () {
                 context.loaderOverlay.show();
                 context.read<AddBloc>().validate().then((value) {
                   context.loaderOverlay.hide();
@@ -60,9 +61,11 @@ class _AddPageBody extends StatelessWidget {
                   }
                 });
               },
-              child: Text("common.complete".tr(), style: _topButtonTextStyle),
+              child: Text(
+                "common.complete".tr(),
+                style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.onBackground),
+              ),
             ),
-            const SizedBox(width: 20.0),
           ],
         ),
         body: BlocBuilder<AddBloc, AddState>(
@@ -76,13 +79,13 @@ class _AddPageBody extends StatelessWidget {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.0.h),
                         child: TimerPanelWidget(
                           time: state.alarmGroup.dateTime,
                           onTimeChanged: context.read<AddBloc>().updateTime,
                         ),
                       ),
-                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
+                      Divider(height: 2.0.h, thickness: 2.0.h, color: theme.colorScheme.outline.withOpacity(0.1)),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: RoutinePanelWidget(
@@ -95,9 +98,9 @@ class _AddPageBody extends StatelessWidget {
                           },
                         ),
                       ),
-                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
+                      Divider(height: 2.0.h, thickness: 2.0.h, color: theme.colorScheme.outline.withOpacity(0.1)),
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.0.h),
                         child: SnoozePanelWidget(
                           snoozeTime: TimeOfDay(
                             hour: state.alarmGroup.snoozeMinute != null ? state.alarmGroup.snoozeMinute! ~/ 60 : 0,
@@ -113,17 +116,17 @@ class _AddPageBody extends StatelessWidget {
                           },
                         ),
                       ),
-                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
+                      Divider(height: 2.0.h, thickness: 2.0.h, color: theme.colorScheme.outline.withOpacity(0.1)),
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.0.h),
                         child: SoundPanelWidget(
                           player: player,
                           onSelectSound: context.read<AddBloc>().updateSound,
                         ),
                       ),
-                      Divider(height: 2.0, thickness: 2.0, color: colors.outline),
+                      Divider(height: 2.0.h, thickness: 2.0.h, color: theme.colorScheme.outline.withOpacity(0.1)),
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.0.h),
                         child: VibratePanelWidget(
                           onTapSwitch: context.read<AddBloc>().updateVibration,
                         ),

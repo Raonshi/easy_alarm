@@ -4,10 +4,10 @@ import 'package:easy_alarm/core/ez_path.dart';
 import 'package:easy_alarm/core/route.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_bloc.dart';
 import 'package:easy_alarm/modules/alarm/bloc/ringing/ringing_state.dart';
-import 'package:easy_alarm/style/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
@@ -30,30 +30,12 @@ class EzRingPage extends StatelessWidget {
 class _AlarmPageBody extends StatelessWidget {
   const _AlarmPageBody();
 
-  TextStyle get _waitForNextAlarmTextStyle => const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, height: 1.0);
-
-  TextStyle get _closeAlarmTextStyle => const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, height: 1.0);
-
-  BoxDecoration get _waitForNextAlarmDecoration => BoxDecoration(borderRadius: BorderRadius.circular(16.0));
-
-  BoxDecoration get _closeButtonDecoration => BoxDecoration(
-        borderRadius: BorderRadius.circular(16.0),
-        boxShadow: const [
-          BoxShadow(
-            offset: Offset(0.0, 4.0),
-            blurRadius: 4.0,
-            color: Colors.black26,
-          ),
-        ],
-      );
-
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
-    final Color disabledColor = Theme.of(context).disabledColor;
+    final ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: theme.colorScheme.background,
       appBar: AppBar(),
       body: BlocBuilder<RingingBloc, RingingState>(
         builder: (context, state) {
@@ -66,7 +48,7 @@ class _AlarmPageBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 37.0),
+                    padding: EdgeInsets.symmetric(horizontal: 37.0.w),
                     child: LottieBuilder.asset("assets/lotties/alarm_ringing.json"),
                   ),
                   Row(
@@ -74,62 +56,37 @@ class _AlarmPageBody extends StatelessWidget {
                     children: [
                       if (state.alarm.snoozeDuration != null) ...[
                         GestureDetector(
-                          onTap: () {
-                            context.loaderOverlay.show();
-                            context.read<RingingBloc>().waitForSnooze().then((_) {
-                              context.loaderOverlay.hide();
-                              final int? totalMinute = state.alarm.snoozeDuration;
-                              if (totalMinute! > 60) {
-                                final int hour = totalMinute ~/ 60;
-                                final int minute = totalMinute % 60;
-                                if (minute == 0) {
-                                  showSnackBar("alarm.nextAlarmSnackbarHour".tr(args: [hour.toString()]));
-                                } else {
-                                  showSnackBar(
-                                    "alarm.nextAlarmSnackbarHourMinute".tr(args: [hour.toString(), minute.toString()]),
-                                  );
-                                }
-                              } else {
-                                showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
-                              }
-                              mainNavKey.currentContext!.replaceNamed(EzPath.alarm);
-                            });
-                          },
+                          onTap: () => _onTapWaitAlarmButton(context, state.alarm.snoozeDuration),
                           child: Container(
-                            decoration: _waitForNextAlarmDecoration.copyWith(
-                              color: colors.background,
-                              border: Border.all(color: colors.outline),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.0.r),
+                              color: theme.colorScheme.background,
+                              border: Border.all(color: theme.colorScheme.outlineVariant),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 11.0),
+                            padding: EdgeInsets.symmetric(vertical: 18.0.h, horizontal: 11.0.w),
                             child: Text(
                               "alarm.waitForNext".tr(),
-                              style: _waitForNextAlarmTextStyle.copyWith(
-                                color: disabledColor,
-                              ),
+                              style: theme.textTheme.labelLarge?.copyWith(color: theme.disabledColor),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 33.0),
+                        SizedBox(width: 33.0.w),
                       ],
                       GestureDetector(
-                        onTap: () {
-                          context.loaderOverlay.show();
-                          context.read<RingingBloc>().stopAlarm().then((_) {
-                            context.loaderOverlay.hide();
-                            mainNavKey.currentContext!.replaceNamed(EzPath.alarm);
-                          });
-                        },
+                        onTap: () => _onTapCloseAlarmButton(context),
                         child: Container(
-                          decoration: _closeButtonDecoration.copyWith(
-                            color: colors.secondary,
-                            border: Border.all(color: colors.outline),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0.r),
+                            boxShadow: [
+                              BoxShadow(offset: Offset(0.0.w, 4.0.h), blurRadius: 4.0.r, color: Colors.black26),
+                            ],
+                            color: theme.colorScheme.primary,
+                            border: Border.all(color: theme.colorScheme.outlineVariant),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 32.0),
+                          padding: EdgeInsets.symmetric(vertical: 18.0.h, horizontal: 32.0.w),
                           child: Text(
                             "alarm.closeAlarm".tr(),
-                            style: _closeAlarmTextStyle.copyWith(
-                              color: colors.onBackground,
-                            ),
+                            style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.onPrimary),
                           ),
                         ),
                       ),
@@ -142,5 +99,34 @@ class _AlarmPageBody extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _onTapWaitAlarmButton(BuildContext context, int? totalMinute) {
+    context.loaderOverlay.show();
+    context.read<RingingBloc>().waitForSnooze().then((_) {
+      context.loaderOverlay.hide();
+      if ((totalMinute ?? 0) > 60) {
+        final int hour = totalMinute! ~/ 60;
+        final int minute = totalMinute % 60;
+        if (minute == 0) {
+          showSnackBar("alarm.nextAlarmSnackbarHour".tr(args: [hour.toString()]));
+        } else {
+          showSnackBar(
+            "alarm.nextAlarmSnackbarHourMinute".tr(args: [hour.toString(), minute.toString()]),
+          );
+        }
+      } else {
+        showSnackBar("alarm.nextAlarmSnackbarMinute".tr(args: [totalMinute.toString()]));
+      }
+      mainNavKey.currentContext!.replaceNamed(EzPath.alarm);
+    });
+  }
+
+  void _onTapCloseAlarmButton(BuildContext context) {
+    context.loaderOverlay.show();
+    context.read<RingingBloc>().stopAlarm().then((_) {
+      context.loaderOverlay.hide();
+      mainNavKey.currentContext!.replaceNamed(EzPath.alarm);
+    });
   }
 }

@@ -9,6 +9,7 @@ import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -30,19 +31,20 @@ class EzAlarmPage extends StatelessWidget {
 class _HomePageBody extends StatelessWidget {
   const _HomePageBody();
 
-  TextStyle get _emptyTextStyle => const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal);
-
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
-    final Color disabledColor = Theme.of(context).disabledColor;
+    final ThemeData theme = Theme.of(context);
     final themeBloc = context.read<ThemeBloc>();
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: theme.colorScheme.background,
       appBar: AppBar(
         centerTitle: false,
-        title: Text('header.alarm'.tr()),
+        surfaceTintColor: theme.colorScheme.background,
+        title: Text(
+          'header.alarm'.tr(),
+          style: theme.textTheme.titleMedium,
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -54,9 +56,9 @@ class _HomePageBody extends StatelessWidget {
             },
             icon: SvgPicture.asset(
               themeBloc.state == ThemeMode.dark ? CustomIcons.sun : CustomIcons.moon,
-              width: 24.0,
-              height: 24.0,
-              colorFilter: ColorFilter.mode(colors.onBackground, BlendMode.srcIn),
+              width: 24.0.w,
+              height: 24.0.h,
+              colorFilter: ColorFilter.mode(theme.colorScheme.onBackground, BlendMode.srcIn),
             ),
           ),
           IconButton(
@@ -67,12 +69,12 @@ class _HomePageBody extends StatelessWidget {
             },
             icon: SvgPicture.asset(
               CustomIcons.add,
-              width: 24.0,
-              height: 24.0,
-              colorFilter: ColorFilter.mode(colors.onBackground, BlendMode.srcIn),
+              width: 24.0.w,
+              height: 24.0.h,
+              colorFilter: ColorFilter.mode(theme.colorScheme.onBackground, BlendMode.srcIn),
             ),
           ),
-          const SizedBox(width: 20.0),
+          SizedBox(width: 20.0.w),
         ],
       ),
       body: SafeArea(
@@ -88,7 +90,7 @@ class _HomePageBody extends StatelessWidget {
                     child: Text(
                       "home.noAlarm".tr(),
                       textAlign: TextAlign.center,
-                      style: _emptyTextStyle.copyWith(color: disabledColor),
+                      style: theme.textTheme.bodyLarge?.copyWith(color: theme.disabledColor),
                     ),
                   );
                 } else {
@@ -97,7 +99,7 @@ class _HomePageBody extends StatelessWidget {
                       context.read<AlarmsBloc>().refreshAlarms();
                     },
                     child: ListView.separated(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 12.0, bottom: 48.0),
+                      padding: EdgeInsets.only(left: 20.0.w, right: 20.0.w, top: 12.0.h, bottom: 48.0.h),
                       itemCount: state.alarms.length,
                       itemBuilder: (context, index) {
                         return AlarmItemWidget(
@@ -107,12 +109,12 @@ class _HomePageBody extends StatelessWidget {
                           onTapSwitch: (int groupId) {
                             context.read<AlarmsBloc>().toggleAlarm(groupId);
                             final String msg =
-                                state.alarms[index].isEnabled ? "home.alarmEnabled".tr() : "home.alarmDisabled".tr();
+                                state.alarms[index].isEnabled ? "home.alarmDisabled".tr() : "home.alarmEnabled".tr();
                             showSnackBar(msg);
                           },
                         );
                       },
-                      separatorBuilder: (context, index) => const SizedBox(height: 16.0),
+                      separatorBuilder: (context, index) => SizedBox(height: 16.0.h),
                     ),
                   );
                 }

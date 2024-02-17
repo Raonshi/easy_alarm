@@ -1,6 +1,7 @@
 import 'package:easy_alarm/common/asset_path.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
 
 class SoundPanelWidget extends StatefulWidget {
@@ -31,17 +32,14 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final ThemeData theme = Theme.of(context);
 
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "alarm.soundLabel".tr(),
-              style: _labelTextStyle.copyWith(color: colors.onBackground),
-            ),
+            Text("alarm.soundLabel".tr(), style: theme.textTheme.labelLarge),
             Expanded(
               flex: 5,
               child: Row(
@@ -50,6 +48,10 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
                   Visibility.maintain(
                     visible: _player.playing,
                     child: IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.onPrimary,
+                      ),
                       onPressed: () {
                         setState(() {
                           _player.stop();
@@ -58,11 +60,19 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
                       icon: const Icon(Icons.stop),
                     ),
                   ),
+                  SizedBox(width: 8.0.w),
                   DropdownMenu(
                     initialSelection: _selectedSound,
                     requestFocusOnTap: false,
                     enableSearch: false,
                     enableFilter: false,
+                    textStyle: theme.textTheme.bodyMedium,
+                    inputDecorationTheme: InputDecorationTheme(
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
                     onSelected: (value) async {
                       if (value == null) return;
                       if (_player.playing) await _player.stop();
@@ -80,13 +90,8 @@ class _SoundPanelWidgetState extends State<SoundPanelWidget> {
                               value: e,
                               label: e.name,
                               style: MenuItemButton.styleFrom(
-                                foregroundColor: colors.onBackground,
-                                textStyle: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.0,
-                                  letterSpacing: -0.5,
-                                ),
+                                foregroundColor: theme.colorScheme.onBackground,
+                                textStyle: theme.textTheme.bodyMedium,
                               ),
                             ))
                         .toList(),

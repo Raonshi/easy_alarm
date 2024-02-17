@@ -3,6 +3,7 @@ import 'package:easy_alarm/style/icons.dart';
 import 'package:easy_alarm/widget/week_day_panel_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AlarmItemWidget extends StatelessWidget {
@@ -16,10 +17,6 @@ class AlarmItemWidget extends StatelessWidget {
   final AlarmGroup item;
   final ValueChanged<int> onTapDelete;
   final ValueChanged<int> onTapSwitch;
-
-  TextStyle get _timeTextStyle => const TextStyle(fontSize: 32, fontWeight: FontWeight.w700);
-
-  TextStyle get _snoozeTextStyle => const TextStyle(fontSize: 22, fontWeight: FontWeight.w700);
 
   String get dateTimeText {
     final DateTime dateTime = item.dateTime;
@@ -53,26 +50,25 @@ class AlarmItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
-    final Color disabledColor = Theme.of(context).disabledColor;
+    final ThemeData theme = Theme.of(context);
 
     return Container(
       decoration: ShapeDecoration(
-        color: item.isEnabled ? colors.primary : colors.background,
+        color: item.isEnabled ? theme.colorScheme.surfaceVariant : theme.colorScheme.outlineVariant,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: colors.outline),
-          borderRadius: BorderRadius.circular(16.0),
+          side: BorderSide(color: theme.colorScheme.outlineVariant),
+          borderRadius: BorderRadius.circular(16.0.r),
         ),
-        shadows: const [
+        shadows: [
           BoxShadow(
-            offset: Offset(0, 4),
-            blurRadius: 4.0,
-            spreadRadius: 0.0,
-            color: Colors.black26,
+            offset: Offset(0.w, 4.h),
+            blurRadius: 4.0.r,
+            spreadRadius: 0.0.r,
+            color: theme.shadowColor.withOpacity(0.26),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(12.0),
+      padding: EdgeInsets.symmetric(horizontal: 12.0.w, vertical: 12.0.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -84,8 +80,8 @@ class AlarmItemWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   dateTimeText,
-                  style: _timeTextStyle.copyWith(
-                    color: item.isEnabled ? colors.onPrimary : disabledColor,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: item.isEnabled ? theme.colorScheme.onSurfaceVariant : theme.disabledColor,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -97,7 +93,7 @@ class AlarmItemWidget extends StatelessWidget {
                   width: 24.0,
                   height: 24.0,
                   colorFilter: ColorFilter.mode(
-                    item.isEnabled ? colors.onPrimary : disabledColor,
+                    item.isEnabled ? theme.colorScheme.onSurfaceVariant : theme.disabledColor,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -111,8 +107,8 @@ class AlarmItemWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   snoozeText,
-                  style: _snoozeTextStyle.copyWith(
-                    color: item.isEnabled ? colors.onPrimary : disabledColor,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: item.isEnabled ? theme.colorScheme.onSurfaceVariant : theme.disabledColor,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

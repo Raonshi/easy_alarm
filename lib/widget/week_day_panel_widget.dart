@@ -32,7 +32,7 @@ class _WeekdayPanelWidgetState extends State<WeekdayPanelWidget> {
           isSelected: _selectedDays[weekday - 1],
           activeBackgroundColor: getActiveBackgroundColor(weekday),
           activeForegroundColor: getActiveForegroundColor(weekday),
-          inactiveBackgroundColor: Theme.of(context).colorScheme.outline,
+          inactiveBackgroundColor: Theme.of(context).disabledColor.withOpacity(0.1),
           inactiveForegroundColor: Theme.of(context).disabledColor,
           onTap: (isSelected) {
             final int currentWeekday = DateTime.now().weekday;
